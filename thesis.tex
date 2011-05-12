@@ -1,0 +1,41 @@
+\documentclass[a4paper,openany]{book}
+
+%\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{color}
+%\usepackage{morefloats}
+\usepackage[section]{placeins}
+
+\newcommand{\code}[1]{{\tt #1}}
+%\newcommand{\TODO}[1]{}
+\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+
+\title{Operating System Auditing and Monitoring}
+\author{Wu Yongzheng}
+\date{}
+
+\frontmatter
+\maketitle
+\tableofcontents
+% \listoffigures
+% \listoftables
+\input{ackno}
+\input{summary}
+
+\mainmatter
+\input{intro}
+\input{monitoring}
+\input{application}
+\input{conclusion}
+
+\backmatter
+\bibliographystyle{plain}
+\bibliography{thesis}
+
+\end{document}

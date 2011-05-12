@@ -1,0 +1,72 @@
+\subsection{Implementation}
+
+Implementation of the visualizations entails collecting tra\-ces when
+binaries are loaded and tracking of function call and return.
+Binary loading information is obtained using
+a modified version of WinResMon~\cite{winresmon}, 
+which makes use of a kernel driver to obtain
+what binaries are loaded by a process as it runs and
+what child processes are created.
+The EXE dependency graph is created from
+the WinResMon trace file into a dependency graph in 
+Graphviz \cite{graphviz} format and rendered by {\tt dot} in Graphviz.
+
+The system trace from WinResMon is very robust and allows for continuous
+full system tracing if so desired.
+It can also trace a large portion of the system boot,
+see Fig. \ref{sec:apply:boot}. 
+It also works with software which employs self-modifying
+code and other malware techniques to defend against virtual machines,
+debuggers and code instrumentation such as Skype.
+Thus, it can handle many more cases than with a more detailed
+instruction instrumentation or interpretation approach, as is done
+with PIN below.
+
+The DLL dependency graph is built from a runtime contr\-ol flow trace from
+function calls and returns during execution.
+We employ PIN~\cite{pin} which instruments the binary to allow monitoring 
+of the control flow during execution of call and return instructions
+when a process runs saving these events into a trace file.
+The trace is then analyzed to generate a DLL dependency graph in
+GraphViz format.
+
+The DLL dependency graph only needs instrumentation of the call instructions
+which is straightforward.
+DLL projection, however, requires tracking of the control flow of both
+call and return instructions.
+The full call/return tracking is more complex than one would expect
+under Windows because one has to handle:
+non-local goto's from {\tt setjmp()} and {\tt longjmp()}, exception handling, 
+kernel callbacks and multithreading.
+For example, a naive implementation which matches counts of call and
+return instructions will fail when a {\tt longjmp()} is used
+since that means that some function does not return.
+We make use of stack and return address matching to do this
+tracking, which is not described in detail for lack of space.
+
+In Windows, execution can be interrupted to switch to a new context.
+When execution in the new context completes, execution of the original
+context resumes.
+There are a number of reasons why the context changes
+such as: asynchronous procedure call (APC), kernel callbacks 
+(kernel calls a user function) and structured exception handling.
+Thus, context switching has to be tracked to avoid matching
+call and return from different contexts.
+We remark that the start of a context switch can be obtained in PIN but
+not when the context terminates.
+Instead, termination is observed by watching the {\tt NtCallbackReturn}
+and {\tt NtContinue} system calls.
+Context switching can be cascaded, thus, we maintain the unfinished
+contexts in a stack.
+
+We generate a trace file to record the call/return control flow.
+The trace records events such as function calls/returns,
+thread creation/termination, context switching, binary loading
+and system calls.
+This allows us to analyze the execution trace in many ways to generate
+different graphs.
+
+The DLL initialization in Windows is identified by the special
+DLL entry function {\tt DllMain} which is called when a DLL is loaded.
+To remove the control flow effect due to DLL initialization, 
+we remove all calls which are due to execution of {\tt DllMain}.

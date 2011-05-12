@@ -1,0 +1,125 @@
+\subsection{Related Work}
+\label{sect:related}
+
+Tripwire \cite{KS93} is one of the first to do file integrity protection
+but is limited as it in user-mode program and 
+checks file integrity off-line.
+It does not provide any mandatory form of integrity checking and
+there are many known attacks such as:
+file modification in between authentication times,
+and attacks on system daemons (e.g. cron and sendmail)
+and system files that it depends on \cite{Arnold,SKO05}.
+
+There a number of kernel level binary level authentication implementations.
+These are mainly for Unix
+such as DigSig \cite{digsig}, Trojanproof \cite{williams}
+and SignedExec \cite{signedexec}, which modify the Unix kernel
+to verify the executable's digital signature before program execution.
+DigSig and SignedExec embed signatures within the the elf binaries.
+For efficiency, DigSig employs a caching mechanism to avoid checking
+binaries which have been verified already. The mechanism is similar 
+to ours here but we need to handle the problems of Windows.
+It appears that DigSig provides binary integrity authentication
+but not binary location authentication.\footnote{Mechanisms based solely on
+signatures embedded in the binaries do not have sufficient information
+for binary location authentication.}
+In this paper, we examine the implementation issues and tradeoffs
+for Windows which is more complex and difficult than in Unix.
+
+Authenticode \cite{authenticode} is Microsoft infrastructure
+for digitally signing binaries.
+% It was publicly announced in 1996 as part of Microsoft's IE 3.0
+% and ActiveX technologies, but it ships as a standard part of Windows.
+% It tells where binaries come from and checks the integrity of binaries.
+In Windows versions prior to Vista, such XP with SP2,
+it is used as follows:
+\begin{enumerate}
+\item During ActiveX installation:
+Internet Explorer uses Authenticode to examine the ActiveX plugin 
+and shows a prompt which contains the publisher's information
+including the result of the signature check.
+\item A user downloads a file using Internet Explorer:
+If this file is executed using the Windows Explorer shell,
+a prompt is displayed giving the signed the publisher's information.
+Internet Explorer uses an NTFS feature called
+Alternate Data Streams to embed the Internet zone information --in this case,
+the Internet-- into the file.
+The Windows Explorer shell detects the zone information and displays the prompt.
+This mechanism is not mandatory and relies on the use of zone-aware programs,
+the browser and GUI shell cooperating with each other.
+Thus, it can be bypassed.
+\end{enumerate}
+
+Since Authenticode runs in user space,
+it can be bypassed in a number of ways, e.g. from the command shell.
+It is also limited to files downloaded using Internet Explorer.
+Only the EXE binary is examined by Authenticode, but DLLs are ignored.
+One possible attack is then to put malware into a DLL and then
+execute it, e.g. with {\tt rundll32.exe}.
+Furthermore, Authenticode relies heavily on digital certificates.
+Checking Certificate Revocation Lists (CRL) may add extra delay 
+including timeouts due to the need to contact CA.
+In some cases, this causes significant slowdown.
+
+The latest Windows Vista improves on signed checking
+because User Account Control (UAC) can be configured for
+mandatory checking of signed executables.
+However, this is quite limited since the UAC mechanism only
+kicks in when a process requests privileged elevation,
+and for certain operations on protected resources.
+UAC is not user friendly since there is a need for constant
+interactive user approval.
+% of elevation requests and operations.
+% maybe no space to have \cite{vista-complaints}.
+Vista does not seem to prevent the loading of unsigned DLLs and 
+other non EXE binaries. 
+The 32-bit versions of Windows (including Vista) do not checked whether
+drivers are signed.
+However, the 64 bit versions (XP, Server 2003 and Vista) require
+all drivers to be signed (this may be too strict and restrict hardware choices).
+
+The closest work on binary authentication in Windows is
+the Emu system in by Schmid et al. \cite{EMU}.
+They intercept process creation by intercepting the NtCreateProcess system
+call. It is unclear whether they are able authenticate all binary code
+since trapping at NtCreateProcess is not sufficient to deal with DLLs.
+No performance benchmarks are given, so it is unclear how 
+if their system is efficient.
+
+% Since it is important to find out whether the performance penalty due to the 
+% authentication is acceptable, this question thus remains unanswered there.
+% In addition, our paper here addresses a much wider scope of 
+% secure program distribution and execution, taking into account various involved 
+% parties (OS, software developers, advisory centers).
+%The proposed scheme calculates MD5 hash values of the binaries,
+%which are used together with the binary name to uniquely identify an application.
+%Each user on the system has an {\em execution control list} (ECL)
+%that specifies which applications the user is allowed to execute.
+%Although we share the same basic mechanism of in-kernel authentication checking with \cite{EMU},
+%our paper here addresses a much wider scope of secure program distribution and execution.
+%Firstly, we first ensure that the binary must come with a valid digital signature first
+%before generating the MAC for faster integrity checking.
+%Secondly, we aim to also find out how low the performance penalty due to the integrity
+%checking in Windows environments can be, and whether such penalty is acceptable.
+%As no benchmark results shown in \cite{EMU}, the question thus remains to be answered.
+%Thirdly, due to our bigger scope, our scheme deals with other new techniques
+%such as software naming for vulnerability checking,
+%and addresses how various parties (OS, software developers, advisory centers)
+%can take advantage of the benefits brought.
+
+% Another approach is to check simply at the filesystem layer such as
+% \cite{i3fs}.
+% Files are digitally signed,
+% and the signature is checked every time the file is accessed.
+% This has the drawback that the overhead of authentication is applied
+% to all files accessed. For example, in Windows checking for file open with
+% execute permissions will lead to many unnecessary checks.
+% \TODO{check if the reference summary is correct for i3fs and FS approach}
+
+% On discovering any failure in integrity check,
+% the file-system layer will immediately block access to the files and notify the administrator.
+% Although such approach can be useful, we view that it is not really suitable
+% for our setting in ensuring a wider scope of secure software distribution and execution,
+% in which many external parties are involved together.
+% 
+% [plus the work from LNCS]

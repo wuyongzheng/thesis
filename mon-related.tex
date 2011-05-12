@@ -1,0 +1,252 @@
+\subsection{Related Work}
+
+Monitoring systems can be classified in a number of ways.
+From the enforcement point of view, we have discretionary and
+mandatory monitoring.
+Discretionary monitoring requires that the monitored software
+actively report to its monitor.
+The traditional UNIX \code{syslog} is an example of discretionary monitoring.
+A log entry is generated when the monitored software calls the \code{syslog()}
+system call.
+In contrast, mandatory monitoring systems enforce that logs are always
+generated when certain actions are performed by the monitored software.
+The \code{ptrace(2)} interface and Solaris Basic Security Module (BSM) Auditing
+are examples of mandatory monitoring.
+Mandatory monitoring is more suited for security purpose because of the enforcement.
+Discretionary monitoring may give more friendly output since the monitored
+software knows which pieces are more important.
+
+A related classification is transparent/opaque monitoring.
+In transparent monitoring, the monitored software does not need to be adapted
+and sometimes does not aware of being monitored;
+whereas in opaque monitoring, the monitored software need to be either
+rewritten and recompiled or transformed manually.
+The two types of classification are related because transparent monitoring
+is usually mandatory as well, and opaque monitoring is usually discretionary.
+\TODO{add exception}
+
+From OS point of view, the monitoring system can be in user space, kernel space
+or both.
+
+\subsubsection{Traditional \code{syslog}}
+
+Syslog is the main logging tool on a UNIX systems. It centrally manages logging
+for your main system services. Syslog is discretionary in such a sense that it
+requires the program to actively call the \code{syslog(2)} system call in order to
+generate a log message. Syslog is implemented in two halves. One half is a set
+of standard C-library routines. Programs utilize these routines to send
+messages to the log daemon. The other is a daemon process \code{syslogd}. It is
+configured with the \path{/etc/syslog.conf} file. It writes log messages to various
+locations.
+
+When writing kernel code, one can send log messages to \code{syslog} by calling
+\code{printk}\footnote{\code{printk} is Linux kernel specific} kernel.  This is
+realized through \code{klogd}, the kernel log daemon.  \code{klogd} is a system
+daemon which intercepts and logs Linux kernel messages. It is usually
+configured to forward kernel messages to \code{syslogd}. Traditional logging
+mechanism such as \code{syslog} is discretionary in nature, thus cannot be used
+for security purpose. In the security monitoring context, we should not trust
+the monitored program, thus the log message supplied by it should also not be
+trusted. For example, the application does not log or logs something to spoof
+the monitor.
+
+\subsubsection{\code{ptrace}}
+
+The \code{ptrace(2)} system call provides a means by which a parent process may
+observe and control the execution of another process, and examine and change
+its core image and registers. It is primarily used to implement breakpoint
+debugging and system call tracing. Most UNIX systems, such as Solaris, FreeBSD,
+and Linux implement this system call.
+
+While being traced, the child will stop
+each time a signal is delivered, even if the signal is being ignored. The
+parent will be notified at its next \code{wait(2)} and may inspect and modify the
+child process while it is stopped. The parent then causes the child to
+continue, optionally ignoring the delivered signal (or even delivering a
+different signal instead).
+
+There are many disadvantages on \code{ptrace} as an system
+auditing tool. Firstly, it is very inefficient. Since the child process will
+stop at each system call, there will be a high process switch cost on each
+system call. Further more, the process still has to stop at every system call
+even if we only want to audit one specific system call. Secondly, if the
+process is already been traced by some process. It is not possible for another
+process to trace it. This is not desirable as an auditing tool, because
+sometimes we need different processes to audit on different things. Lastly,
+\code{ptrace} will bring side-effect to the process been traced. For example, if a
+process is attached to with PTRACE ATTACH, its original parent can no longer
+receive notification via wait when it stops, and there is no way for the new
+parent to effectively simulate this notification. This is also not desirable
+because we want the process behave the same as while not been traced.
+
+\begin{figure}[htb]
+\begin{verbatim}
+#include <sys/types.h>
+#include <sys/times.h>
+#include <unistd.h>
+main()
+{
+  struct tms timing;
+  int i;
+  getpid();
+  if (fork() == 0) {
+    getppid();
+    if (fork() == 0) {
+      times(&timing);
+      _exit(1);
+    }
+    for (i=0; i < 10; getpid()) ;
+  }
+}
+\end{verbatim}
+\caption{Simple C program to escape \code{ptrace}}
+\label{fig:ptrace-bug}
+\end{figure}
+
+\code{ptrace}
+suffers from many race condition problems\cite{garfinkel03tap}. One could write a simple C
+program as in Figure~\ref{fig:ptrace-bug} to escape from ptraceing. After several iterations, some
+child processes will not be traced by the tracing program.
+
+Many Linux kernel
+exploits make use of \code{ptrace} bugs. The famous ones are "Linux Non-Readable File
+Ptrace Vulnerability" in 2000, "Linux Ptrace/Setuid Exec Vulnerability" and
+"Linux ptrace/execve Race Condition Vulnerability" in 2001.
+
+\subsubsection{Solaris /proc}
+
+Solaris \path{/proc}\cite{faulkner1991tpf}\footnote{Different UNIX systems implement
+different \path{/proc} file systems.}
+is a file system that provides access to the state of each process
+in the system. \path{/proc} can be used for system call interposition.
+
+\begin{figure}[htb]
+\begin{verbatim}
+-rw------- 1 wuyongzh grad 4333568 May 10 16:49 as
+-r-------- 1 wuyongzh grad     152 May 10 16:49 auxv
+dr-x------ 2 wuyongzh grad      32 May 10 16:49 contracts
+-r-------- 1 wuyongzh grad      32 May 10 16:49 cred
+--w------- 1 wuyongzh grad       0 May 10 16:49 ctl
+lr-x------ 1 wuyongzh grad       0 May 10 16:49 cwd ->
+dr-x------ 2 wuyongzh grad    8208 May 10 16:49 fd
+-r--r--r-- 1 wuyongzh grad     120 May 10 16:49 lpsinfo
+-r-------- 1 wuyongzh grad     912 May 10 16:49 lstatus
+-r--r--r-- 1 wuyongzh grad     536 May 10 16:49 lusage
+dr-xr-xr-x 3 wuyongzh grad      64 May 10 16:49 lwp
+-r-------- 1 wuyongzh grad    3168 May 10 16:49 map
+dr-x------ 2 wuyongzh grad     800 May 10 16:49 object
+-r-------- 1 wuyongzh grad    3848 May 10 16:49 pagedata
+dr-x------ 2 wuyongzh grad    9008 May 10 16:49 path
+-r-------- 1 wuyongzh grad      72 May 10 16:49 priv
+-r--r--r-- 1 wuyongzh grad     336 May 10 16:49 psinfo
+-r-------- 1 wuyongzh grad    3168 May 10 16:49 rmap
+lr-x------ 1 wuyongzh grad       0 May 10 16:49 root ->
+-r-------- 1 wuyongzh grad    1536 May 10 16:49 sigact
+-r-------- 1 wuyongzh grad    1232 May 10 16:49 status
+-r--r--r-- 1 wuyongzh grad     256 May 10 16:49 usage
+-r-------- 1 wuyongzh grad       0 May 10 16:49 watch
+-r-------- 1 wuyongzh grad    5016 May 10 16:49 xmap
+\end{verbatim}
+\caption{List of the \code{/proc/pid} directory in Solaris 5.10}
+\label{fig:proc}
+\end{figure}
+
+The name of each entry in the \path{/proc}
+directory is a decimal number corresponding to a process-ID. These entries are
+themselves subdirectories. Access to process state is provided by additional
+files contained within each subdirectory. The owner of each \path{/proc} file and
+subdirectory is determined by the user-ID of the process.
+
+There are many files under each \path{/proc/pid} directory as shown in
+Figure~\ref{fig:proc}. Most files describe process state and can only be opened
+for reading. Address space files contain the image of the running process and
+can be opened for both reading and writing. An open for writing allows process
+control; a read-only open allows inspection but not control.
+
+In general, more than one process can open the same \path{/proc} file at the
+same time. Exclusive open is an advisory mechanism provided to allow
+controlling processes to avoid collisions with each other. A process can obtain
+exclusive control of a target process, with respect to other cooperating
+processes, if it successfully opens any \path{/proc} file in the target process
+for writing while specifying \code{O\_EXCL} in the \code{open(2)}. Such an open
+will fail if the target process is already open for writing.
+
+Data may be transferred from or to any locations in the address space of the
+traced process by applying \code{lseek(2)} to position the as file at the
+virtual address of interest followed by \code{read(2)} or \code{write(2)} (or
+by using \code{pread(2)} or \code{pwrite(2)} for the combined operation). The
+address-map file \path{/proc/pid/map} can be read to determine the accessible
+areas (mappings) of the address space.
+
+A tracing process writes specially-formatted commands to the ctl file to
+specify events of interest and actions to be applied to the tracing process.
+These commands appear similar to the arguments given to the \code{ptrace(2)} call: an
+identifier indicating the requested control operation and any argument required
+for that operation. We will describe some commands which are related to system
+auditing.
+
+\begin{enumerate}
+\item \code{PCSTOP}: When applied to the process control file, PCSTOP directs
+the process to stop and waits for it to stop.
+\item \code{PCRUN}: Make a process runnable
+again after a stop. 
+\item \code{PCSTRACE}: Define a set of signals to be traced in the
+process. The receipt of one of these signals by a process causes the process to
+stop.
+\item \code{PCKILL}: If applied to the process control file, a signal is sent to
+the process with semantics identical to those of kill(2).
+\item \code{PCSENTRY}/\code{PCSEXIT}:
+These control operations instruct the process to stop on entry to or exit from
+specified system calls. When entry to a system call is being traced, a process
+stops after having begun the call to the system but before the system call
+arguments have been fetched from the process. When exit from a system call is
+being traced, a process stops on completion of the system call just prior to
+checking for signals and returning to user level. At this point, all return
+values have been stored into the process' registers.
+\item \code{PCWATCH}: Set or clear a
+watched area in the controlled process from a prwatch structure operand. A
+watch-point is triggered when a process in the traced process makes a memory
+reference that covers at least one byte of a watched area and the memory
+reference is as specified in pr wflags. When a process triggers a watch-point,
+it incurs a watch-point trap.
+\end{enumerate}
+
+Comparing to \code{ptrace(2)}, \path{/proc} gives a finer
+grained control over monitored system calls. We can specify only the interested
+system calls to intercept. This can give a great performance improvement if we
+want to monitor a small set of system calls. Another advantage over \code{ptrace(2)}
+is that a process can be traced by more than one tracing process using /proc.
+However, \path{/proc} still suffers from performance penalty caused by process switch
+on each traced system calls. It requires the tracing process' immediate
+response on each traced system calls. As a result, it can be used for process
+confining but not good for auditing.
+
+As well as \code{ptrace(2)}, \path{/proc} will still
+bring side-effect to the traced process. When a traced process calls \code{setuid(2)},
+the call will fail because the tracing process would have insufficient
+privileges to the setuided process.
+
+\subsubsection{Light-weight Auditing Framework}
+
+The lightweight auditing framework is intended to be a way for the kernel to
+get various types of audit information out to user space without slowing things
+down, especially when auditing is not being used. The framework is meant to
+serve as a complement to SELinux; it is already being shipped as a part of the
+Fedora Core 2 test 2 kernel. There are two kernel-side components to the audit
+code. The first is a generic mechanism for creating audit records and
+communicating with user space. All of that communication is performed via
+netlink sockets; there are no new system calls added as part of the audit
+framework. Essentially, a user-space process creates a NETLINK AUDIT socket,
+writes audit request structures it, and reads back audit reply structures in
+return. The generic part of the audit mechanism can control whether auditing is
+enabled at all, perform rate limiting of messages, and handle a few other
+tasks. On the kernel side, it provides a printk()-like mechanism for sending
+messages to user space. This code also implements a user-specified policy on
+what happens if memory is not available for auditing; truly paranoid
+administrators can request that the kernel panic in such situations.
+
+\subsubsection{Linux Trace Toolkit (LTT) and LTTng}
+
+\subsubsection{Solaris DTrace}
+
+\subsubsection{KProbes, DProbes and SystemTap}

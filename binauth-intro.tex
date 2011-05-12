@@ -1,0 +1,107 @@
+\subsection{Introduction}
+\label{sect:intro}
+
+Malware such as viruses, trojan horses, worms, remote attacks, 
+are a critical security threat today.
+A successful malware attack usually also modifies
+the environment (e.g. file system) of the compromised host.
+Many of the system security problems such as malware stem from the fact that untrusted code is executed
+on the system.
+We can mitigate many of these problems by ensuring that code which is executed only comes
+from trusted software providers/vendors and the code is executed in the correct context.
+In this paper, we show that this can be efficiently achieved even on complex
+operating systems such
+as Windows. Our system provides two guarantees:
+(i) we only allow the execution of binaries (in the rest of the paper, we refer
+to any executable code stored in the file system as a {\em binary})
+whose contents are already known and trusted --- we call this {\em authenticating binary integrity};
+and (ii) as binaries are kept in files, the pathname of the file must 
+match its content --- we call this {\em authenticating binary location}. 
+Binary integrity authentication ensures that the binary has not been
+tampered with, e.g. {\tt cmd.exe} is not a trojan.
+Binary location authentication ensures that we are executing
+the correct executable content. 
+A following extreme example illustrates location authentication. 
+Suppose the binary integrity of the shell and the file system format executables 
+are verified. If an attacker swaps their pathnames,
+then running a shell would cause the file system to be formatted.
+In this paper, we refer to {\em binary authentication} to mean when 
+both the binary's data integrity and location are verified.
+
+Most operating systems can prevent execution of code
+on the stack due to buffer overflow, e.g. NX protection.
+Combining stack protection with binary authentication
+makes the remaining avenues for attack 
+smaller and more difficult.
+%i.e. return-to-libc attacks and function pointer overwriting
+%are still possible.
+Binary authentication is also beneficial because it is even more important
+for the operating system to be protected against malicious drivers
+and the loading of malware into the kernel.
+
+Most work on binary integrity authentication is on Unix/Linux
+\cite{digsig,williams,signedexec}.
+However, the problem of malware is more acute in Windows.
+There are also many types of executable code,
+e.g. executables (.exe), dynamic linked libraries (.dll), 
+ActiveX controls, control panel applets, and drivers. 
+In this paper, we focus on mandatory binary authentication of all forms
+of executables in Windows. 
+Binaries which fail authentication cannot be loaded, thus,
+cannot be executed. We argue that binary authentication together with 
+execute protection of memory regions (e.g. Windows data execution prevention) 
+provides protection against most of the malware on Windows.
+
+A binary authentication needs to be flexible to operate under different scenarios.
+Our prototype signs binaries using a HMAC \cite{rfc2104} which is more lightweight
+than having to rely on PKI infrastructure, although it can also make use of it.
+The authentication scheme additionally allows for other security benefits.
+Not only is it important to authenticate software on a system but one also needs
+to deal with the maintenance of the software over time.
+Nowadays, the number of discovered vulnerabilities grows rapidly 
+\cite{CERT-vul}.
+This means that binaries on a system (even if they are authenticated) may
+be vulnerable. This leads to a vulnerability management and patching problems.
+We propose a simple software ID system leveraging on the binary
+authentication infrastructure and existing infrastructures such as DNS and certificae authorities
+to handle this problem.
+
+Windows has the Authenticode mechanism \cite{authenticode}.
+In Windows XP version and earlier, 
+it alerts the users of the results of signature verification under
+a few situations. However, it is not mandatory, and can be bypassed.
+The Windows Vista UAC mechanism makes use of signed binaries but it only
+deals with EXE binaries. It is also limited to privilege escalation situations.
+One common drawback of existing Windows mechanisms is that they do not 
+authenticate the binary location.
+Moreover, requiring PKI infrastructure and certificates, 
+we believe, is too heavy for a general purpose mechanism.
+% The latest Windows Vista, through its User Account Control (UAC), 
+% makes some improvement by always alerting the users of signature verification status,
+% particularly if the user runs with Administrator privilege.
+% Yet, many problems remain, such as concern over certificate processing and revocation overhead, 
+% and constant interactive user approval dialog which may irritate or annoy the users.
+
+The main contribution of this paper is that we believe that it provides the first
+comprehensive infrastructure for trusted binaries for Windows.
+This is significant given that much of the problems of security on Windows stems from
+inability to distinguish between trusted and untrusted software.
+It provides mandatory authentication for the full range of binaries under Windows, and goes beyond
+authenticated code in XP and Vista.
+We also protect driver loading which gives increased kernel protection.
+Our scheme provides mandatory driver authentication which 32-bit Windows does not,
+and can be integrated with more flexible policies which 64-bit Windows does not support.
+We also analyze the security of our system. 
+Our benchmarking shows that the overhead of comprehensive binary
+authentication can be quite low, around 2\%,
+with a caching strategy.
+% Caching however is not always better.
+% Under intensive file modification usage scenarios, 
+% an uncached strategy can be preferable.
+
+% The paper is organized as follows.
+% Section~\ref{sect:windows} examines special issues in Windows.
+% Section~\ref{sect:related} surveys related work.
+% We describe our scheme and implementation in Section~\ref{sect:scheme}.
+% Section~\ref{sect:cost} presents the benchmarks, and
+% Section~\ref{sect:conclusion} concludes this paper.

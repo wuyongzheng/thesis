@@ -1,0 +1,124 @@
+\subsection{Windows Issues}
+\label{sect:windows}
+
+We discuss below the complexities and special problems of
+Windows which make it more difficult to implement binary authentication
+than in other operating systems such as Unix.
+Windows NT (Server 2000, XP, Server 2003, Vista) is a microkernel-like
+operating system. 
+Programs are usually written for the Win32 API but these are
+decomposed into microkernel operations. 
+However, Windows is closed source --- only the Win32 API is documented
+and not the microkernel API.
+Our prototype makes use of both the documented and undocumented
+kernel infrastructure. However, it is not possible to make any guarantees
+on the completeness of the security mechanisms
+(which would also be a challenge even if Windows was open source).
+Some of the specific issues in Windows which we deal with are:
+\begin{itemize}
+\item {\bf Proliferation of Binary Types:}
+It is not sufficient to ensure the integrity of {\tt EXE} files.
+In Windows, binaries can have any file name extension, or even no extension.
+Some of the most common extensions include {\tt EXE} (regular
+executables), {\tt DLL} (dynamic linked libraries), {\tt OCX} 
+(ActiveX controls), {\tt SYS} (drivers), {\tt DRV} (drivers)
+and {\tt CPL} (control panel applets).
+Unlike Unix, binaries cannot be distinguised by an execution flag.
+Thus, without reading its contents,
+it is not possible to distinguish a binary from any other file.
+
+\item {\bf Complex Process Execution:}
+A process is created using {\tt CreateProcess()} which is a Win32 library
+function. However, this is not a system call since Windows is a microkernel,
+and in reality this is broken up at the native API into:
+{\tt NTCreateFile()}, {\tt NTCreateSection()}, {\tt NTMapViewOfSection()},
+{\tt NTCreateProcess()}, {\tt NTCreateThread()}.
+Notice that {\tt NTCreatePro-\\cess()} at the microkernel level 
+performs only a small part of what is needed to run a process.
+Due to this, it is more complex to incorporate mandatory authentication in Windows.
+
+\item {\bf DLL loading:}
+To load a DLL, a process usually uses the Win32 API, {\tt LoadLib-\\rary()}.
+However, this is broken up in a similar way to process execution above.
+% In order to load a particular DLL, a process first calls
+% {\tt NtCreate-\\File()} \footnote{A process usually 
+% just calls {\tt LoadLibrary()} Win32 API, but we refer to the Native APIs here.}
+% to open that DLL file.
+% It subsequently calls {\tt NtCreateSection()} to create a section object,
+% and then pass the section object to {\tt NtMapViewOf-\\Section()} to map the file 
+% into its address space.
+
+%However, many system DLLs known as ``KnownDLLs" \cite{knowndlls},
+%on which most executables usually depend on, are loaded differently.
+%A registry key defines this set of DLLs.
+%They are loaded during system startup by {\tt smss.exe}, and the corresponding section 
+%objects are registered in the system so that they can be opened later by 
+%calling {\tt NtOpenSection()}.
+%This mechanism, although useful for performance reasons, 
+%is known to have introduced a security problem in the past \cite{knowndlls-vul}.
+% describes a vulnerability in which a user can inject
+%a malicious DLL by polluting KnownDlls namespace without modifying any system DLLs.
+
+\item {\bf Execute Permissions:}
+Many code signing systems, particularly those on Linux \cite{digsig,signedexec},
+implement binary loading by examining the execute permission bit 
+in the access mode of file open system-call.
+The same mechanism, however, does not work in Windows.
+Windows programs often set their file modes in a more permissive manner.
+Simply denying a file opening with execute mode set 
+when its authentication fails, will cause 
+many programs to fail which are otherwise correct on Windows.
+Instead, we need to properly intercept the right API(s) with
+correctly intended operation semantics to respect Windows behavior.
+%We have observed that there are files opened with execute
+%permission by Windows Explorer and many other programs but the files are never
+%executed.
+%In other words, these files are opened with unnecessary execute permissions.
+%If these file-open actions are denied, then these programs will not function correctly.
+
+%\item {\bf TOCTTOU:}
+%An access control system may suffer from Time-of-Check-to-Time-of-Use
+%(TOCTTOU) race condition bug problem \cite{tocttou}.
+%In windows, a binary is write-locked during its execution.
+%That means, in order to ensure executing the correct file,
+%the file only needs to be authenticated at the beginning
+%of the execution.
+%When the file is from a network file server, the lock is also implemented in the
+%file server.
+%Thus it has the same semantics as executing a local file.
+
+\end{itemize}
+
+%\TODO{fix version stuff, add brief discussion that windows patches do
+%not discuss what files and versions are changed etc}
+
+%Compared to other open platforms, Windows potentially also makes 
+%the issue of locating vulnerable software components more complicated. 
+%A great deal of binaries created by Microsoft contain an internal file version,
+%which is stored as the file's meta-data. After Windows Update operations,
+%the name of the updated file may however remain unchanged.
+%Thus, it is difficult to keep track of files changes with such embedded version information.
+%More precisely, one cannot ensure whether a version of a program $P_i$ 
+%remain vulnerable to an attack $A$.
+%Without an explicit mechanism like our software naming,
+%manual inspection of files therefore is a difficult and daunting task.
+%The picture is even made more complicated given that much of 
+%Windows infrastructure remains undocumented. 
+%As such, it is extremely difficult for a typical administrator
+%who examines vulnerability information from public advisories
+%to trace through the system and pinpoint the exact affected components.
+
+Compared to other open platforms, Windows potentially also makes 
+the issue of locating vulnerable software components more complicated. 
+A great deal of binaries created by Microsoft contain an internal file version,
+which is stored as the file's meta-data. The Windows update process does not
+indicate to the user which files are modified. 
+Moreover, meta data of the modified file might still be kept the same.
+Thus, it is difficult to keep track of files changes in Windows.
+More precisely, one cannot ensure whether a version of a program $P_i$ 
+remain vulnerable to an attack $A$.
+It is rather difficult for a typical administrator
+who examines vulnerability information from public advisories
+to trace through the system and pinpoint the exact affected components.
+Our software naming scheme, associates binaries with
+their version and simplifies software vulnerability management.

@@ -1,0 +1,234 @@
+\subsection{Empirical Results}
+\label{sect:cost}
+
+Our authentication system can detect when a modified binary is loaded
+or run from the wrong pathname. In this section, we examine
+the three factors which impact on system performance:
+(i) Verifier checking upon binary loading (execution);
+(ii) file modification monitoring; and
+(iii) binary set-up during the SignatureToMac process.
+The first two above are the most important as they directly 
+affect user's waiting time for process execution and 
+affect overall system operation.
+The tests here are meant to determine the worst case overhead as well
+as average overheads.
+
+The benchmarks are run on a Core 2 Duo with 2GB of ram
+running Windows XP with SP2.
+Each benchmark is run five times.
+As we want to investigate the effect of the cached Verifier,
+each benchmark is run with caching and without caching.
+% When caching is disabled, the binaries will be authenticated 
+% every time they are executed, and {\tt NtCreateFile()} and {\tt NtOpenFile()} 
+% system calls are not intercepted.
+When caching is enabled, we ignore the result of the first run because
+the overhead of authentication overhead is already shown in the uncached case.
+Even if we count the first run, its impact will be very small because
+some of the microbenchmarks run for 10K times, so the authentication
+overhead becomes negligible.
+
+To see the difference of using different hashing algorithms, we implement
+and benchmark three algorithms: MD5, SHA-1 and SHA-256.
+Only MD5 and SHA-256 are shown in Table~\ref{table:bigtable} as
+the results of SHA-1 are always between these.
+When caching is enabled, results of different hashing algorithms are
+not distinguished (shown as Cached-MAC in the table),
+because binaries are not require MAC checking during the benchmark.
+The reason is that the first run is ignored, and the binaries are not modified
+during the benchmark.
+
+To see the difference with digital signature based authentication system,
+we also compare the performances of our scheme against
+the Microsoft official Authenticode utility called {\tt Sign Tool} \cite{signtool},
+and another Sysinternals (now acquired by Microsoft) Authenticode utility
+{\tt Sigcheck} \cite{sigcheck}.
+Note that two tools are user-mode programs.
+They are there to illustrate the difference between non-mandatory strategies
+used with Authenticode with our in-kernel mandatory authentication.
+% However, the slowdown factor can already be seen clearly from the results shown later.
+
+% \subsection{Overhead of Loaded-Binary Verification}
+
+The first two benchmarks investigate system performance under
+two scenarios:
+\begin{enumerate}
+\item {\bf Micro-benchmark:}
+The micro-benchmark aims to measure the worst case performance overhead
+incurred by the scheme. 
+Note that this is primarily intended to measure the authentication cost
+but not other overhead, which is done by the last file modification 
+microbenchmark.
+Here, we have two micro-benchmark scenarios.
+\begin{enumerate}
+\item {\bf EXE Loading:}
+This executes the {\tt noop.exe} program, a dummy program
+that immediately exits, for 10K times.
+This scenario measures the overhead for authenticating the
+{\tt EXE} file.
+The benchmark program first calls {\tt CreateProcess()},
+and waits for the child process' termination using the {\tt WaitForSingleObject()} function.
+We use different binary sizes (40KB, 400KB, 4MB and 40MB, only the 40K and 40MB
+results are displayed)
+for noop.exe to see how executable size impacts performance.
+\item {\bf Loading DLL:}
+The second scenario executes the {\tt load-dll.exe} program for 100 times.
+This scenario is used to find out how the number of loaded DLLs impacts the performance.
+Program {\tt load-dll.exe} loads 278 standard Microsoft
+DLLs with a total file size of $\sim$75MB.
+The size of the {\tt load-dll.exe} itself is 60KB.
+Note that in Windows, the bulk of code is often in DLLs which is why the 
+{\tt EXE} file may be small, e.g. Open Office has over 300 DLLs.
+\end{enumerate}
+
+\item {\bf Macro-benchmark:}
+The macro-benchmark measures overhead under a typical usage scenario.
+Our benchmark is to create the Windows DDK sample projects
+using the {\tt build} command.
+In each test run, 482 C/C++ source files in 43 projects are built.
+This benchmark is chosen as it is deterministic, non-interactive, creates
+many processes and uses many files.
+\end{enumerate}
+
+We benchmark {\tt Sign Tool} and {\tt Sigcheck} in the following fashion.
+We first sign {\tt noop.exe} and {\tt load-dll.exe} using 
+{\tt Sign Tool}'s signing operation.
+We then measure the execution time of 
+authenticating and executing the two programs.
+For the macro-benchmark, we replace each development tool in the DDK
+(i.e. {\it build.exe}, {\it nmake.exe}, {\it cl.exe} and {\it link.exe})
+with a wrapper program which first authenticates the actual development 
+tool and then invokes it.
+For the micro-benchmark, we consider two settings: 
+(i) {\tt EXE} only; and (ii) all binaries ({\tt EXE} + {\tt DLL}).
+The macro-benchmark, however, only tests the EXE case.
+This is because, during the macro-benchmark, many programs are invoked,
+and each program each invocation may dynamically load a different set of DLLs.
+Thus, it is hard to keep track of what DLLs are loaded, and it is
+unfair to simulate with all DLLs used.
+
+\begin{table*}[tb]
+\centering
+\begin{tabular}{|l||c|c||c|c||c|c||c|c|}
+\hline
+   & \multicolumn{6}{|c||}{{\bf Micro-Benchmark}} & \multicolumn{2}{|c|}{{\bf Macro-}} \\
+   & \multicolumn{6}{|c||}{} & \multicolumn{2}{|c|}{{{\bf Benchmark}}} \\
+{\bf Authentication}	& \multicolumn{2}{|c||}{{\tt noop} 40K} & \multicolumn{2}{|c||}{{\tt noop} 40M}
+   & \multicolumn{2}{|c||}{{\tt load-dll}} & \multicolumn{2}{|c|}{{\tt build}} \\
+{\bf System}    & time & slowdown & time & slowdown
+                & time & slowdown & time & slowdown \\
+\hline
+\hline
+{\bf Clean}     & $22.76$ & $-$ & $30.07$ & $-$
+                & $45.32$ & $-$ & $66.26$ & $-$ \\
+\hline
+{\bf EXE Only:} & & & & & & & & \\
+{\tt Signtool}  & $2822$ & \underline{$11637\%$} & $4850$ & $16033\%$
+                & $73.49$ & \underline{$62.16\%$} & $97.00$ & $46.39\%$ \\
+{\tt Sigcheck}  & $1720$ & $7457\%$ & $5629$ & $18623\%$
+                & $62.82$ & $38.62\%$ & $110.5$ & \underline{$66.72\%$} \\
+Uncached-MD5    & $25.96$ & $14.08\%$ & $2150$ & $7052\%$
+                & $45.34$ & $0.05\%$ & $70.85$ & $6.93\%$ \\
+Uncached-SHA256 & $30.29$ & $33.07\%$ & $9005$ & \underline{$29851\%$}
+                & $45.34$ & $0.05\%$ & $71.79$ & $8.35\%$ \\
+Cached-MAC      & $23.20$ & ${\bf 1.93}\%$ & $30.63$ & ${\bf 1.88}\%$
+                & $45.33$ & ${\bf 0.02}\%$ & $67.62$ & ${\bf 2.06}\%$ \\
+\hline
+{\bf All Binaries:} & & & & & & & & \\
+{\tt Signtool}  & $11867$ & \underline{$52043\%$} & $14030$ & \underline{$46565\%$}
+                & $16018$ & \underline{$35244\%$} & $-$ & $-$ \\
+{\tt Sigcheck}  & $4283$ & $18772\%$ & $6186$ & $20478\%$
+                & $12548$ & $27587\%$ & $-$ & $-$ \\
+Uncached-MD5    & $26.10$ & $14.67\%$ & $3881$ & $12811\%$
+                & $128.8$ & $184.1\%$ & $79.31$ & $19.69\%$ \\
+Uncached-SHA256 & $30.42$ & $33.67\%$ & $9302$ & $30839\%$
+                & $201.3$ & $344.0\%$ & $91.80$ & \underline{$38.55\%$} \\
+Cached-MAC      & $23.25$ & ${\bf 2.14\%}$ & $30.58$ & ${\bf 1.72\%}$
+                & $45.35$ & ${\bf 0.07\%}$ & $67.88$ & ${\bf 2.45\%}$ \\
+\hline
+\end{tabular}
+\caption{Benchmark results showing times (in seconds) and slowdown factors. The worst slowdown
+factors for each benchmark scenario are shown with underline, whereas the best are in bold.
+We define $slowdown_x = (time_x - time_{clean}) / time_{clean}$.}
+\label{table:bigtable}
+\end{table*}
+
+The results are given in Table \ref{table:bigtable} but
+we have not shown ``noop 400K'' and ``noop 4M'' 
+because they are bounded by the results of ``noop 40K'' and ``noop 40M''.
+Other results not shown are that the overhead is approximately
+linear with respect to the file size, e.g.
+the results of the All-binaries/Uncached/SHA-256 benchmarks are
+40K:30.42s, 400K:85.43s, 4M:598.0s, 40M:9302s.
+
+We can see that the overhead of {\tt Signtool} and {\tt Sigcheck} makes
+it unusable if DLLs are to be checked (352x slower on {\tt load-dll}).
+If only {\tt EXE} are checked, then at least 40\% overhead and based
+on the {\tt load-dll} benchmark, one could expect about an order
+of magnitude worse if all DLLS are checked.
+Of course, using these tools would incur additional overhead from creating
+a process and the main purpose is just to show the difference
+between what can be done in user-mode versus in-kernel.
+We can see that all the uncached-MD5/SHA256 are considerably faster
+than {\tt Signtool} and {\tt Sigcheck}.
+
+Authenticating only {\tt EXE}, the difference between uncached has overheads
+around 8\% while cached brings this down to very small, around 2\%x and almost
+neglible in the {\tt load-dll} benchmark (0.02\%).
+Note that as uncached overhead is quite small, the results are dominated
+by non-determinism in timing measurements.
+Moving to all DLLs ({\tt EXE} + {\tt DLL}), we can see the effect of Windows
+programs using many DLLs (more code in {\tt DLL} than {\tt EXE}).
+The overhead incurred by caching is still small while uncached can grow 
+to between 20-40\% depending on the hash algorithm.
+Note that the uncached overhead is applicable for files which cannot be cached.
+
+% \subsection{Overhead of File Modification Monitoring}
+
+%\begin{table*}[h]
+%\centering
+%\begin{tabular}{|l|c|c|}
+%\hline
+%Case & time & slowdown \\
+%\hline
+%Clean & $4.051$ & $-$ \\
+%File in the table & $6.809$ & $68.1\%$ \\
+%File not in the table & $6.266$ & $54.7\%$ \\
+%\hline
+%\end{tabular}
+%\caption{Benchmark results showing file modification monitoring overhead}
+%\label{table:filewrite}
+%\end{table*}
+
+The final microbenchmark investigates the tradeoffs between cached
+and uncached verification.
+Caching means that MAC verification is amortized over executions
+but has added overhead from monitoring file modification,
+while uncached is the opposite.
+% has the cost of MAC every execution 
+% but no file modification cost.
+Our micro-benchmark opens a file for writing 100K times to
+measure the worst case overhead incurred by file modification monitoring.
+We have 3 experiments:
+(i) a clean system without binary authentication;
+%  ($CleanMod$);
+(ii) binary authentication with cache and the modified file is a binary;
+% ($BinMod$);
+and (iii) binary authentication with cache and the modified file
+is not a binary.
+%  ($DataMod$).
+
+The results for the file modification micro-benchmark
+show that for binary authentication with a cache, it
+doesn't matter whether the file being written to is a binary or not.
+Both cases incur about 60\% overhead compared to a clean system.
+Since binary authentication with no-cache has no overheads for file
+modifications, this means that under some usage scenarios where file modification
+is very high,
+the uncached strategy may be preferable over cached even when Verifier overhead
+is higher.
+
+% The results show that the running time of $B$ and $C$ are both about 1.6 times of $A$.
+% This overhead only happens when a file is opened with write permission.
+% There is no overhead when a file is opened with read permissions.
+% There is a tradeoff between cached and uncached version.
+% When there are a lot of file modifications, the uncached version will be more efficient.

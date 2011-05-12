@@ -1,0 +1,40 @@
+\subsection{Case Studies}
+\label{sec:study}
+
+The following case studies show how \lviz{} can be used to
+understand system behavior and to solve system or application problems.
+We first use a well understood task, file copying,
+to familiarise the reader with \VDP{}.
+We then use a software compilation example to show how \VDP{} can
+be used for software failure diagnosis.
+We use two visualizations on whole system traces to understand
+how the operating system works and examine performance problems.
+Lastly, we use \VDP{} to examine performance problems in a browser benchmark.
+These examples also illustrate that the \VDP{} visualization is highly
+customizable and in practice, one could use many different visualizations
+on the same trace.
+
+% In order to demonstrate the potential and power of visualizing system traces,
+% we have developed a visualization tool \VDP{} using an extension of
+% dotplots \cite{dnadp}.
+% Dotplots were used to show sequence similarity in
+% DNA \cite{dnadp} and music \cite{audio}.
+% Our \VDP{} dotplots (or simply \VDP{} for both the visualization and tool)
+% extends the basic dotplot to get a flexible visualization
+% which can be tailored to visualize different kinds of behavior.
+% Furthermore, \VDP{} uses a number of novel extensions geared towards
+% understanding software behavior whereas traditional uses of dotplots
+% are for showing sequence similarity.
+
+The notation Bar $n$ refers to the $n$th barcode.
+The configuration of each visualization is described in the corresponding
+figure caption.
+
+\input{lviz-ex-cp}
+\input{lviz-ex-build}
+\input{lviz-ex-idle}
+\input{lviz-ex-boot}
+%\input{lviz-ex-install}
+\input{lviz-ex-wbbench}
+%\input{lviz-ex-iexploit}
+%\input{lviz-ex-virus}

@@ -1,0 +1,90 @@
+\subsection{Related Work}
+\label{sec:related}
+
+\TODO{maybe dont need the first para}
+% There are a number of related works on execution trace visualization,
+% some are graph based, some are hierarchical,
+% some are Cartesian coordinate based.
+% We focus on Cartesian coordinate base visualization to which \VDP{} belongs.
+% The Cartesian coordinate based visualization is commonly used when each
+% visualized entity (function, event, object, line of source code, etc.)
+% is associated with some numerical properties.
+% Each entity is then positioned on to the Cartesian coordinate based on
+% its properties.
+
+\TODO{reviewer 2:
+The statement in section 2 that Cartesian visualizations are commonly used when each visualized entity is associated
+with two or three numerical properties is somewhat confusing. The choice of the so-called embedding, or projection,
+is in Infovis in general not one-to-one to the data attributes, at least not at this level. For example one would
+visualize some data using hierarchies primarily and not Cartesian plots if the most important aspect to reason about
+is the hierarchical one, even when the data has 2 or 3 numerical attributes per element. Or a table in a data base can
+be shown as a table, but better as a graph, if it actually encodes a graph. I think strongly that the layout choice
+should reflect the task at hand, and not data modeling issues.
+fixed.
+}
+
+\TODO{reviewer 2:
+In the previous work you should definitely discuss the more recent work of Holten, Cornelissen, van Deursen, and
+Zaidman on visualizing trace information, see "Understanding Execution Traces Using Massive Sequence and Circular
+Bundle Views" (proc. ICPC 2007), since it is at least as related to the topic of this paper as the other references, and is
+quite recent. The work of F. van Ham and J. Abello on MatrixZoom fits also in this area.
+fixed (only added the first paper).
+}
+
+% SeeSoft~\cite{eick94} visualizes general log files by zooming out
+% lines of text logs and coloring them by message types.
+SeeLog~\cite{eick1995dtf} visualizes Unix accounting trace files by
+plotting events by time and process.
+SeeLog can be viewed as a restricted variant of the
+\VDP{} visualization.
+Magpie \cite{magpie} is a performance analysis tool designed for web servers.
+It uses collected system events including file I/O, computation,
+thread scheduling and network to analyze the resources usage of
+HTTP requests.
+BootVis~\cite{bootvis} 
+is a visualization tool to tune
+Windows booting plotting resource use versus time.
+
+Bodic et al. \cite{bodik05cvs} propose another visualization tool for
+web servers.
+It shows frequency of different HTTP requests
+and highlight anomalies that may indicate site failures.
+\VDP{} on the other hand is a general trace visualizer but
+it can be used for similar diagnosis (see Sec.~\ref{sec:wbbench}).
+TuningFork \cite{tuningfork} is a trace analysis tool for real-time systems
+including visualizing unsatisfied real time constraints in
+real-time systems.
+
+EVolve~\cite{evolve} is a visualization framework for understanding
+Java program by visualization execution traces from the JVM and
+has a DotPlot visualization.
+% It includes a DotPlot module which has some similarity with \VDP{}.
+However, \VDP{} uses an extended DotPlot (see Sec.~\ref{sec:vis})
+and generates different visualizations (see Fig.~\ref{fig:make-matching})
+depending on its configuration.
+\lviz{} is designed to scale for large traces and
+to be efficient to meet user interaction needs.
+Voigt et al.~\cite{voigt09oae} propose a visualization method which correlates
+class method invocation, object invocation and time.
+To correlate methods and objects, it places objects and methods
+on each axis and draw dots to represent the
+method-access-object relationship.
+Cornelissen et al.~\cite{cornelissen} propose two visualizations,
+massive sequence and circular bundle views, to examine execution traces.
+The massive sequence view visualizes a trace by placing each event as rectangles
+according to its invoking software module (X-axis) and time (Y-axis).
+The circular bundle view visualizes software module interactions by arranging
+modules into a tree and draw two-module interaction as a curve along the
+path in the tree.
+These visualizations are different as they do not compare events 
+nor work with closed source software.
+
+\TODO{reviewer 3:
+Dotplots and their extensions have been studied in the field of visualization more than
+extensively. They have been proven to be useful for finding patterns in similarities in various
+fields. In this paper, the dotplot is not used differently. The configuration of visualizations
+reminds me DNAVis:
+Case Study: Visualization of annotated DNA sequences, Tim Peeters, Mark Fiers, Huub van de
+Wetering, Jan-Peter Nap, Jarke J. van Wijk, Joint Eurographics IEEE TCVG Symposium on Visualization
+(2004).
+}

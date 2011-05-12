@@ -1,0 +1,79 @@
+\subsection{Introduction}
+
+Software is increasingly complex with many interactions with other software
+and the operating system.
+This complicates understanding software/component behavior and diagnosing
+problems or performance.
+The close source nature of Microsoft Windows (or simply, Windows) exemplifies this trend.
+Suppose our task is to understand/diagnose/debug some software on Windows.
+Ideally, system/software documentation or source code
+analysis would give the answer.
+In practice, however, this may not be
+workable either due to lack of source or overall
+system complexity being too high.
+An orthogonal approach to address this issue is by examining
+detailed system behavior.
+Recently, there are a number of monitoring systems which
+give detailed system traces such as DTrace~\cite{dtrace} for Solaris,
+DProbes for Linux and Flight Data Recorder~\cite{fdr}
+and WinResMon~\cite{winresmon} for Windows.
+
+However, the system traces can be very large and also
+difficult to analyze. Statistics from \cite{fdr} show that Windows
+server workloads can generate as much as 70M events/day.
+An idle machine can generate about 1M events/day. We also
+observed similar statistics for Windows. Although much of
+the interactions between the processes and software in the
+system is contained in the system trace, in practice, the detail
+can be overwhelming.
+
+\TODO{reviewer 3:
+It is still not completely clear why the OS is playing such an important rol in this paper, since
+the case studies just cover small parts of the OS and show other programs as well. Probably it is
+much more clear to define (formally) what an event is and how it can be interpreted in software
+programs or parts of an operating system. Probably this model can be used for other kind of data
+sets as well, for instance a network log of packages send from one source to another.
+}
+
+We propose \lviz{}, a visualization tool for
+understanding such large and complex system traces.
+\lviz{} has a number of visualizations.
+In this paper, we focus on the visualization which we call \VDP{}.
+It consists of a number of inter-connected sub-visualizations:
+an extended DotPlot;
+two Axis Histograms; and one or more barcodes.
+The \VDP{} can be flexibly configured for different purpose.
+In Sec.~\ref{sec:vis}, we show the design and configurations of \VDP{}.
+In Sec.~\ref{sec:imp}, we show that
+the prototype of \lviz{} is efficient and can handle large system traces
+with real-time response. For example, a trace of size 120MB with 558K events 
+is loaded in under 3 seconds
+and after that it can be interactively displayed/zoomed in around 0.5 seconds.
+
+\TODO{reviewer 2:
+In section 1, you mention the VDP (what's that?) but I do not see a definition of that term before it's being used.
+fixed.
+}
+
+\TODO{reviewer 3:
+What does the abbreviation VDP stands for? It is never introduced!
+fixed.
+}
+
+\TODO{reviewer 3:
+Why should we use dotplots for traces? Why not something else?
+}
+
+The \VDP{} can be used on different traces and for different purpose
+by using different configurations.
+In Sec.~\ref{sec:study}, we use some case studies to show that
+\VDP{} can be used for solving performance problems,
+program failure diagnosis and finding execution patterns/anomalies.
+% We ask the reader to print paper in color or read PDF in a computer,
+% because we use colors in the figures.
+
+\TODO{reviewer 3:
+The authors do not need to mention that the pictures are in color; that is standard for the
+visualization community.
+fixed.
+}
