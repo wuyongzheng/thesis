@@ -104,7 +104,7 @@ main()
 \end{figure}
 
 \code{ptrace}
-suffers from many race condition problems\cite{garfinkel03tap}. One could write a simple C
+suffers from many race condition problems\cite{garfinkel2003traps}. One could write a simple C
 program as in Figure~\ref{fig:ptrace-bug} to escape from ptraceing. After several iterations, some
 child processes will not be traced by the tracing program.
 
@@ -115,7 +115,7 @@ Ptrace Vulnerability" in 2000, "Linux Ptrace/Setuid Exec Vulnerability" and
 
 \subsubsection{Solaris /proc}
 
-Solaris \path{/proc}\cite{faulkner1991tpf}\footnote{Different UNIX systems implement
+Solaris \path{/proc}\cite{faulkner1991process}\footnote{Different UNIX systems implement
 different \path{/proc} file systems.}
 is a file system that provides access to the state of each process
 in the system. \path{/proc} can be used for system call interposition.
