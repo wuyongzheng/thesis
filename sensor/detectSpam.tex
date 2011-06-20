@@ -1,0 +1,137 @@
+%\subsubsection{Spam Detection} \label{subsec:spam}
+\subsubsection{Detecting Malware which Sends Spam Email} \label{subsec:spam}
+
+It is common that botnets are used to send spam email.
+Spam can be sent out at different rates.
+Some worms like Storm and Rustock have been reported to send at lowish
+rates of 20 and 33 emails/min, while others can be high, e.g. Srizbi's rate is
+1800 emails/min \cite{botlab}. While 20 emails/min is probably too
+high for humans, malware could also send at lower rates.
+We remark that humans might also send email at high rate, e.g.
+when using a script to send emails to a group of recipients such 
+as a mailing list.
+
+Our experiment is meant to show
+spam detection is reliable when the monitor uses
+data from external sensors.
+We also experiment on
+different modes of sending email, namely,
+SMTP-based clients and also webmail clients.
+
+%\paragraph{Spam Detection Using the Framework}
+%\label{subsubsec:spam-detectmethod}
+
+To detect bots that send spam, using our modified CuSum detection, we apply the following rules: (i) when
+the user is absent, any outgoing email flags a spamming activity; and
+(ii) when the user is present, our detection algorithms are applied on the
+number of emails sent. Essentially, if over $N$ emails are sent
+within a time interval of length $t$, the algorithm flags it as
+spamming activity, where $N$ and $t$ are the two tunable parameters and carries slightly different meanings in each detection algorithm.
+
+The first rule relies on the fact that emails are usually directly
+sent to the mail servers when the user performs ``send''
+in the email client. Any scheduled
+delay in delivery is based on the server itself. The actual value of
+$N$ and $t$ in the second rule can be learned from the normal
+traffic for each host.
+Although the rules are simple, no matter how slow the spam rate
+is, we can detect spam when the user is absent. So if a
+stealthy spam program sends out only a single email at night,
+this could slip out unnoticed by normal email rate based spam detection
+while we would detect it.
+
+Fig. \ref{fig:email} shows the typical email activity of a
+user in a day. About 10 to 20 emails are sent daily.
+It shows that our hypothesis that all emails are sent with the
+user present is reasonable.
+
+When we apply CuSum to detect changes in the amount of emails sent when
+the user is present, we incorporate a limit on the accumulation time
+$t$, and set $a=0$, $N=120$ and $t=6$ hours. The effect is that
+whenever there is an outgoing email, we accumulate the count, and no
+more than $N=120$ emails can be sent in 6 hours. If the accumulated sum
+exceeds 120, we raise a spam alarm for the host. The allowable
+average email rate is three minutes per email. This is already high for a
+human user, since users do not consistently send an email every 3
+minutes for 6 hours. Using a lower threshold will make it even easier
+to detect the spam.
+When the user is absent, we set $N=1$, meaning any
+outgoing email indicates that it is spam.
+
+%\paragraph{Experimental Results on Spammer Detection} \label{sec:spam-dect}
+
+\begin{table}[!t]
+  \centering
+  \begin{tabular}{|c|c|c|}
+  \hline
+  Spam worm  & User present & User absent \\
+  \hline
+  Storm & 6.1 min & immediate \\
+  \hline
+  Rustock & 3.6 min & immediate \\
+  \hline
+  Srizbi & 5 sec & immediate \\ [0.5ex]
+  \hline
+  \end{tabular}
+  \caption{Detection time of different spam worms. (Detection threshold $N=120$ emails in $t=6$ hours at user presence, and $N=1$ during user absence.)}
+  \label{tbl:detect-spam}
+\end{table}
+
+We detect the emails by analysing the network traffic obtained from
+the sensor. As the details of identifying email are specific to email
+servers and email protocols which are orthogonal to the framework,
+we discuss them in Appendix \ref{appendix:email}.
+
+In our experiment, spam is sent from the monitored host using the
+modified Agobot.
+We tested the detection of spam at rates corresponding to Srizbi,
+Rustock and Storm worms.
+We assume the spam emails are sent out at uniform rate.
+Table \ref{tbl:detect-spam} shows the
+detection time when the user is present and absent.
+Note that threshold $N$ is set on the parameter of the accumulated
+email amount. It is easy to see the detection time is inversely
+proportional to the spam rate. Since the spam rate of Srizbi is much
+higher than Rustock or Storm, it takes least time to detect. When
+the user is present, the detection time of Srizbi is within 5 seconds
+and about 4 and 6 minutes for Rustock and Storm respectively.
+When the user is absent, all three spam worms are detected
+instantly, because the detection threshold $N=1$ at user absence.
+
+\begin{table*}[!t]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \multirow{2}{*}{Detection Algorithm} & Rate & Moving Average & Changepoint & User absent \\ \cline{2-4}
+  & \multicolumn{3}{|c|}{User present (a=5 emails/min)}  & (a=0)\\ \hline
+  \hline
+  Storm   & 16 sec & 18 sec $\sim$ 96 min & 8 min & immediate\\
+  \hline
+  Rustock & 10 sec & 11 sec $\sim$ 58.2 min & 4.3 min & immediate\\
+  \hline
+  Srizbi  &  1 sec &  1 sec $\sim$ 1.1 min & 4 sec & immediate\\ [0.5ex]
+  \hline
+  \end{tabular}
+  \caption{Detection time of spam worms, using rate based detection, moving average detection, and changepoint detection.} 
+  %(The upper bound of normal email rate is $a=5$ emails/min, and the detection threshold $N=120$ emails in $t=6$ hours at user presence. The detection threshold $N=1$ during user absence)
+  \label{tbl:detect-spam2}
+\end{table*}
+
+To detect spam using rate based or moving average detection algorithms
+is straightforward. 
+Table \ref{tbl:detect-spam2} compares the detection time using rate, moving average and changepoint detection. The detection threshold equals to 1 during user absence for all three algorithms. When user is present, the acceptable normal email rate is $a=5$ emails per minute, and the detection threshold for changepoint detection is $N=120$ emails in $t=6$ hours, the threshold $T_r=a+N/t\approx6$ email per minute for rate based detection, and the threshold for moving average detection is $T_m = 1920$ email per 6 hours or $16/3$ email per minute on average.
+
+Table \ref{tbl:detect-spam2} shows that using the user presence information, spam detection is significantly reduced for all three detection algorithms in the user absence case. 
+In general, the more aggressive the spam worm, the easier it 
+becomes to detect it. 
+Srizbi is detected in much more quickly than Rustock or Storm. Comparing the detection time using the three detection algorithms, we can see that rate based detection is the quickest. 
+However, what the detection time does not show is that rate based detection is 
+sensitive to the instantaneous email rate.
+Thus, it is more likely to have false alarms than the other two detection algorithms. 
+If the threshold of rate based detection is set too loose so
+as to reduce false positives, this will risk increasing
+the probability of false negatives. 
+The moving average detector has a wide variation in detection time which
+depends on the initial state when the spam program starts execution. In the worst case, it takes about 1.5 hours to detect the Storm worm. 
+Changepoint detection can detect all three spam worms in a reasonable time, 
+and the detection is not sensitive to the instantaneous email rate. 

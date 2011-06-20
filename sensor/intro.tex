@@ -1,0 +1,156 @@
+\subsection{Introduction}
+\label{sec:intro}
+
+Securing computers against malware is increasingly difficult today. 
+Anecdotes abound that the survival time
+of an unpatched PC running Windows XP connected to the Internet 
+is in the order of minutes~\cite{Survival1,Survival2}.
+Worms can be quite effective in infecting systems, e.g.
+the Conficker worm~\cite{Conficker}
+is estimated to have infected 6\% of computers on the Internet.
+
+Often the goal of the attackers is to infect a host to make it part
+of a botnet.
+The malware may be mostly dormant until it is activated,
+as such, it can be difficult to detect that the host is infected.
+The detection problem is made worse since malware can exploit rootkit
+techniques to hide its presence and also any activity.
+For example, the Mebroot~\cite{Mebroot} rootkit infects the master boot record of the
+hard disk allowing it to infect the Windows kernel during boot.
+After that it hides the changes to the master boot record to make it
+difficult for antivirus software to detect its presence.
+
+Many security mechanisms are host-based -- either
+part of the operating system or interact with it.
+A primary exception is network-based security mechanisms which
+analyze network data and traffic.
+While there are some successes in detecting the presence or activity of
+malware by network-based security mechanisms, there are many other
+sources of information outside the host that are also useful for
+making detection and security mechanisms more robust.
+
+In this paper, we propose a framework which 
+fuses external (with respect to the host machine)
+environment information collected by external sensors
+in decision making to have more robust and enhanced
+security mechanisms.
+We employ the framework to:
+(i) enhance intrusion detection;
+(ii) monitor and control resource usage;
+and (iii) enhance access and rate control policies with
+user presence and out-of-band feedback.
+The advantage of our framework is that by using the external sensors,
+we are able to give reliable security guarantees even when the host is
+compromised, i.e. by a rootkit.
+Our focus will be on protecting stationary hosts (e.g.
+workstation) which users work on rather than servers controlled remotely
+or mobile laptops.\footnote{
+We remark that it is feasible to deal with mobile devices but the framework
+will need to be more complex and will need to incorporate authentication
+features, thus, for simplicity and clarity, we focus on non-mobile hosts.
+}
+
+We take advantage of the growth in pervasive computing and sensor technology
+which provide (relatively) cheap sensors which can take a variety of physical
+measurements.
+These sensors are used in a variety of ways.
+Firstly, the sensor can be used to measure resource usage on the host itself,
+e.g. correlating CPU usage (the resource)
+with CPU temperature (the sensor measurement).
+Secondly, the sensors can be used to measure the interaction of the host
+with the environment, e.g. network usage which also includes sending emails.
+Thirdly, the sensors can be used to measure environmental information
+which is orthogonal to the host, the most important being
+using sensors to determine the presence or absence of
+the user on the host as well as physical user activity such as keyboard usage.
+By ``user'', we mean the human using the host and although
+there may be more than one user, we simply say user.
+
+We are also concerned with maintaining user privacy.
+While it is possible to obtain comprehensive user activity information,
+e.g. user identity and key strokes from
+surveillance cameras, 
+we focus more on sensors that only provide
+binary information like the presence of a user or keyboard activity
+or other coarse-grained indirect data.
+However, in some applications, privacy may not be an issue and part of
+the security policy, e.g. access control policies, and we will also
+present such applications.
+
+Another source of environment information could be from physical
+security information management systems.
+Such systems are already in-place in many organizations and could provide
+relevant environment information whereby user activities can be
+derived, e.g. the door entry control system gives
+evidence that a particular user is in the machine room.
+Green buildings may have many sensors which are designed to detect human
+presence or activity.
+
+A natural application of our framework is to enhance the security of
+intrusion detection systems (IDS).
+This is because the IDS may be running on the host, 
+as such, it could be compromised by malware.
+External sensors, on the other hand, are
+difficult to be accessed or compromised by either malware or remote intruders.\footnote{
+Our focus is on remote attacks rather than attacks with physical system access.
+} 
+The results of an environment sensing based malware detector 
+can be correlated with alerts from an IDS to reduce false positives.
+While existing IDS may incorporate network traffic information in
+gateways which are external to the host, the difference is that we
+make further use of other tamperproof sensors and fuse it with user
+presence and activity. 
+
+The following example shows the difference
+from the network intrusion problem. Consider the case of a single
+email being sent. At the network level, there is insufficient
+information to be able to identify whether it is a spam email
+generated by malware or a legitimate email sent by the user. 
+Whereas, in our framework, suppose that the
+email is sent in the absence of the user and user activity, it is
+reasonable to infer that the email has been sent automatically.
+Furthermore, in the absence of any additional information, 
+a default rule to classify this email as spam activity will be reasonably
+effective and accurate.
+In this paper,
+we present some application scenarios of malware detection where a botnet
+is using malware on the host for:
+(i) sending spam email;
+(ii) contributing to distributed denial of service (DDoS) attacks; 
+and (iii) using the host as a compute engine for offline
+dictionary attacks.
+
+A different set of security applications is where the
+environment information is used on the host as part of a security mechanism.
+It can be used to increase the expressivity of
+access control and rate control policies
+by requiring privileged actions on a host to be correlated with
+physical user presence and physical activity.
+This prevents remote attacks which
+escalate privileges, e.g.
+privileged actions can only
+be performed if the administrator is present
+and using the console.
+
+An important property of our framework is that it can be immune
+to attacks which compromise the host.
+Without the fusion of sensor data from the environment surrounding the host, 
+the attacker can simply hide inside the host or erase traces of an
+attack or intrusion. Some malware may even be able
+to shut down IDSs deployed in the host. A limitation of our
+framework is that the sensor data obtained is coarse grained and
+possibly noisy. Nevertheless, our experimental evaluations show 
+such coarse data is already useful in identifying certain 
+mismatches between the host's and user's physical activities.
+
+The rest of this paper is organized as follows. Sec.
+\ref{sec:framework} introduces the framework of integrating the data
+from external sources to the access control or intrusion detection
+logic.
+We apply the framework to malware detection in Sec.
+\ref{sec:app-malware} to demonstrate that information
+external to the host enhances the detection of malware activity.
+The framework is extended to rate and access control applications in
+Sec. \ref{sec:app-ac-rate}.
+Related work is discussed in Sec. \ref{sec:related}
+and Sec. \ref{sec:conclusion} concludes.

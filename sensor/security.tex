@@ -1,0 +1,55 @@
+% include some discussions on knowledgeable malware with the ability to 
+% detect the presence of the user. This system is still useful on
+% those situations (e.g. it imposes an upper bound to the malware).
+%
+% provide some discussions on the nature of the side
+% channel that connects all devices with the monitor.
+
+\subsubsection{Security Discussions}
+
+We further discuss two security considerations.
+
+\subparagraph{Communication Channel}
+
+In view that malware may reside in the hosts,
+it is important that external sensors are able to communicate with
+the monitor securely so that the hosts are unable to compromise
+the integrity, authenticity and confidentiality of the communication.
+One solution is to have a separate private network for the sensors,
+e.g. a wireless sensor network with the external sensors as the nodes.
+A cheaper implementation could tunnel encrypted communication
+through the host but that would be susceptible to DOS attacks if
+the host is compromised.
+The privacy requirements and the need for a separate private
+network fit well with wireless sensor networks equipped with
+multi-modality sensors.
+%There are many commercial wireless multi-sensor
+%boards which fit our purposes, e.g.
+%SBT80 from the EasySen
+%\cite{EasySen} contains a number of sensors including infra-red,
+%temperature and acoustic.
+
+\subparagraph{Knowledgeable Malware}
+
+Let us consider the scenarios where
+(i) the hosts are compromised by malware,
+(ii) the malware knows the system architecture and the detection algorithms,
+including the threshold values, and
+(iii) the external sensors, routers and the monitor are not compromised.
+Since the malware resides in the host, it may able
+to accurately derive user presence using information from, for example,
+the keyboard and mouse.
+Based on the derived information, the malware can attempt
+to carry out malicious activities while mimicking normal activities, in order
+to evade detection.
+However, note that to evade detection, the malware is
+constrained by the detection threshold and can only utilize low resources when
+the user is not present.
+When the user is present, although the threshold is
+higher, the malware risks of being detected by the user.
+For example, the
+user may notice the interactive response is slow on the machine.
+Furthermore, user presence detection based on information accessible 
+by the host is arguably less accurate than through specifically 
+designed external environment
+sensors which add more constraints on the malicious activities.

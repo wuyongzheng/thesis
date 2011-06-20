@@ -1,0 +1,44 @@
+\subsubsection{Handling Exceptions}
+
+It is important to also deal with cases where there is exceptional
+behavior which may otherwise cause false positives.
+
+\paragraph{Scheduled Outgoing Email}
+If user has a large amount of email to send, and he opts to send them while going for a coffee break, our system supports that if the user has obtained sufficient email tokens. 
+%for him to send the emails when he is away. 
+The tokens to send email are obtained by directly interacting with the monitor,
+such as by solving a CAPTCHA \cite{captcha} or graphical Turing test
+to validate that it is a human request.
+Several tokens can be obtained in a batch, and the user only needs to solve one puzzle for validation.
+
+Such a mechanism employing tokens to send emails can be adopted even when 
+the user is present, as a special way of requesting for additional email quota. The tokens obtained for sending email when the user is present expire when 
+the user goes away. 
+Similarly, the tokens allowing the user to send email while he is away expire when the user comes back. The expiration mechanism reduces the opportunity 
+for spam worms to hijack leftover tokens.
+
+\paragraph{Scheduled CPU Intensive Programs}
+We need to handle carefully the case of non-malicious programs that commonly
+run when no user is present. Besides system auto-updates, these
+programs include nightly backup, nightly virus scan, remote desktop
+and user scheduled computation. Backup and virus scan are regular
+tasks. Their resource consumption can be profiled, in terms of the
+start time, duration, and the increase in CPU temperature. Based on
+our measurement, system backup only increases the CPU temperature by
+1-3\degree. Virus scan usually increases the CPU temperature by
+2-3\degree. These host profiles are basis of a whitelist kept by
+the monitor to suppress false alarms. Even if attacker tries to hide
+the malware execution by running it at the same time as these tasks,
+the excess increase in temperature or duration will still trigger
+the alarm.
+
+User scheduled computations may cause irregular behavior.
+As the execution of scheduled computation can be planned ahead, the
+user simply declares in advance to the monitor, the estimated process
+start time, duration and CPU load
+(converted to temperature increases by the monitor).
+The monitor suppresses any
+false alarm within the specified resource consumption. The user is
+advised to give a conservative estimation, for it is better for the
+user to intervene if excess resources are consumed, than allowing
+the attacker to free ride. 

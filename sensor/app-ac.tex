@@ -1,0 +1,159 @@
+\subsection{Application to Access Control and Rate Control}
+\label{sec:app-ac-rate}
+
+Here we investigate how environment information can be useful in
+controlling and allocating resources.  A security policy may require
+administrators to be physically inside the machine room to access
+server consoles and administrative tools. In order to mitigate
+malware from sending spam email, we could implement rate control in
+the router or the mail server, and the rate limit is based on user
+presence. In both cases, environment information is used as a
+condition to access certain resources. Note that the first case is
+on access control, while the second is on rate control.
+
+\subsubsection{Access Control}
+\label{sec:app-ac}
+
+Our framework can be used to implement location-based access
+control. One location-based access control scheme was proposed by Ardagna et
+al. \cite{locaccess} to restrict access to certain resources based on
+physical location of the user. In their work, the physical location
+is obtained from mobile devices, such as mobile phones carried by
+users. Our framework also implements location-based access
+control, but in a different way. Their work adopts a user-centric
+approach where the device is attached to the user and
+user's location is measured in order to figure out
+which resources can be accessed.
+We adopt a resource-centric approach where the device is attached to
+the resource and user presence is observed near the resource in order
+to decide whether to grant the access.
+
+Both approaches have advantages and disadvantages.
+When there are more resources than users, the resource-centric approach
+incurs more cost for the sensors.
+However, in the scenarios we discuss, there are likely fewer resources
+than users or it is closer to a 1:1 ratio.
+A user-centric approach may not be able to determine location
+reliably, e.g. GPS would not work indoors,
+% \TODO{tampering is not an issue - commented out the old text}
+% The user-centric approach not only determines user location,
+% it can also determine, for example, user's velocity which
+% can be useful in some applications.
+% On the other hand, with a resource-centric approach,
+% the sensors device is hard to be tampered by the user,
+% because it is not possessed by the user.
+% For example, with user-centric approach, a malicious user can hack
+% the device to produce false location information;
+% whereas with resource-centric approach, the sensoring device for
+% a server is located in the server room and the malicious has to
+% physically get access to the server room first.
+% With user-centric approach, the sensoring device can be separated from
+% the user an produce false location information,
+% and it is hard to determine user location
+% in some environment; 
+whereas a resource-centric approach does not have to determine location.
+
+Our access control policy not only incorporates user presence information
+but also user activity information.
+For example, the user activity information can be 
+``the user has typed some keys''.
+Enforcement is implemented both on the host and
+router depending on the type of the resource. Enforcement implemented on
+the host implicitly assumes that malware is not in control of the
+host and the host decides the access based on environmental
+information gathered by the monitor, but the malware cannot affect
+access control policies at the environment level.
+Thus, the monitor and host cooperate, which is different from the 
+earlier IDS applications where the monitor operates independently from the host.
+We give two access control policies to illustrate environment aware
+access control:
+
+\begin{enumerate}
+\item {\em The user can execute the {\tt /usr/bin/sudo} program only if he
+is sitting at the host.}
+This policy is used to mitigate the problem of remote attacks - it requires
+that there is a human present before the sudo operation is allowed.
+This policy has to be enforced on the host.
+A remote attacker who does not yet have control of the host would
+be prevented from performing actions which could be used to infect the
+operating system.
+
+\item {\em The user can send email only if he is sitting at the computer
+and has mouse or keyboard activity.}
+This policy is used to prevent malware from sending email while the user
+is away.
+Since user activity is enforced in the policy, it also prevents sending
+email while the user is idle, e.g. watching a movie.
+The intuition is that the user must have performed some typing or
+mouse action in order to send an email.
+Unlike user presence, which can be thought of as being
+a continuous signal, mouse and keyboard input are discrete events which may
+happen at time points which do not overlap with the email sending time interval.
+Thus, the precise meaning of the policy is
+``An email can be sent at time $t$ if user presence is observed at that $t$
+and there is mouse or keyboard input between $[t-\Delta, t+\Delta]$''.
+This policy is enforced in the router or the mail server instead of
+the host and thus provides enforcement even when the host is compromised.
+\end{enumerate}
+
+\subsubsection{Rate Control}
+\label{sec:app-rate}
+
+Previously we showed that abnormal resource usage when the user
+is absent can be easily detected under several scenarios.
+This can be easily extended to controlling the resource usage
+rate in the case of activities involving external resources.
+Two natural scenarios of external rate control are:
+\begin{itemize}
+\item {\bf Shaping Network Traffic} \\
+To mitigate computers being used as bots to perform DDoS attacks,
+the router can shape network traffic based on user presence information.
+By limiting the traffic on flows, this becomes a form
+of inverse quality of service, providing reduced quality when the user
+is not present. If P2P programs are being used, this would
+save some network bandwidth, e.g. if the host uses Skype and becomes
+a Skype supernode, it could lose its supernode status under
+the reduced network flow.
+
+
+\item {\bf Sending Email} \\
+Similarly, the emails could be simply denied when the user is absent.
+If the threshold is above zero, then
+for both webmail and SMTP, the router can simply
+rate limit the protocol. Alternatively for an SMTP server, it could
+quarantine email beyond the threshold. In both cases, outgoing spam emails
+are rate limited possibly to zero.
+
+The email rate can also be rate limited when the user is present.
+The idea is that email is based on typing and/or mouse clicks.
+This data can also be recorded using environmental sensors.
+The email rate can then be based on a function of the detected
+keystrokes and/or mouse clicks.
+\end{itemize}
+
+The framework can make resource rate limiting policies more flexible and usable.
+The idea is to have feedback if a usage is too high for a resource.
+External sensors can then be used as a secure channel to request a higher
+resource rate.
+For example, a monitor on the host can display the resource usage and
+warn the user if he is reaching the limit.
+The user can have something as simple as a button which is pressed
+to function as the secure request
+channel to obtain more network bandwidth or more emails.
+A low resolution camera could also be employed as an out-of-band channel
+to the monitor where the low resolution may mitigate privacy concerns.
+For example, it would be easy for the user to give hand signals to
+communicate to the monitor.
+On the other hand, implementing
+such a policy securely is difficult 
+without the help of external environment information.
+
+In the access and rate control application discussed above,
+to control the resource utilization,
+essentially we need to verify whether an entity is ``human''.
+Instead of using external environment to infer user presence,
+alternatively, a CAPTCHA could be used.
+Using the environment information
+has the advantage that the users are not interrupted by the
+challenges issued by the graphical Turing test.
+

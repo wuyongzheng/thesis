@@ -1,4 +1,5 @@
-thesis.pdf: *.tex thesis.bib
+.PHONY: thesis.pdf
+thesis.pdf:
 	pdflatex thesis
 	bibtex thesis
 	pdflatex thesis
@@ -17,4 +18,4 @@ clean:
 .PHONY: dist
 dist:
 	-rm `date +thesis-%m%d%H.zip`
-	zip -q -r `date +thesis-%m%d%H.zip` thesis.pdf thesis.bib *.tex binauth depvis lbox lviz sensor winresmon
+	zip -q -r `date +thesis-%m%d%H.zip` thesis.pdf thesis.bib *.tex binauth binint depvis lbox lviz sensor winresmon

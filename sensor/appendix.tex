@@ -1,0 +1,116 @@
+\subsection*{Appendix: Email Detection}
+\label{appendix:email}
+
+\begin{table*}[bt]
+  \centering
+  \begin{tabular}{|c|l|}
+  \hline
+  SMTP     & the SMTP request command is {\tt MAIL}. \\
+  \hline
+           & The destination IP is in the set of {\tt hotmail.com} server IPs,  \\
+  {\tt hotmail.com}  & the protocol is HTTP,
+           the HTTP request method is {\tt POST}, and \\
+           & the HTTP request URI starts with {\tt /mail/SendMessageLight.aspx?} \\
+  \hline
+           & The destination IP is in the set of {\tt netease.com} server IPs, \\
+  {\tt netease.com}  & the protocol is HTTP,
+           the HTTP request method is {\tt POST}, and \\
+           & the HTTP request URI ends with {\tt \&func=mbox:compose} \\
+  \hline
+           & The destination IP is in the set of {\tt gmail.com} server IPs, \\
+  {\tt gmail.com}    & the protocol is HTTP,
+           the HTTP request method is {\tt POST}, and \\
+           & the HTTP request URI contains {\tt \&view=up\&act=sm} \\
+  \hline
+  SquirrelMail & A particular HTTP request immediately after an email is sent. \\ [0.5ex]
+  \hline
+  \end{tabular}
+  \caption{Rules for email detection. }\label{tbl:detect-email}
+\end{table*}
+
+We detect the sending of outgoing email is done by matching packets 
+at the router with a list of signatures. 
+We experiment with SMTP and various webmail protocols.
+% Table \ref{tbl:detect-email} shows the
+% signatures of email sent using SMTP and 
+Email sent using SMTP protocol is relatively easy to detect, since
+an SMTP command {\tt MAIL} indicates the user is submitting email.
+Webmail interfaces are more complex.
+Table \ref{tbl:detect-email} summarises
+the signatures we used to identify emails sent using the following
+four webmail protocols: Hotmail, Gmail, NetEase, and SquirrelMail.
+
+For webmail protocols, the destination IP is first matched 
+with a set of possible known servers relevant for that protocol.
+Next, we examine the first few bytes of packet payload to
+look for a HTTP request method {\tt POST}. Existence of such a request
+indicates that the client is performing some webmail
+interaction such as submitting email, logging into
+the mail server, making a request to retrieve email, requesting for
+the email listing, or requesting housekeeping operations. To
+determine whether the client is sending an email, different
+checks are carried out for different mail services. For Hotmail,
+we look for a URI that starts with: \\
+\hspace*{1cm}{\tt mail/SendMessageLight.aspx?}. \\
+For NetEase, the request URI ends with: \\
+\hspace*{1cm} {\tt \&func=mbox:compose}. \\
+For Gmail, the request URI contains: \\
+\hspace*{1cm} {\tt \&view=up\&act=sm}. \\
+We remark that Gmail defaults to using HTTPS from late Jan. 2010
+but our experiments were conducted prior to that. 
+However, Gmail can still be configured to simply use HTTP.
+We discuss HTTPS webmail later.
+
+The check to detect sending email needs to read the following
+data inside the HTTP message for Hotmail, Netease and Gmail:
+33 bytes for Hotmail; 64 bytes for NetEase; and 80 bytes for Gmail.
+Hence during packet captures, the packet payload to the relevant webserver 
+IP addresses needs to be logged partially.
+Detecting email sent with SquirrelMail is less
+straightforward as the payload is encrypted. We found that
+immediately after an email is sent, there is an HTTP GET request in
+plain text of a large size to fetch the listing of the current
+folder. These signatures enable us to identify the sending of email reliably.
+Compared to a typical spam filter that inspects the email content,
+our method has less privacy concerns.
+
+To detect email when encrypted webmail is used, 
+we examine the HTTPS traffic destined to the webmail server. 
+Although we cannot inspect the content of such traffic, 
+we know that each interaction (check for new mail, compose ...) 
+with the webmail server requires a one or more packets to be sent. 
+Thus, the outgoing traffic rate, is also an upper bound on the email
+sending rate.
+The same reasoning can also be used to rate limit the number of emails sent.
+% Thus by limiting the outgoing data rates, we can effectively limit the user interactions, which then limits spams in HTTPS traffic.
+
+We investigate this approach on the HTTPS traffic of Gmail. 
+All of Gmail's web components (including Javascript, HTTPXML request,
+images, and Flash) are from \url{https://mail.google.com}.
+There are no third party resources except DNS traffic.
+When we interact with the Gmail interface, packets from \url{mail.google.com} are observed.
+We found the packet sizes to
+vary from a minimum of 40 bytes to a maximum of 1500 bytes,
+but each TLS record can be as large as $\approx 2^{14}$ bytes. 
+
+Exceptionally large TLS records are likely part of some email.
+However, not all emails contain exceptionally large packets, and piece
+of email may contain more than one large packet. 
+We did not find any clear indication of emails sent, in the
+Gmail's HTTPS traffic as
+sending email and certain other operations, such as checking the inbox,
+display similar behavior in the HTTPS traffic.
+This shows that the detector might be limited to approximating
+the email sending rate by the HTTPS traffic rate if no distinguishing
+features can be used.
+%So instead of differentiating and controlling the sending of emails, we exert some control on the user interactions in general. 
+%
+%From the examination, we are certain that controlling the traffic rate will be effective in limiting all the user interactions, as all the webmail related interactions are between the user and the webmail server. 
+We remark that the detection limit on the outgoing data rate of 
+HTTPS traffic will need to be more generous than the limit when 
+unencrypted email is used, 
+but it nevertheless can be used as an upperbound on the email spam rate.
+
+
+
+
