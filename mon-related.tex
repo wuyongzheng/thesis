@@ -1,5 +1,7 @@
 \chapter{Background on System Monitoring}
 
+In this chapter, we give some background on system monitoring.
+
 Monitoring systems can be classified in a number of ways.
 From the enforcement point of view, we have discretionary and
 mandatory monitoring.
@@ -27,6 +29,12 @@ is usually mandatory as well, and opaque monitoring is usually discretionary.
 
 From OS point of view, the monitoring system can be in user space, kernel space
 or both.
+
+A monitoring system can have side effects to alter the execution of the
+monitored software or no side effects (except maybe performance overhead).
+An example of the former is \code{ptrace(2)} which can be used to filter
+system calls.
+Examples of the later include Solaris BSM and DTrace.
 
 \section{Traditional \code{syslog}}
 
@@ -250,3 +258,5 @@ administrators can request that the kernel panic in such situations.
 \section{Solaris DTrace}
 
 \section{KProbes, DProbes and SystemTap}
+
+\section{Instrumentation tool: Pin, valgrind and DynamoRIO}
