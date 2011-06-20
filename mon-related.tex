@@ -1,4 +1,4 @@
-\chapter{Background on System Monitoring}
+\section{Background on System Monitoring}
 
 \TODO{the background of lbox and winresmon merges to here}
 
@@ -38,7 +38,7 @@ An example of the former is \code{ptrace(2)} which can be used to filter
 system calls.
 Examples of the later include Solaris BSM and DTrace.
 
-\section{Traditional \code{syslog}}
+\subsection{Traditional \code{syslog}}
 
 Syslog is the main logging tool on a UNIX systems. It centrally manages logging
 for your main system services. Syslog is discretionary in such a sense that it
@@ -60,7 +60,7 @@ the monitored program, thus the log message supplied by it should also not be
 trusted. For example, the application does not log or logs something to spoof
 the monitor.
 
-\section{\code{ptrace}}
+\subsection{\code{ptrace}}
 
 The \code{ptrace(2)} system call provides a means by which a parent process may
 observe and control the execution of another process, and examine and change
@@ -123,7 +123,7 @@ exploits make use of \code{ptrace} bugs. The famous ones are "Linux Non-Readable
 Ptrace Vulnerability" in 2000, "Linux Ptrace/Setuid Exec Vulnerability" and
 "Linux ptrace/execve Race Condition Vulnerability" in 2001.
 
-\section{Solaris /proc}
+\subsection{Solaris /proc}
 
 Solaris \path{/proc}\cite{faulkner1991process}\footnote{Different UNIX systems implement
 different \path{/proc} file systems.}
@@ -236,7 +236,7 @@ bring side-effect to the traced process. When a traced process calls \code{setui
 the call will fail because the tracing process would have insufficient
 privileges to the setuided process.
 
-\section{Light-weight Auditing Framework}
+\subsection{Light-weight Auditing Framework}
 
 The lightweight auditing framework is intended to be a way for the kernel to
 get various types of audit information out to user space without slowing things
@@ -255,10 +255,10 @@ messages to user space. This code also implements a user-specified policy on
 what happens if memory is not available for auditing; truly paranoid
 administrators can request that the kernel panic in such situations.
 
-\section{Linux Trace Toolkit (LTT) and LTTng}
+\subsection{Linux Trace Toolkit (LTT) and LTTng}
 
-\section{Solaris DTrace}
+\subsection{Solaris DTrace}
 
-\section{KProbes, DProbes and SystemTap}
+\subsection{KProbes, DProbes and SystemTap}
 
-\section{Instrumentation tool: Pin, valgrind and DynamoRIO}
+\subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}

@@ -1,4 +1,4 @@
-\section{Windows Binary Security Issues}
+\subsection{Windows Binary Security Issues}
 \label{sec:problems}
 
 The Windows NT operating system
@@ -8,7 +8,7 @@ To understand the issues, we first discuss how
 binaries are used in Windows followed
 by some representative attacks.
 
-\subsection{Binary Usage in Windows}
+\subsubsection{Binary Usage in Windows}
 
 A {\em binary} in Windows is a file containing executable code.
 Binaries in Windows occur in many contexts,
@@ -49,7 +49,7 @@ DLL injection, DLL search order hijacking, Autorun/Autoplay, Autostart,
 shell extensions, Windows Services, {\tt rundll\linebreak[0]32.exe},
 and Browser Helper Objects.
 
-\subsection{Normal Usage versus Malicious Attacks}
+\subsubsection{Normal Usage versus Malicious Attacks}
 \label{sec:usageattack}
 
 A security model must be able to distinguish
@@ -117,7 +117,7 @@ We highlight how the attacks behave in a similar fashion to the normal usage
 scenarios described earlier and the security mechanism needs
 to distinguish between normal usage versus an attack.
 
-\subsubsection{Running Unintended Executables}
+\paragraph{Running Unintended Executables}
 
 A common attack is to employ social engineering techniques to get
 the user to run a malware executable.
@@ -136,7 +136,7 @@ Notice that the behaviour of both a direct or file extension social
 engineering attack is similar to the regular
 software running scenario.
 
-\subsubsection{Application Data with Embedded Binaries}
+\paragraph{Application Data with Embedded Binaries}
 
 Malware binaries can be embedded within documents.
 A recent vulnerability in PDF readers \cite{pdfattack} illustrates this
@@ -147,7 +147,7 @@ Notice that the behavior in the attack
 resembles the unpack-and-run in the normal installation scenarios.
 
 
-\subsubsection{DLL Attacks}
+\paragraph{DLL Attacks}
 
 DLL attacks typically exploit some feature of an application
 to inadvertently load a malicious DLL.

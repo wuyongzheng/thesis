@@ -1,8 +1,8 @@
-\section{Related Work}
+\subsection{Related Work}
 \label{sec:prevworks}
 
 
-\subsection{Isolation Models}
+\subsubsection{Isolation Models}
 
 Isolation can be used to prevent malware from changing
 other parts of the system.
@@ -81,7 +81,7 @@ and syslog (the UNIX logging service).
 Simply allowing and denying them will lead to either insecure sandboxing or
 unusable software.
 
-\subsection{Signed Binaries}
+\subsubsection{Signed Binaries}
 \label{sec:signing}
 
 There are systems \cite{binauth, digsig, williams, signedexec, FOOD}
@@ -105,7 +105,7 @@ Another difference is that signed binaries
 only ensures that the binaries are not modified but
 may not prevent deletion.
 
-\subsubsection{Self-signed executables}
+\paragraph{Self-signed executables}
 
 Self-signed executables \cite{selfsign} is a different approach
 to signed binaries which allows for software updates.

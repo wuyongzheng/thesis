@@ -1,4 +1,4 @@
-\section{Visualizing Software Dependencies}
+\subsection{Visualizing Software Dependencies}
 
 On Windows, there are many kinds of binary files.
 We use the term program to denote the executable, which
@@ -53,7 +53,7 @@ The EXE-DLL dependencies are different between the EXE dependency
 graph and the DLL dependency graphs, i.e. they have different definitions
 and visualizations.
 
-\subsection{EXE Dependency Graph}
+\subsubsection{EXE Dependency Graph}
 \label{sec:exe-dep-graph}
 
 We first define what we mean by EXE-DLL and EXE-EXE dependency in
@@ -151,7 +151,7 @@ which shows the dependencies from DLLs which match with the
 pathname {\tt /windows/system32/*.dll} (note that we have used
 the forward `{\tt /}' for pathnames).
 
-\subsubsection{DLL Dependency Graph}
+\paragraph{DLL Dependency Graph}
 
 We define what we mean by EXE-DLL and DLL-DLL dependency in
 a {\em DLL Dependency Graph}. The DLL dependency graph
@@ -232,7 +232,7 @@ i.e. labelled as {\it *y*}.
 Our visualization can choose to either ignore DLL initialization or
 to take it into account.
 
-\subsection{Other DLL Dependency Graphs}
+\subsubsection{Other DLL Dependency Graphs}
 
 There are two DLL Dependency Graphs
 which are obtained through {\em diff} and {\em projection} operations.

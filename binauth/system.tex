@@ -1,4 +1,4 @@
-\section{Binary Authentication and Software IDs}
+\subsection{Binary Authentication and Software IDs}
 \label{sect:scheme}
 
 We want a lightweight binary authentication scheme which can work
@@ -8,7 +8,7 @@ Management of binaries includes determining which binaries should be
 authentic, dealing with issues arising from disclosed vulnerabilities,
 and software patching.
 
-\subsection{Software ID Scheme}
+\subsubsection{Software ID Scheme}
 
 % \TODO{Cover the case if binary is not signed by developer.
 % Remember we want to be lightweight so there are a few possibilities.
@@ -96,7 +96,7 @@ The salt expands the name space to reduce the risk of a hash function collision.
 \end{center}
 \end{figure}
 
-\subsection{Binary Authentication System Architecture}
+\subsubsection{Binary Authentication System Architecture}
 
 % \TODO{Password issues:
 % Password not stored on the machine.
@@ -163,7 +163,7 @@ The Verifier is a kernel driver which makes use of
 decides whether an execution is to be allowed.
 
 %\subsubsubsection{SignatureToMac}
-\subsubsection{SignatureToMac}
+\paragraph{SignatureToMac}
 
 Once software is installed on the system,
 Fig. \ref{fig:hashing} shows how SignatureToMac processes the binaries:
@@ -206,7 +206,7 @@ version control and vulnerability management.
 
 
 %\subsubsubsection{Verifier}
-\subsubsection{Verifier}
+\paragraph{Verifier}
 
 % The Verifier initializes itself from {\it Digest\_file}.
 The Verifier performs mandatory binary authentication ---
@@ -418,7 +418,7 @@ end procedure
 \caption{Pseudo code of file modification monitor}
 \label{fileopen}
 \end{figure}
-\subsection{Security Analysis}
+\subsubsection{Security Analysis}
 \label{sect:analysis}
 
 The security of binary authentication relies on the strength
@@ -455,7 +455,7 @@ then we can keep trusting the binary for execution (as long as we still believe 
 % on the storage is imposed in trade of higher security guarantee.
 % \end{itemize}
 
-% \subsection{Threat Analysis}
+% \subsubsection{Threat Analysis}
 Here we discuss some possible attacks to the authentication system.
 All the attacks except the last two target the caching system.
 More precisely, the attacker attempts to modify an already authenticated

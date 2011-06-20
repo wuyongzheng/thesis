@@ -1,4 +1,4 @@
-\section{Comprehending Module Dependencies in Real Software}
+\subsection{Comprehending Module Dependencies in Real Software}
 \label{sec:apply}
 
 We now give some usage scenarios which demonstrate how our visualizations
@@ -24,7 +24,7 @@ would not make sense for DLLs which do significant work in the initialization.
 \label{fig:boot}
 \end{figure}
 
-\subsection{System Boot}
+\subsubsection{System Boot}
 \label{sec:apply:boot}
 
 Fig.~\ref{fig:boot} shows the EXE dependency graph for a boot to shutdown cycle
@@ -42,7 +42,7 @@ On the other hand, some DLLs are used exclusively by one program (e.g.
 This is somewhat surprising leading to the question why {\tt odbc32},
 the database query interface, is used by {\tt explorer}.
 
-\subsection{Comparing Web Browsers}
+\subsubsection{Comparing Web Browsers}
 
 \begin{figure}
 \centering
@@ -111,7 +111,7 @@ different directories.
 \label{fig:gimp-vendor}
 \end{figure*}
 
-\subsection{Gimp}
+\subsubsection{Gimp}
 
 GIMP is an open source image manipulation program. Like many open source
 software, it uses libraries from various sources. In this experiment, we
@@ -144,7 +144,7 @@ binaries belonging to GIMP only turn out to be quite small and
 GIMP prefers to rely on
 existing frameworks like {\tt gtk} (GUI) and GEGL (image processing).
 
-\subsection{Firefox: Plug-ins and a Surprise}
+\subsubsection{Firefox: Plug-ins and a Surprise}
 
 \begin{figure}
 \centering
@@ -172,7 +172,7 @@ The fact that there is interaction with a module which is not part of
 the Firefox can mean that a bug in that module can also affect Firefox.
 This can be concern for software developers.
 
-\subsection{Adobe Flash in Internet Explorer}
+\subsubsection{Adobe Flash in Internet Explorer}
 \label{sec:flash}
 
 \begin{figure*}
