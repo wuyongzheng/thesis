@@ -1,0 +1,64 @@
+\section{Introduction}
+
+Securing Windows is a challenge because of its large
+attack surface which can lead to many ways where
+binaries can be loaded and subsequently executed.
+Software in Windows also has many interactions with each other.
+These interactions are often not well understood or specified.
+Software is typically closed source, in binary form only.
+
+In this paper, we use software to mean binary files which are either
+executables or Dynamic Link Libraries (DLLs).
+We have two goals. Firstly, the security objective 
+is to ensure the use of trusted binaries and maintain their integrity.
+This protects against attacks which attempt to modify or remove binaries 
+commonly used in malware or denial of service attacks.
+We prevent malware attacks which rely on
+getting a malicious executable to be run or
+a malicious DLL to load.
+In addition, we prevent the malware from being persistent.
+
+Secondly, the security mechanism needs to be usable with typical
+software in binary form.
+It needs to be compatible with the software life cycle of software in the
+system, i.e.
+software may be installed, then used, then updated, and 
+finally uninstalled. 
+Portions of installed software, e.g. DLLs,
+may be shared with other software. 
+Ideally, the security mechanism should be (mostly) transparent to 
+this software life cycle.
+While it may not be possible to be completely transparent/compatible 
+for arbitrary binaries, it should support the mechanisms used 
+by typical software.
+We remark that as we are concerned with
+closed source and binaries,
+approaches which change the process of installation/update,
+usually requiring (some source code), are not relevant.
+Clearly, there is a tradeoff between security and usability --
+we seek a practical middle ground with improved security while
+being compatible with typical software.
+
+In this paper, we present a new security model
+for binaries called {\em BinInt}.
+We implement a prototype of BinInt for Windows 
+which meets our security objectives yet allows
+for software to be changed as part of the software lifecyle.
+It provides a number of modes for operation: default, install 
+and temporary trusted modes.
+BinInt provides protection (in default mode) against a broad range of 
+binary-based attacks.
+Our system is efficient and has negligible overhead in default and temporary
+trusted modes. 
+In install mode, our benchmarks
+show $\sim$12\% overhead which is reasonable since
+the use of install mode is infrequent.
+
+The paper is organized as follows.
+Mechanisms for loading binaries in
+Windows and binary-based attacks are reviewed in Sec.~\ref{sec:problems}.
+Sec.~\ref{sec:prevworks} discusses related work.
+Our binary security model is described in Sec.~\ref{sec:binint}.
+Implementation and evaluation of BinInt is in
+Sec.~\ref{sec:imp} and Sec.~\ref{sec:conc} concludes.
+

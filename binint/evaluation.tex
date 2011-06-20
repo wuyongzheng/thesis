@@ -1,0 +1,66 @@
+\section{Implementation and Evaluation}
+\label{sec:imp}
+
+We implemented a prototype of BinInt in Windows XP.
+It is implemented with a kernel driver that intercepts binary loading,
+file modification, process creation and some other operations.
+We evaluate the performance of BinInt against
+a baseline system with a vanilla unmodified Windows XP SP3.
+The benchmarks are run in a VMWare virtual machine 
+on a Intel Core 2 Duo 2.33GHz CPU (with one core allocated to VMWare) 
+and 512MB memory.
+We use the following benchmarks:
+software build (building {\tt putty}, a SSH client, with 86 C files) using
+the Visual Studio command line interface;
+WinRAR archive extraction (extracting the Linux kernel source code);
+and the SunSpider JavaScript Benchmark in Firefox.
+The first two benchmarks are chosen to test
+process creation and file I/O in a realistic setting.
+The last benchmark is chosen to be representative of
+a more intensive CPU workload.
+Each benchmark is run 5 times to obtain
+the runtimes (mean and standard deviation) in the base system (without BinInt)
+and BinInt in all three modes.
+
+\begin{table}[tb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+workload & environment & running time & overhead \\ \hline \hline
+\multirow{4}{*}{build} &
+  base   & $59.0\pm2.0$s & \\ \cline{2-4}
+& d-mode & $58.7\pm1.8$s & $-0.5\%$ \\ \cline{2-4}
+& t-mode & $59.8\pm1.3$s & $1.4\%$ \\ \cline{2-4}
+& i-mode & $60.3\pm1.9$s & $2.2\%$ \\ \hline
+\multirow{4}{*}{archive} &
+  base   & $41.4\pm1.4$s & \\ \cline{2-4}
+& d-mode & $40.0\pm2.2$s & $3.4\%$ \\ \cline{2-4}
+& t-mode & $42.2\pm0.8$s & $2.0\%$ \\ \cline{2-4}
+& i-mode & $46.1\pm1.1$s & $11.4\%$ \\ \hline
+\multirow{4}{*}{javascript} &
+  base   & $1257.7\pm21.1$ms & \\ \cline{2-4}
+& d-mode & $1257.3\pm25.2$ms & $-0.0\%$ \\ \cline{2-4}
+& t-mode & $1249.5\pm26.1$ms & $-0.7\%$ \\ \cline{2-4}
+& i-mode & $1247.9\pm15.8$ms & $-0.8\%$ \\ \hline
+\end{tabular}
+\caption{BinInt overhead}
+\label{table:benchmark}
+\end{table}
+
+Table~\ref{table:benchmark} shows the runtimes.
+Except for the archive extraction test in i-mode,
+the average overheads are small.
+In most cases, the overhead is smaller than the standard deviation
+(caused by environmental factors such as caches, etc., and in some
+others it is even negative (slightly faster)).
+The results show that with the exception of the archive test, 
+the overhead of BinInt is negligible and within timing variation.
+
+The $11.4\%$ overhead in the i-mode archive benchmark
+shows the overheads of i-mode when the workload is mostly file creation
+and writing of many (small) files.
+Although the extracted files are not binaries, BinInt
+has to check whether or not they are binaries.
+As software installation should not be a frequent task,
+we are less concerned with efficiency of
+i-mode as long as it is still reasonable.

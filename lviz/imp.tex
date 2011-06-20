@@ -72,15 +72,18 @@ the output value $y$ is mapped using the equation $y=x^{1/\gamma}$
 The second option is histogram equalization which is
 a well known technique in image processing.
 
-\TODO{reviewer 3:
-The visual scalability discussion in section 4 opens up some serious questions. If I understand correctly, what is done
-is basically aggregation of colors like in image processing? This is very dangerous, since a visualization application
-should aggregate the actual data values, or more exactly even, the semantics of these values, and not the color
-mapped values. Just adding up or averaging colors can produce meaningless colors or even worse colors which exist
-in the used color map but have another meaning. See for example the work of D. Holten et al referred earlier or the
-work of T. Munzner on accordion drawing, guaranteed visibility, and the sequence juxtaposer comparison (available
-at http://www.cs.ubc.ca/~tmm/papers.html)
-}
+% \TODO{reviewer 3:
+% The visual scalability discussion in section 4 opens up some serious questions.
+% If I understand correctly, what is done is basically aggregation of colors like
+% in image processing? This is very dangerous, since a visualization application
+% should aggregate the actual data values, or more exactly even, the semantics of
+% these values, and not the color mapped values. Just adding up or averaging
+% colors can produce meaningless colors or even worse colors which exist in the
+% used color map but have another meaning. See for example the work of D. Holten
+% et al referred earlier or the work of T. Munzner on accordion drawing,
+% guaranteed visibility, and the sequence juxtaposer comparison (available at
+% http://www.cs.ubc.ca/~tmm/papers.html)
+% }
 
 Fig.~\ref{fig:gamma} shows our {\tt xcopy} example visualized
 with various normalization options.
@@ -228,11 +231,12 @@ cuts down the trace loading time to 1.3 seconds.
 The speedup is more significant when the matching and coloring rules are
 more complicated.
 
-\TODO{reviewer 2:
-The scalability solution seems, from what I can read, well thought. However I wonder if a comparatively fast result, if
-not a faster one, could not have been obtained, with less programming effort, by using a pixel shaders or CUDA
-implementation.
-}
+% \TODO{reviewer 2:
+% The scalability solution seems, from what I can read, well thought. However I
+% wonder if a comparatively fast result, if not a faster one, could not have been
+% obtained, with less programming effort, by using a pixel shaders or CUDA
+% implementation.
+% }
 
 % While the DP treats each event independently,
 % RTG has to show the connections

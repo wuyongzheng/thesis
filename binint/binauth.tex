@@ -1,0 +1,145 @@
+\section{The BinInt Security Model}
+\label{sec:binint}
+
+In Sec.~\ref{sec:prevworks}, we discussed a number of existing
+security models. While those models can be used to provide security
+for binaries, the main drawback is that they do not cover the usage spectrum
+across the software lifecycle nor do they handle all the
+typical attack scenarios mentioned.
+We now present a new security model for binaries
+which we call BinInt.
+This model combines file integrity together with
+aspects of signed binaries and isolation to give a binary
+security mechanism which 
+addresses usability in the software lifecycle. We remark
+that while we focus on Windows, this model has general applicability
+to other operating systems.
+
+We are cognizant that a security mechanism
+should provide the desired form of protection in practice for
+the intended system usage.
+Full two-way isolation protects the host
+against malware in the VM but may not
+protect against other attacks.
+More importantly, it does not protect the software running 
+in the VM from malware.
+This is why our model combines a number of features together to provide
+binary integrity. 
+We focus solely on integrity and security of binaries
+as want to preserve compatibility with existing
+software (in Windows) while allowing implicit sharing.
+Our model should not be considered as a sole security mechanism and
+is meant to be used with other security mechanisms, 
+e.g. ACLs or MAC, IDS, etc.
+
+Our goals are three fold.
+Firstly, to prevent attacks exploiting vulnerabilities which load 
+untrusted binaries.
+Secondly, to ensure integrity of binaries.
+This both prevents malware from being installed on the system and 
+prevents denial of service attacks which delete binaries.
+Thirdly, we want to achieve a middle ground
+between usability and security.
+Any changes to system usage should not be onerous and existing software 
+should (mostly) be able to run, including closed source binaries.
+While it is impossible to guarantee that all unmodified software can still
+function normally together with a security mechanism, our goal is that
+it should work in practice for typical software.
+Thus, frequent tasks, such as running and updating benign software, 
+should be (mostly) transparent.
+Other infrequent tasks, such as software installation and removal, 
+can be a little different but should not cause much inconvenience.
+As the mechanism should be applied to all processes, 
+it should only have small overheads especially for frequent tasks.
+
+We now describe our BinInt model.
+All processes are in one of the following execution modes:
+{\em d-mode} (default mode), {\em i-mode} (install mode) and
+{\em t-mode} (temporary trusted mode).
+Intuitively, d-mode corresponds to running already installed software,
+while i-mode is for installing/updating software.
+Special cases for running software
+which needs to dynamically create and load binaries but is not a software
+install are handled by t-mode,
+e.g. building and running binaries in an IDE
+or dynamic temporary binaries as in Sysinternals tools.
+
+Each process and binary is labeled with a {\em software domain}, which
+relates the process or binary to a particular installed software.
+The idea is that we may use the name of a particular software or
+the software vendor as the software domain.
+A special software domain $\bot$ denotes binaries
+which do not have a valid software domain.
+Binaries whose software domain is not $\bot$ are called {\em b-valid}.
+
+We now describe the rules.
+Creating a binary in i-mode sets its label to the software domain
+of the process and to $\bot$ otherwise in d-mode or t-mode.
+A binary can only be written to or deleted in i-mode provided
+it has the same software domain as the process or it is $\bot$.
+In d-mode or t-mode, only binaries whose label is $\bot$ can be written to.
+There are no restrictions on the read operation as it has no effect on binary
+loading and integrity.
+
+A binary can be loaded/executed in d-mode only if it is b-valid.
+As t-mode and i-mode need to use new binaries, there are no restrictions
+on loading/execution. 
+Rather the restriction is on the privilege needed to change to t-mode or i-mode.
+The mode and software domain is preserved when creating a new process.
+In our model, except for $\bot$,
+the software domain is only used in i-mode.
+
+In order to change the mode of a process, we define a
+special operation, called {\em modetrans}.
+Modetrans is meant to be a privileged operation, and as such,
+requires user authentication and appropriate privileges, i.e.
+similar to {\tt sudo} in Unix or UAC in Windows.
+As i-mode, is meant for new software, the user (or the execution mode policy)
+needs to also specify what is the (new) software domain.
+Note that our model assumes all files are typed as binary or not,
+which means that binary files can only be written as data files in
+i-mode.
+This is not a significant restriction since binaries have a special format
+and are usually created/written to in a special context where there is
+an easy correspondence to one of our modes.
+
+It is easy to map BinInt to the scenarios in Sec~\ref{sec:usageattack}.
+Installed software normally runs in d-mode;
+software install/up\-date/uninstall employ i-mode;
+and special cases like the IDE run in t-mode.
+The attacks discussed cannot run in d-mode as the software
+domain would be $\bot$.
+The PDF vulnerability attack is prevented since Acrobat Reader
+runs in d-mode and thus cannot execute the executable file created.
+The DLL attacks are also prevented for the same reasons.
+
+\subsection{Using BinInt in Windows}
+
+When the system is booted, the initial process(es) run in d-mode.
+We enhance  BinInt with an additional
+{\em execution mode policy} (defined by a protected configuration file).
+The execution mode policy is to simplify system usage by predefining
+special cases where the operation of modetrans can be performed
+automatically.
+It specifies the path of an 
+executable to have a specific mode and software domain.
+We require that the executable should be b-valid so it is not possible
+to use an arbitrary executable.
+If no such a mapping is found in the policy, 
+it inherits the mode and domain of its parent process, e.g. d-mode and $\bot$.
+
+We have implemented a command-line {\tt modetrans} utility which
+first authenticates the user, i.e. using a password.
+It then executes a user-specified program in a user-specified mode and 
+in the case of i-mode, also the specified software domain.
+One could implement a shell extension integrated with the Windows Explorer
+to be more GUI friendly.
+
+Both the execution mode policy and {\tt modetrans} are used to run an 
+executable in a specified mode and domain.
+The policy is preferred if the executable should always run
+in that execution mode and software domain.
+For example, since the Windows auto-updater {\tt wuauclt.exe} should
+always run in i-mode and with sofware domain ``microsoft'', the policy
+should map \path{C:\windows\system32\wuauclt.exe}
+to i-mode and ``microsoft'' software domain.

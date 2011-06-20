@@ -1,0 +1,135 @@
+\section{Related Work}
+\label{sec:prevworks}
+
+
+\subsection{Isolation Models}
+
+Isolation can be used to prevent malware from changing
+other parts of the system.
+A straight forward form of isolation is to have 
+multiple independent systems or virtual machines (VM).
+This is useful for protecting one application against another though
+it might not protect against the PDF and WinHelp attacks discussed in
+Sec.~\ref{sec:usageattack} which are against the applications themselves.
+There is also the question of whether it is effectively feasible to 
+run each software within its own VM.
+On the one hand,
+this by definition also prevents sharing which is incompatible
+with the use of implicit sharing by software in Windows and
+may be incompatible with system services and utilities.
+It also means a loss of usability since data is not sharable
+between applications.
+The isolation also leads to high
+maintenance cost of updating all VMs against
+vulnerabilities as there are multiple copies of
+the same software or library.
+On the other hand, using isolation separately on each software can also
+have significant system overheads since large numbers of virtual machines
+need to be run.
+
+One-way isolation is a form of isolation which
+lets untrusted programs run in a sandbox where they can read from the
+trusted base system but modifications are confined to the sandbox.
+In one-way isolation, processes can be executed in isolation domains,
+other processes are executed normally in the base system.
+The semantics of file access is modified such that an isolated process
+can read files in the base system but when it tries to modify them,
+a private copy is duplicated from the base system and subsequent modification
+is applied on the private copy.
+Special care must be taken to handle file deletion so that files in the
+base system are not accessed.
+
+Kato et al. proposed an one-way isolation system named
+SoftwarePot \cite{softwarepot},
+whose main purpose is to allow software to securely circulate among
+different hosts.
+Secure circulation means that software in the sandbox should not interfere
+with the base system.
+A security policy specifies files visible to the sandbox,
+path mapping from base system to sandbox, system calls allowed and
+network addresses allowed to interact.
+Liang et al. proposed another one-way isolation system named
+Alcatraz \cite{alcatraz}.
+The main difference between SoftwarePot and Alcatraz is that the latter
+enables modification from the sandbox to be {\em committed} to the base
+system.
+
+The problems of one-way isolation are similar to that of
+virtual machines, namely, that isolation is the opposite of sharing.
+Other than that, one-way isolation protects the integrity of non-isolated
+system from attackers in the isolated system,
+but it does not protect the integrity of the isolated system.
+There are many forms of interactions between the sandbox and the base system,
+such as file system access, networking and IPC
+(including local sockets, pipes, process synchronization mechanisms,
+signals, window messages, etc.).
+The first two forms are easier to sandbox because their semantics are known.
+However, IPC is application dependent and can be complicated and
+undocumented.
+Even if only considering documented ones,
+it would take too much effort to implement filters for different IPC
+protocols (e.g. shared memory, pipe, CORBA, D-Bus, SunRPC etc.).
+SoftwarePot does not discuss IPC and Alcatraz simply disallows some forms of IPC.
+However, IPC is important and cannot be ignored.
+For example, the X window system, is implemented as local sockets;
+the Windows GUI requires (undocumented) IPC to the {\tt smss.exe}
+and {\tt csrss.exe} processes.
+Some services are implemented as IPC such as
+service management and domain name resolution in Windows,
+PulseAudio (the sound system in Linux),
+and syslog (the UNIX logging service).
+Simply allowing and denying them will lead to either insecure sandboxing or
+unusable software.
+
+\subsection{Signed Binaries}
+\label{sec:signing}
+
+There are systems \cite{binauth, digsig, williams, signedexec, FOOD}
+that only allow signed binaries to be loaded or executed.
+In these systems, signature of binaries are either embedded
+in the files themselves or signed by a third party, such
+as the administrator and stored in a secure database.
+Executing or loading are only allowed if the signature can be verified.
+
+There are three basic problems with signed binaries.
+Firstly, the security relies on the trust of the signing keys.
+If key is leaked, the trust is broken.
+For example, the Stuxnet worm \cite{stuxnet} uses
+signed drivers with real certificates which are trusted by Windows.
+Secondly, revocation checking is expensive as it cannot be done
+locally and furthermore may not be timely.
+Lastly, we cannot assume that all software vendors sign their binaries.
+A more important difference is that most signed binary schemes are not
+intended to deal with the software lifecycle issues which we are concerned with.
+Another difference is that signed binaries
+only ensures that the binaries are not modified but
+may not prevent deletion.
+
+\subsubsection{Self-signed executables}
+
+Self-signed executables \cite{selfsign} is a different approach
+to signed binaries which allows for software updates.
+In their proposal, all binaries are embedded with their signatures signed
+by the software vendor.
+Unlike the previous signed binary systems, the assumption is that any
+binary which has been signed can be trusted.
+Using the observation that binaries are usually updated by a newer
+version from the same vendor as the original,
+binary updating is allowed if the signature can be verified
+with the same public key.
+
+The self-signed executables system binds paths with keys.
+Once bound, the key cannot be changed, even when the file is removed.
+An attacker can also sign malware as long as it is the first
+software installed with that path.
+Alternatively, this can constitute a denial of service attack since
+an attacker binding the path first would disallow future correct
+software to be installed at that path.
+As deleted files leave behind a stub, the number of stubs will
+monotonically increase over time. This can lead to yet another
+denial of service attack to exhaust storage.
+
+In order to compare the signatures between the old and new copy,
+semantics of file writing has to be changed such that
+writing is applied on a shadow copy and later updated atomically.
+This can break software that assumes normal POSIX semantics.

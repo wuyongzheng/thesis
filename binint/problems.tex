@@ -1,0 +1,188 @@
+\section{Windows Binary Security Issues}
+\label{sec:problems}
+
+The Windows NT operating system
+is difficult to secure
+because of its closed source and complex nature.
+To understand the issues, we first discuss how
+binaries are used in Windows followed
+by some representative attacks.
+
+\subsection{Binary Usage in Windows}
+
+A {\em binary} in Windows is a file containing executable code.
+Binaries in Windows occur in many contexts,
+the following is a non-exhaustive list:
+applications/executables ({\tt exe}),
+command files ({\tt com}),
+Dynamic Linked Libraries ({\tt dll}),
+ActiveX controls ({\tt ocx}),
+device drivers ({\tt drv},
+screensavers ({\tt scr}),
+control panel applets ({\tt cpl}),
+Input Method Editors ({\tt ime}),
+and codecs ({\tt acm}, {\tt ax}).
+Obviously a binary needs to be in the correct format.
+In Windows, the only way to identify a binary
+is its format, the filename extension is only a convention.
+
+A single process in Windows typically uses many binaries which
+can originate from many sources.
+For example, a software installation may introduce many binaries including
+shared libraries which can be loaded by many/all processes.
+To illustrate, even a small program like {\tt notepad}
+loads 13 binaries from 3 different directories.
+(It happens here that because the AVG antivirus is installed, the
+binary {\tt avgrsstx.dll} is also loaded).
+In contrast, {\tt Internet Explorer} on a {\em YouTube} page may load
+86 DLLs from {\tt System32}, 14 other DLLs, 3 drivers and some other
+binaries.
+A more detailed look at the sharing and dependencies of Windows binaries
+can be found in \cite{icse10}.
+
+There are numerous mechanisms in Windows which can cause a binary to be used,
+i.e. load the binary.
+Subsequently, code in the binary may be executed.
+Some of the common mechanisms used both by legitimate software
+as well as malware are:
+DLL injection, DLL search order hijacking, Autorun/Autoplay, Autostart,
+shell extensions, Windows Services, {\tt rundll\linebreak[0]32.exe},
+and Browser Helper Objects.
+
+\subsection{Normal Usage versus Malicious Attacks}
+\label{sec:usageattack}
+
+A security model must be able to distinguish
+malicious attacks from normal software usage.
+We firstly look at typical software usage scenarios in the
+software life cycle, namely running, installing, updating and developing 
+a software.
+We then look at some attacks which exploit binaries whose
+behavior is similar to the normal usage scenarios.
+
+The most common scenario is that of {\em running} a software.
+Normal usage typically involves loading binaries,
+reading/writing data files and possibly the creation of child processes.
+It is, however, not common for binaries to be created or modified.
+We highlight that binaries can come from
+various (3rd party) sources.
+For example, Windows Explorer (Windows GUI shell) loads 3rd party DLLs
+to provide shell extensions.
+The shell extensions are used to preview
+images or video, to add a control panel component, to customize
+file icons and context menus, etc.
+Another example is anti-virus software which forces
+its DLLs to be loaded by {\em all} processes, e.g. {\tt avgrsstx.dll}
+from the AVG anti-virus software.
+
+{\em Installing} software involves creating binaries
+and data files.
+Installers downloaded from the Internet are typically packed as
+self-extracting archives, which
+unpack themselves into a temporary directory and launch from there.
+This unpack-and-run behaviour is also observed in the normal
+running of some software, e.g.
+many {\tt Sysinternals} tools
+unpack a kernel driver into a temporary directory and then load it.
+
+There are a number of software {\em update} mechanisms.
+Microsoft Windows Update employs a dedicated service (daemon process) to check,
+download and apply updates.
+In this case, the updater is completely separate from 
+the software being updated.
+Other software, such as {\tt Mozilla Firefox} and {\tt Sun JDK},
+employ a self-update mechanism.
+We use Firefox to illustrate the mechanism.
+Firefox checks online if there is a new version available and
+downloads the update as a compressed archive file.
+After downloading, Firefox invokes the updater
+as a helper process and terminates itself.
+The updater process reads the downloaded archive and 
+updates {\tt firefox.exe}
+and other files if necessary.
+When updating is finished, the updater re-launches Firefox ({\tt firefox.exe})
+and terminates itself.
+The helper process technique is usually used
+because in Windows, a binary cannot be written to when it is loaded by
+another process.
+
+Software {\em development} means that binaries have to be created.
+For example, to debug a software using an IDE,
+the IDE firstly builds the program and then runs it.
+Thus the IDE creates or modifies binaries then executes them.
+
+We now turn to some common attacks that involve binary loading or modification.
+Furthermore, these attacks use binary vulnerabilities in trusted programs.
+We highlight how the attacks behave in a similar fashion to the normal usage
+scenarios described earlier and the security mechanism needs
+to distinguish between normal usage versus an attack.
+
+\subsubsection{Running Unintended Executables}
+
+A common attack is to employ social engineering techniques to get
+the user to run a malware executable.
+However, the attack can be more subtle and exploit features of various
+applications to hide the executable. 
+For example, by default, Windows Explorer hides file extensions. 
+Consider a malware {\tt postcard.jpg.exe} where
+the icon of the malware also looks like a photo.
+The user is then fooled into thinking it is a JPEG image and click
+it for viewing in Windows Explorer.
+The malware could execute its payload and then display
+the photo.
+Thus, the user would probably think this is just the normal display
+of a JPEG image.
+Notice that the behaviour of both a direct or file extension social
+engineering attack is similar to the regular
+software running scenario.
+
+\subsubsection{Application Data with Embedded Binaries}
+
+Malware binaries can be embedded within documents.
+A recent vulnerability in PDF readers \cite{pdfattack} illustrates this
+attack where a legal PDF file containing an embedded executable.
+When the PDF file is viewed, the PDF viewer (e.g. {\tt Acrobat}) also
+automatically executes the embedded executable.
+Notice that the behavior in the attack
+resembles the unpack-and-run in the normal installation scenarios.
+
+
+\subsubsection{DLL Attacks}
+
+DLL attacks typically exploit some feature of an application
+to inadvertently load a malicious DLL.
+The ``carpet bomb'' \cite{safari1} attack involves bugs of two different
+browsers.
+Safari had a feature\footnote{
+Apple did not consider it as a bug.
+}
+which downloaded files onto the user's desktop automatically.
+Internet Explorer had a bug where certain DLLs are specified
+by the file name rather than a full pathname.
+By combining the behavior of Safari and Internet Explorer,
+a malicious website can execute arbitrary code on a machine 
+that visits the site.
+It is surprising to see that this vulnerability where applications
+do not use a sufficiently qualified path when loading DLLs
+has recently re-surfaced
+(in Aug 2010) as ``binary planting'' attacks \cite{binary-planting}.
+
+In some cases, an application has features to execute binaries.
+This can be exploited.
+A vulnerability \cite{winhelp} in handling Windows Help files in
+Internet Explorer was recently discovered.
+A malicious web page can cause Internet Explorer to load a malicious
+WinHelp ({\tt .hlp}) file from an arbitrary path.
+WinHelp also has a feature to allow loading of arbitrary DLLs.
+The bug and the feature together enable a malicious website to execute
+arbitrary code on the client.
+
+The recent Stuxnet worm \cite{stuxnet} also uses a DLL attack.
+Interestingly, Windows 7 does not even give a UAC warning with this attack.
+Stuxnet exploits a vulnerability in Windows Explorer which displays an icon
+for shortcut files by using a DLL specified in the shortcut.
+
+All above attacks load existing malicious DLLs which could be accidentally
+downloaded/copied or exist in a network drive.
+Once the DLL is in place, the behaviour of the attacks is similar to the
+regular software running scenario.
