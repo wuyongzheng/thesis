@@ -1,4 +1,4 @@
-\subsection{Explaining the Visualizations}
+\section{Explaining the Visualizations}
 
 \begin{figure*}[thb]
 \centering
@@ -13,7 +13,7 @@ Fig.~\ref{fig:wget-exe-split} shows the EXE dependency graph for {\tt wget}.
 {\tt Wget} loads 34 DLLs but due to space limitations, we only show 4 of
 them.
 The EXE dependency graph is meant for comparing multiple EXE's to show
-grouped dependencies. 
+grouped dependencies.
 When there is only a single EXE in the graph, it reduces to a single level
 tree. See Fig \ref{fig:boot} and \ref{fig:browsers} to see the graph
 when there are multiple EXEs.
@@ -33,7 +33,7 @@ For example, the binary {\tt user32.dll} is assigned to group {\tt gui} under
 the grouping method {\tt functi\-onality}.
 As there is no single source of information for all the binaries, we mainly
 searched on the Internet for information using the binary's name.
-We also used the DLL's exported functions and file version metadata 
+We also used the DLL's exported functions and file version metadata
 as heuristics.
 
 For vendor grouping, the assignment of most binaries was done automatically
@@ -41,8 +41,8 @@ using the ``Company'' information embedded in the file version metadata.
 In some cases, some binaries do not have metadata, so a manual process
 was used.
 One can also have other and multiple mappings beyond the two which we used.
-In this paper, we only used a 
-common mapping for functionality and vendor mappings 
+In this paper, we only used a
+common mapping for functionality and vendor mappings
 in all the dependency graphs.
 The grouping process as a whole is relatively static and can mostly be
 done once so while some manual effort is needed to create an initial

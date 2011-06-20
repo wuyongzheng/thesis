@@ -1,22 +1,22 @@
-\subsection{Visualizing Software Dependencies}
+\section{Visualizing Software Dependencies}
 
 On Windows, there are many kinds of binary files.
 We use the term program to denote the executable, which
 is usually an EXE file in Windows.
-Unlike Unix, Windows has many kinds of binary files containing 
+Unlike Unix, Windows has many kinds of binary files containing
 other software modules.
 A non-comprehensive list of the binary files other than EXE
-is as follows: 
+is as follows:
 DLL (dynamic link libraries), ocx (ActiveX controls,
 these are commonly used by Internet Explorer), sys (device
-drivers, these may be in user or kernel mode), cpl (control panel applets), 
+drivers, these may be in user or kernel mode), cpl (control panel applets),
 acm/ax (multimedia codecs), etc.
 In this paper, we use the term EXE to denote the single main executable,
 and the term DLL to denote binaries containing software other than the EXE.
 We consider both EXE and DLL files used to be software modules.
 
 The module dependencies are naturally visualized using a directed graph where
-a directed edge from a node representing binary $A$ to another 
+a directed edge from a node representing binary $A$ to another
 node representing binary $B$ indicates that there is
 a dependency, namely that code in $A$ makes use of code in $B$.
 (We see later why there is the phrasing ``node representing a binary'' in
@@ -33,7 +33,7 @@ For example, one of Mozilla's UI libraries {\tt xul.dll} depends on the SQLite
 database library {\tt sqlite3.dll}.
 \item {\bf EXE-EXE}: \\
 Programs may also depend on other programs. This arises when a process
-which is an instance of program $P_a$ creates another process 
+which is an instance of program $P_a$ creates another process
 which is an instance of program $P_b$.
 We also visualize this with an edge from $P_a$ to $P_b$ (thicker blue edge).
 The label of an edge indicates the number of times $P_a$ creates $P_b$.
@@ -53,7 +53,7 @@ The EXE-DLL dependencies are different between the EXE dependency
 graph and the DLL dependency graphs, i.e. they have different definitions
 and visualizations.
 
-\subsubsection{EXE Dependency Graph}
+\subsection{EXE Dependency Graph}
 \label{sec:exe-dep-graph}
 
 We first define what we mean by EXE-DLL and EXE-EXE dependency in
@@ -62,7 +62,7 @@ an {\em EXE Dependency Graph}.
 \begin{definition}
 An EXE-DLL dependency in an EXE dependency graph
 is when process {\em a} running executable
-$x$ loads binary $y$. 
+$x$ loads binary $y$.
 We say that $x$ has an EXE-DLL dependency on $y$.
 \end{definition}
 In Windows, a binary can be loaded explicitly by the {\tt LoadLibrary()} API,
@@ -80,7 +80,7 @@ EXE-EXE dependencies give a form of parent-child relationship.
 However, is not the same as the process hierarchy graph
 since the process hierarchy is about processes and the EXE-EXE
 dependency is on files.
-Furthermore, as we will see in the visualization, 
+Furthermore, as we will see in the visualization,
 there is only one node for every program and there can be cycles.
 
 We are mostly concerned with dependencies between different executables,
@@ -88,8 +88,8 @@ hence, we omit self loops if there is an EXE-EXE dependency between $x$ and
 itself.
 We remark that in Windows, process creation is achieved in the WIN32 library
 with the {\tt CreateProcess()} API (there
-is an implicit dependency that {\tt kernel32.dll} relies on {\tt ntdll.dll}), 
-where\-as in Unix, a combination of the 
+is an implicit dependency that {\tt kernel32.dll} relies on {\tt ntdll.dll}),
+where\-as in Unix, a combination of the
 {\tt fork()} and {\tt execve()} system calls
 are used.
 
@@ -99,14 +99,14 @@ and (ii) where they are different.
 Furthermore, a program may depend
 on a number of other programs to do its work.
 
-The EXE dependency graph has two kinds of nodes, 
+The EXE dependency graph has two kinds of nodes,
 files which are EXEs, are denoted by ellipses, while
-files which are DLLs, are denoted by rectangles. 
+files which are DLLs, are denoted by rectangles.
 (See Fig. \ref{fig:grouping}).
 EXE-EXE and EXE-DLL dependencies are represented by
 blue and black directed edges respectively.
-In general, the EXE dependency graph forms a general graph rather than a 
-DAG since programs can mutually depend on one another 
+In general, the EXE dependency graph forms a general graph rather than a
+DAG since programs can mutually depend on one another
 (this is a generalization of a call graph to the process level).
 
 \begin{figure}
@@ -124,7 +124,7 @@ a directed edge between node $x$ and $y$ denotes that there is
 the dependency between file $x$ and file $y$,
 e.g. see the left graph in Fig. \ref{fig:grouping}.
 This straightforward direct visualization is usually too complex
-to be manageable as it often has too many nodes and edges simply 
+to be manageable as it often has too many nodes and edges simply
 because there are many dependencies in Windows.
 For example, in a fresh Windows install,
 the {\tt C:/windows/system32} directory alone can contain more
@@ -148,10 +148,10 @@ directories or program directories and there are different binary types,
 we further group files so that the files with the same directory and
 same file type are in one node, e.g. label 4 in Fig. \ref{fig:browsers}
 which shows the dependencies from DLLs which match with the
-pathname {\tt /windows/system32/*.dll} (note that we have used 
+pathname {\tt /windows/system32/*.dll} (note that we have used
 the forward `{\tt /}' for pathnames).
 
-\paragraph{DLL Dependency Graph}
+\subsubsection{DLL Dependency Graph}
 
 We define what we mean by EXE-DLL and DLL-DLL dependency in
 a {\em DLL Dependency Graph}. The DLL dependency graph
@@ -160,15 +160,15 @@ we can assume that process $a$ is running executable $x$.
 
 \begin{definition}
 An EXE-DLL dependency in a DLL Dependency Graph
-is when there is a control transfer from code in executable $x$ 
-to code in DLL $y$. 
+is when there is a control transfer from code in executable $x$
+to code in DLL $y$.
 We say that $x$ has an EXE-DLL dependency on $y$.
 \end{definition}
 
 \begin{definition}
 A DLL-DLL dependency in a DLL Dependency Graph
-is when there is a control transfer from code in 
-DLL $x$ to code in DLL $y$. 
+is when there is a control transfer from code in
+DLL $x$ to code in DLL $y$.
 We say that $x$ has a DLL-DLL dependency on $y$.
 \end{definition}
 
@@ -176,7 +176,7 @@ A DLL dependency graph shows how the code in DLLs depend
 on each other. The motivation is that a DLL often has a certain functionality,
 so the graph also illustrates the use of that functionality in an
 abstract fashion. Furthermore, DLLs can depend on each other in a complex
-fashion which is shown by this graph. 
+fashion which is shown by this graph.
 For example, DLL dependency graph can show how a DLL can have
 a hidden dependency because it relies on other DLLs for certain functionality.
 
@@ -200,7 +200,7 @@ e.g. Fig \ref{fig:wget-nogroup} shows the graph for a small program {\tt wget}.
 We use a simple idea that the visualization can be abstracted in two ways
 by grouping.
 One way of grouping is to group binaries which have a related function
-in the same node, for example, we can group Windows DLLs which deal with 
+in the same node, for example, we can group Windows DLLs which deal with
 networking together.
 Another way of grouping is to think of the source of the binary, so this
 could be a way of grouping by software vendor.
@@ -210,7 +210,7 @@ The DLL dependency graph shows actual control flow dependency.
 The EXE dependency graph, on the other hand, only shows what
 DLLs are loaded. Obviously, in a DLL dependency graph,
 if there is a path from executable $x$ to the node representing
-DLL $y$ (due to grouping), then there will 
+DLL $y$ (due to grouping), then there will
 be a direct edge in the EXE dependency graph between $x$ and the node
 representing $y$ (due of grouping).
 However, an edge in the EXE dependency graph does not imply that there is
@@ -229,10 +229,10 @@ of the edges in the graph.
 Note that this can lead to some nodes being disconnected from the graph,
 and in some cases, those nodes will be treated as nodes which are not called,
 i.e. labelled as {\it *y*}.
-Our visualization can choose to either ignore DLL initialization or 
+Our visualization can choose to either ignore DLL initialization or
 to take it into account.
 
-\subsubsection{Other DLL Dependency Graphs}
+\subsection{Other DLL Dependency Graphs}
 
 There are two DLL Dependency Graphs
 which are obtained through {\em diff} and {\em projection} operations.
@@ -240,15 +240,15 @@ which are obtained through {\em diff} and {\em projection} operations.
 Sometimes we want to compare two executions of the same executable or
 module.
 For example, we want to identify which additional binaries are used when
-we browse a web page with Adobe Flash versus browsing without Flash. 
+we browse a web page with Adobe Flash versus browsing without Flash.
 We can then conjecture that those additional binaries are related to the
 Flash component.
 We also want to know which additional module invocations/dependencies
 are incurred by Flash.
-To visualize this, 
+To visualize this,
 it is useful to define the graph difference between the two graphs,
 which we call {\em diff}.
-The diff of graph $A$ and $B$, denoted by $A-B$, 
+The diff of graph $A$ and $B$, denoted by $A-B$,
 is essentially subtracting graph $B$ from $A$.
 The result is that only edges that appear in $A$ but not in $B$ appear
 in the resulting {\em diff} graph.
@@ -259,29 +259,29 @@ Sometimes we want to focus on a specific binary - or a group of binaries.
 For example, we want to know which binaries are used by the cryptography
 library {\tt crypt32.dll}, and correspondingly,
 which binaries use {\tt crypt32.dll}.
-We want to determine not only which binaries are directly used, 
+We want to determine not only which binaries are directly used,
 but also those which are indirectly used.
 We propose the {\em projected} DLL dependency graph for this purpose.
 In the graph projected on a set of binaries $S$,
 only binaries that are used by $S$ or binaries that use $S$ either directly
 or indirectly are shown.
 Note that this is not the same as finding connected components containing
-$S$ in the dependency graph. 
-This is because the dependency graph loses some information. 
+$S$ in the dependency graph.
+This is because the dependency graph loses some information.
 Instead, the projection looks at the control flow chain during
 execution and selects all the DLLs which have $S$ in its path.
 Since projection removes edges from the original graph, we have the
-option to keep DLLs which are not in the projection but are used 
+option to keep DLLs which are not in the projection but are used
 (this makes sense under grouping) and we label the node as {\it \#y\#}
 
 \begin{figure}
 \begin{minipage}[t]{3.5cm}
 \begin{verbatim}
-void main (void) { 
+void main (void) {
    A();
    B(1);
 }
-void C (void) {} 
+void C (void) {}
 void D (void) {}
 \end{verbatim}
 \end{minipage}

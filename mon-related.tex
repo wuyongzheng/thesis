@@ -1,4 +1,4 @@
-\subsection{Related Work}
+\chapter{Background on System Monitoring}
 
 Monitoring systems can be classified in a number of ways.
 From the enforcement point of view, we have discretionary and
@@ -28,7 +28,7 @@ is usually mandatory as well, and opaque monitoring is usually discretionary.
 From OS point of view, the monitoring system can be in user space, kernel space
 or both.
 
-\subsubsection{Traditional \code{syslog}}
+\section{Traditional \code{syslog}}
 
 Syslog is the main logging tool on a UNIX systems. It centrally manages logging
 for your main system services. Syslog is discretionary in such a sense that it
@@ -50,7 +50,7 @@ the monitored program, thus the log message supplied by it should also not be
 trusted. For example, the application does not log or logs something to spoof
 the monitor.
 
-\subsubsection{\code{ptrace}}
+\section{\code{ptrace}}
 
 The \code{ptrace(2)} system call provides a means by which a parent process may
 observe and control the execution of another process, and examine and change
@@ -113,7 +113,7 @@ exploits make use of \code{ptrace} bugs. The famous ones are "Linux Non-Readable
 Ptrace Vulnerability" in 2000, "Linux Ptrace/Setuid Exec Vulnerability" and
 "Linux ptrace/execve Race Condition Vulnerability" in 2001.
 
-\subsubsection{Solaris /proc}
+\section{Solaris /proc}
 
 Solaris \path{/proc}\cite{faulkner1991process}\footnote{Different UNIX systems implement
 different \path{/proc} file systems.}
@@ -226,7 +226,7 @@ bring side-effect to the traced process. When a traced process calls \code{setui
 the call will fail because the tracing process would have insufficient
 privileges to the setuided process.
 
-\subsubsection{Light-weight Auditing Framework}
+\section{Light-weight Auditing Framework}
 
 The lightweight auditing framework is intended to be a way for the kernel to
 get various types of audit information out to user space without slowing things
@@ -245,8 +245,8 @@ messages to user space. This code also implements a user-specified policy on
 what happens if memory is not available for auditing; truly paranoid
 administrators can request that the kernel panic in such situations.
 
-\subsubsection{Linux Trace Toolkit (LTT) and LTTng}
+\section{Linux Trace Toolkit (LTT) and LTTng}
 
-\subsubsection{Solaris DTrace}
+\section{Solaris DTrace}
 
-\subsubsection{KProbes, DProbes and SystemTap}
+\section{KProbes, DProbes and SystemTap}

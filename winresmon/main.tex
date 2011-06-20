@@ -1,8 +1,8 @@
-\section{WinResMon: a Resource Usage Logging Framework for Windows}
+\chapter{WinResMon: a Resource Usage Logging Framework for Windows}
 
 %winresmon\cite{ramnath2006winresmon} for windows
 
-\subsection{Introduction}
+\section{Introduction}
 
 The tasks of software maintenance and configuration require a precise
 understanding of system resources, the individual requirements of each piece
@@ -56,7 +56,7 @@ determining a program's resource usage as well as the resource usage
 interactions between multiple programs.
 
 
-\subsection{Motivation and Applications}
+\section{Motivation and Applications}
 
 We believe that the key to solving the software maintenance problem is to
 understand the life cycle of the system and programs therein.  We also wish
@@ -155,7 +155,7 @@ with applications.  For example, {\small\tt .DOC} is registered to Microsoft Wor
 \end{enumerate}
 
 
-\subsection{System Design}
+\section{System Design}
 
 The WinResMon system infrastructure shown in Figure~\ref{usp} consists of the
 following components: logger, archiver, query API, and user-log API.  
@@ -172,7 +172,7 @@ Query and user-log API provide the interface to the trace database.
 \end{figure*}
 
 
-\subsubsection{The Logger}
+\subsection{The Logger}
 
 The logger consists of a system call (syscall) interceptor and a trace
 generator module.  The syscall interceptor is an in-kernel driver which
@@ -305,7 +305,7 @@ C:$\backslash$temp}.  A filter can therefore be used in the logger to prevent
 logging resource access of no interest to the system administrator.
 
 
-\subsubsection{The Log database}
+\subsection{The Log database}
 
 The log database consists of a number of log files and one
 distinguished {\it active log} to which the logger 
@@ -324,7 +324,7 @@ Max\_log\_size}. \\
 \end{itemize}
 
 
-\subsubsection{Archiving Old Traces}
+\subsection{Archiving Old Traces}
 
 As WinResMon logs system activities over a long period of time, the trace
 becomes very large. If old traces are discarded, some early yet potentially valuable information,
@@ -409,7 +409,7 @@ additionally provide an API function (in a secure manner) to perform deletion
 on selected trace entries based on a specified selection condition.
 
 
-\subsubsection{A Query API and Analyzer}
+\subsection{A Query API and Analyzer}
 \label{sect:queryapi}
 
 We want to support trace analyzers which answer queries solving particular
@@ -467,7 +467,7 @@ Some sample analyzer applications using this query API are described in
 Section~\ref{sect:sample}.
 
 
-\subsubsection{The User-Log API}
+\subsection{The User-Log API}
 \label{sect:custlog}
 
 The user-log API lets applications add their own entries into the log
@@ -530,7 +530,7 @@ int main (int argc, char **argv)
 \end{figure}
 
 
-\subsection{Implementation}
+\section{Implementation}
 
 \begin{figure}[h]
 \begin{picture}(240,150)
@@ -583,7 +583,7 @@ step 4.}
 \end{enumerate}
 
 
-\subsubsection{System call interception}
+\subsection{System call interception}
 
 The overview of the logger in Figure~\ref{logger} shows that resource usage is
 captured by intercepting system calls.  In practice, this is actually more
@@ -615,7 +615,7 @@ space \cite{MSDN}.  WinResMon makes use of {\small\tt PsSetCreateProcessNotifyRo
 during process creation or termination.
 
 
-\subsubsection{Event handling}
+\subsection{Event handling}
 
 When sending the data from the kernel to the user space, it is inefficient to
 send every event as it arrives.  WinResMon's implementation therefore makes use
@@ -633,7 +633,7 @@ user level trace generator.
 WinResMon can also be extended to as a remote-monitoring tool.
 
 
-\subsection{Writing Custom Analyzers}
+\section{Writing Custom Analyzers}
 \label{sect:sample}
 
 This section demonstrates how to write custom analyzers on top of the WinResMon
@@ -721,7 +721,7 @@ entry.  After iterating over all relevant records, it closes the handle.
 \end{itemize}
 
 
-\subsection{Using WinResMon}
+\section{Using WinResMon}
 
 The extended example below shows the use of WinResMon to solve software
 maintenance problems.
@@ -780,7 +780,7 @@ result, Yahoo remains the default search engine for the system.
 \end{enumerate}
 
 
-\subsection{WinResMon Overhead}
+\section{WinResMon Overhead}
 
 To measure the performance overhead resulting from constant
 monitoring of systems with WinResMon,  we first look at some
@@ -958,7 +958,7 @@ The macro-benchmark results demonstrate that running WinResMon all the
 time  is quite reasonable under typical usage.
 
 
-\subsection{Related Work}
+\section{Related Work}
 
  From a high level perspective, WinResMon differs from previous systems/tools in
 that it is:
@@ -1007,7 +1007,7 @@ LBox and WinResMon are designed for monitoring resource usage, while DTrace and
 SystemTap are designed for general system call instrumentation.
 
 
-\subsection{Conclusion}
+\section{Conclusion}
 
 This paper presented the motivation, design, implementation and usage of
 WinResMon.  Its main use is to inspect resource access and software dependency
@@ -1085,7 +1085,7 @@ logging mechanism.
 % \onecolumn
 % 
 % 
-% \section*{Appendix 1: List of Intercepted System Calls}
+% \chapter*{Appendix 1: List of Intercepted System Calls}
 % 
 % Table~\ref{loggedcalls} lists the Microsoft Windows NT native-level system
 % calls intercepted in our current implementation.
@@ -1152,7 +1152,7 @@ logging mechanism.
 % \end{table}
 % 
 % 
-% \section*{Appendix 2: Example of Log Priorities for Trace Compaction}
+% \chapter*{Appendix 2: Example of Log Priorities for Trace Compaction}
 % 
 % The following example shows a fragment from a log configuration which assigns
 % priorities on FILE resource-type entries.  We map log entries into priority

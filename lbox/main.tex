@@ -1,6 +1,6 @@
-\section{LBox: a User-level Logging Framework for Linux}
+\chapter{LBox: a User-level Logging Framework for Linux}
 
-\subsection{Introduction and Overview}
+\section{Introduction and Overview}
 
 Logging and auditing are important operating system facilities used
 to help monitor correct system operation and to detect potential
@@ -105,7 +105,7 @@ these desirable features in a user-space monitor without requiring special
 privileges. Furthermore, we demonstrate an efficient implementation
 which has low overhead even though the monitors are in user-space.
 
-\subsection{Related Work and Approaches}
+\section{Related Work and Approaches}
 
 A commonly used technique for monitoring is system call tracing or system call
 interposition to monitor the system calls made by a process.
@@ -234,7 +234,7 @@ in different Unixes.
 % monitor selected events.
 
 
-\subsection{The Monitor Framework}
+\section{The Monitor Framework}
 \label{sec:framework}
 
 A monitor is a user-space process which audits the behavior of other processes.
@@ -248,7 +248,7 @@ a convenient interface to the kernel monitoring interface.
 Due to lack of space, we will cannot give all the underlying
 details but rather illustrate by example.
 
-\subsubsection{The Monitor Process Specification}
+\subsection{The Monitor Process Specification}
 
 An arbitrary collection of processes, not necessarily related by parent-child
 relationships can be designated for mandatory monitoring.
@@ -310,7 +310,7 @@ Thus, the monitor can be targeted to observe only the activities
 of particular processes of interest, ignoring other processes. 
 This helps to reduce monitoring overhead.
 
-\subsubsection{The Event Specification List}
+\subsection{The Event Specification List}
 
 An event specification defines which behaviors
 of the monitored processes is of interest to the monitor.
@@ -564,7 +564,7 @@ such as process creation, signals, setuid operations.
 % \end{enumerate}
 %% \end{enumerate}
 
-\subsubsection{The Monitor Operational Model}
+\subsection{The Monitor Operational Model}
 
 In our framework, an auditing monitor is simply a user-level process
 which is the user-level monitor.
@@ -614,7 +614,7 @@ One could of course build a different user-space library.
 Even nicer would be a scripting language to make monitoring even easy,
 i.e. even a D-like scripting language.
 
-\subsubsection{An Extended Example}
+\subsection{An Extended Example}
 \label{sec-eg}
 
 Figure \ref{eg-prog} illustrates how a monitor is written in our system.
@@ -696,13 +696,13 @@ It returns when there is one matching event and doesn't use timeout.
 % an existing or new process is to be monitored by this monitor.
 
 
-\subsection{Security and Monitor Interactions}
+\section{Security and Monitor Interactions}
 
 We now turn to security considerations. Earlier we have looked
 at mandatory and reliable (and non-reliable) auditing.
 There are two other important security components in our framework.
 
-\subsubsection{Confidentiality Considerations}
+\subsection{Confidentiality Considerations}
 As we allow non-privileged users to run their own lbox monitors,
 it is important to ensure system confidentiality. 
 We do not allow a non-root user to monitor processes owned by other users.
@@ -733,7 +733,7 @@ To ensure mandatory monitoring, once $p$ (or its children, if the
 lbox contains the children) returns its userid back to $u$, the monitor
 can now receive monitored events.
 
-\subsubsection{The Lbox Policy Daemon}
+\subsection{The Lbox Policy Daemon}
 
 It may be the case that for non-root users, one would like to impose
 further restrictions on monitoring. This might be to disallow certain
@@ -777,7 +777,7 @@ in which case, a default policy is applied.
 % A flexible lbox becomes more important because we expose
 % the auditing interface to normal users.
 
-\subsubsection{Cascading Monitors}
+\subsection{Cascading Monitors}
 \label{sec:self}
 
 It may be the case that one of the processes being monitor is
@@ -888,13 +888,13 @@ monitor $15349$ will receive the event.
 
 %% can add application events
 
-\subsection{Using Monitors}
+\section{Using Monitors}
 
 We now give some simple examples of using the framework.
 This examples are only meant to exemplify the ease of creating
 a customized auditing monitor and are not meant to be full blown applications.
 
-\subsubsection{Testing a possibly untrusted program}
+\subsection{Testing a possibly untrusted program}
 
 This example checks to see if a process is not stealing your PGP keys.
 The monitor process first creates the lbox and then a child process
@@ -923,7 +923,7 @@ which executes the program to be audited.
 % It is automatically removed from the set of monitored processes.
 
 
-\subsubsection{Monitoring the web server}
+\subsection{Monitoring the web server}
 
 In this example, we want to see whether the web server is working correctly.
 More precisely, we want to make sure it is only accessing files inside
@@ -958,7 +958,7 @@ Note that the order of the two specifications is not important.
 % we get rid of \code{/var/www} by using IGNORE as the
 % directory inheritance flag.
 
-\subsubsection{Global Monitoring}
+\subsection{Global Monitoring}
 
 Sometimes you need to monitor all actions on a single process;
 and other times you need to monitor a single action on all processes.
@@ -970,7 +970,7 @@ The event specification is the following network event, \\
 {\small\verb|  lbox_net_connect_ipv4(&event_spec,|} \\
 {\small\verb|    "137.132.0.0/255.255.0.0");|}
 
-\subsubsection{Other Applications}
+\subsection{Other Applications}
 
 LAFS \cite{lafs}
 is a logging and auditing file system where accesses not conforming
@@ -987,9 +987,9 @@ applications tasks did not run as they were supposed to, e.g. due to some
 failure. Again, it is easy to write a monitor which can detect whether
 tasks ran as scheduled.
 
-% \subsection{Implementation Issues}
+% \section{Implementation Issues}
 % 
-% \subsubsection{The Hooking Mechanism}
+% \subsection{The Hooking Mechanism}
 % 
 % The prototype implementation we have is in Linux on the 2.6 kernel series.
 % There are several ways of implementing the monitor mechanism:
@@ -1018,7 +1018,7 @@ tasks ran as scheduled.
 % just a module.
 % \end{enumerate}
 % 
-% \subsubsection{Matching The File Specification}
+% \subsection{Matching The File Specification}
 % 
 % Matching file event specifications, requires the 
 % deeper matching file event specification to take precedence.
@@ -1050,7 +1050,7 @@ tasks ran as scheduled.
 % during the path resolving phase, all the parent {\tt dentry}
 % nodes are stored in the {\tt dcache}.
 % 
-% \subsubsection{Performance Tuning Methods}
+% \subsection{Performance Tuning Methods}
 % 
 % To reduce the overhead of of task switching caused by our auditing system,
 % we introduce an event buffer so that the monitored process 
@@ -1079,7 +1079,7 @@ tasks ran as scheduled.
 % Other kinds of objects can be equally fast, for example,
 % with a socket connection event, we only need to do the netmask test.
 
-\subsection{Experimental Evaluation}
+\section{Experimental Evaluation}
 
 Our prototype Linux implementation makes use of LSM \cite{lsm} and
 version 2.6.10 of the kernel,
@@ -1392,7 +1392,7 @@ can out perform DTrace which is an in-kernel tracing mechanism.
 This is very encouraging and furthermore, 
 we believe we can still optimize our prototype.
 
-\subsection{Conclusion}
+\section{Conclusion}
 
 We show a user-level auditing framework suitable for general purpose
 auditing and security monitoring. 

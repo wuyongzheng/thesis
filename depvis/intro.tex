@@ -1,11 +1,11 @@
-\subsection{Introduction}
+\section{Introduction}
 
 
 Software is often made up of
 a mix of different modules; from system components, to
 software from various third parties.
 One's software is then part of an eco-system of software modules
-which forms a rich and complex web of relationships. 
+which forms a rich and complex web of relationships.
 System components (usually in the form of dynamic link libraries)
 are also crucial and are usually needed for
 a program to function.
@@ -14,7 +14,7 @@ a program to function.
 Microsoft Windows has a very complex software module eco-system.
 In addition, the usage dependency between
 APIs with the actual software components delivered as binaries
-is usually not properly documented. 
+is usually not properly documented.
 Microsoft software often makes extensive
 use of Microsoft software components without much documentation.
 While source code may be available, it would not be available for all
@@ -22,11 +22,11 @@ the relevant software modules.
 Some modules are so extensively embedded in the system that they are
 hard to study or understand.
 
-This ``web of dependencies'' between software, 
+This ``web of dependencies'' between software,
 means that
 there can be fragile and implicit dependencies between all the software
 installed (past, present or future) on a system.
-In Windows, this often leads to software failures when installing or 
+In Windows, this often leads to software failures when installing or
 uninstalling some application.
 This is colloquially known as ``DLL hell'' \cite{dllhell}.
 
@@ -41,7 +41,7 @@ We propose two visualizations: EXE dependency graphs and DLL dependency
 graphs. The first is useful for comparing several programs
 against each other, possibly this may include the involvement
 of other processes not from those executables.
-The second is useful for investigating the interactions between 
+The second is useful for investigating the interactions between
 an executable and the DLLs used, as well as, interactions
 between the DLLs themselves.
 
@@ -49,7 +49,7 @@ We deal with potential complexity of the visualizations in a number of ways.
 The visualizations are
 simplified either through a compressed dependency graph
 or through the simple notion of grouping by function
-or vendor (but other mappings are possible). 
+or vendor (but other mappings are possible).
 Projection gives a simpler graph giving the interactions which
 only affect selected modules; while the diff operation
 gives the difference between two dependency graphs.
@@ -60,26 +60,26 @@ of realistic software on Windows. For example, we give scenarios
 involving whole system usage from boot to shutdown, understanding strange
 interactions which can occur when software is installed (TortoiseSVN modules
 affecting arbitrary software), sharing of modules between different browsers,
-understanding module usage in terms of source of the module 
-(vendor perspective), 
+understanding module usage in terms of source of the module
+(vendor perspective),
 visualizing usage of different versions of modules for networking, etc.
 We believe that it is a good idea for software developers (and even users)
 to understand the interaction between modules on a system.
-This is useful for developing and maintaining 
+This is useful for developing and maintaining
 robust software. Furthermore, the complexity of the
 Windows environment is such that many unexpected interactions
 and dependencies can occur without the knowledge of software developers,
 administrators and users.
 
-\subsection{Related Work}
+\section{Related Work}
 
 Most of the related work on software dependencies makes use of analysis
-of the source code. Some of it also makes use of static and 
+of the source code. Some of it also makes use of static and
 dynamic analysis of binaries.
 \cite{metrics} focuses on software testing and analysis of
 software components and their dependencies on Windows Server 2003
 using a tool from \cite{testing}.
-\cite{network} is also similar and uses graph network analysis 
+\cite{network} is also similar and uses graph network analysis
 to predict software defect rates on Windows Server 2003.
 Other tools to construct dependency graphs are \cite{progdep} and \cite{depvwr}
 but they rely on the source code.
@@ -92,7 +92,7 @@ code since they rely on instrumentation by adding code to intercept function
 entry and exit points.
 
 Our paper focuses on understanding interactions of software modules,
-in terms of the binaries, as a whole in Windows through 
+in terms of the binaries, as a whole in Windows through
 various dependency graphs. We deal with binaries and not with source code.
 We also deal with the more complex environment of Windows, e.g. kernel
 can call user space functions, a form of callback.

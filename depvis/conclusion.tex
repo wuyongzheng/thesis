@@ -1,17 +1,17 @@
-\subsection{Discussion}
+\section{Discussion}
 
 In addition to the scenarios in Sec.~\ref{sec:apply},
 we experimented with other scenarios which we describe briefly due to lack
 of space. They are similar to those in Sec.~\ref{sec:apply} but the details differ.
-We investigated what happens with Internet Explorer under 
+We investigated what happens with Internet Explorer under
 the following situations:
-(i) loading a Java applet versus an {\tt about:blank} page; 
+(i) loading a Java applet versus an {\tt about:blank} page;
 (ii) a demonstration Microsoft Silverlight webpage versus blank; and
 (iii) a {\tt https} webpage versus regular {\tt http}.
 Another scenario is to answer the question of
 what are the new dependencies for Acrobat on a regular PDF versus
 one with an embedded form.
-We also experimented with Java applications and .NET applications 
+We also experimented with Java applications and .NET applications
 to see the behavior of virtual machines and managed code.
 
 The two visualizations EXE dependency and DLL dependency graphs are just two
@@ -21,7 +21,7 @@ For example, instead of using binaries as basic units, we can use functions
 to visualize more fine grain behaviour.
 This makes the graph much more complex because there are many more functions
 than binaries.
-We can use similarity grouping, diff and projection to ``zoom in'' 
+We can use similarity grouping, diff and projection to ``zoom in''
 on specific regions.
 Because we utilize instrumentation of binaries, we can also visualize other runtime
 properties of the code.
@@ -31,25 +31,25 @@ and scale the nodes in the graph so that the area of each node is proportional t
 
 Although we have focused on visualizations in this paper, the traces which are collected
 contain a wealth of information. A workflow for software comprehension can also make use
-of the trace data in addition to the visualization. 
-The trace data is at a fine grain level but is hard to understand. 
+of the trace data in addition to the visualization.
+The trace data is at a fine grain level but is hard to understand.
 Thus, the visualization gives a roadmap for investigating the traces.
 
 We have demonstrated that software dependencies in Windows are quite
-complex even when looking at the coarse grain level of software components 
+complex even when looking at the coarse grain level of software components
 packaged into binaries and executables.
 Our tools give an effective way of extracting and
 visualizing the software dependencies and interactions between binaries.
 We show that even with the complexity of actual Windows software,
-it is possible to analyse whole system interaction, 
+it is possible to analyse whole system interaction,
 understand how modules are used and shared,
 and also discover potential unexpected or unusual interactions/modules.
 Such an understanding is also useful for software developers,
-system administrators and also users, to manage the 
-software ecosystem on Windows and to deal with the problems which arise 
+system administrators and also users, to manage the
+software ecosystem on Windows and to deal with the problems which arise
 from module updates and potential ``DLL hell'' repercussions.
 
-\subsection{Acknowledgements}
+\section{Acknowledgements}
 
 We acknowledge the support of the Defence Science \& Technology Agency.
 
