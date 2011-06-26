@@ -32,7 +32,7 @@ In Windows, this often leads to software failures when installing or
 uninstalling some application.
 This is colloquially known as ``DLL hell'' \cite{dllhell}.
 
-In this paper, our objective is to understand the usage and dependencies
+In this section, our objective is to understand the usage and dependencies
 between software modules (executables and DLLs) in Windows.
 We work purely with binaries since source is not available for all the
 components. Furthermore, some software may be written in more than
@@ -93,7 +93,7 @@ them locate areas to be changed. Their method relies on access to the source
 code since they rely on instrumentation by adding code to intercept function
 entry and exit points.
 
-Our paper focuses on understanding interactions of software modules,
+Our work focuses on understanding interactions of software modules,
 in terms of the binaries, as a whole in Windows through
 various dependency graphs. We deal with binaries and not with source code.
 We also deal with the more complex environment of Windows, e.g. kernel

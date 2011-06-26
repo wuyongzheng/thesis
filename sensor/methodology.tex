@@ -1,11 +1,11 @@
-\subsubsection{Methodology}
+\subsection{Methodology}
 
 The methodology for each malware detection application is as follows.  For each
 application, we will first present the malware detection model, including the
 relevant external sensors and rules to the anomaly detection; then we perform
 experiments and analysis to validate the feasibility of our models.
 
-\paragraph{Experimental Setup}
+\subsubsection{Experimental Setup}
 Our experimental setup consists
 of one router and
 several hosts connected by 100Mbps connections to the Internet
@@ -44,7 +44,7 @@ is only a simulation to simplify the experiments.
 For network traffic, headers of all packets and partial payload
 passing through the router are logged.
 
-\paragraph{Detection Methods}
+\subsubsection{Detection Methods}
 
 We use three detection methods for each application in this section.  We then
 demonstrate that the execution of malware can be detected using any of these
@@ -52,7 +52,7 @@ methods using our framework.  The three detection methods are rate based
 detection, moving average detection, and changepoint detection (our modified
 version of the CuSum algorithm).
 
-\subparagraph{Rate Based Detection}
+\paragraph{Rate Based Detection}
 
 The general idea is that the allowable usage rate is dependent on user presence.
 When the user is present, the resource usage rate is higher than 
@@ -68,7 +68,7 @@ However, the drawback is that it is very sensitive to the instantaneous rate.
 Thus, it has potential in having a high false positive or false negative rate. 
 In addition, the detection threshold is prone to tampering if it is adaptive.
 
-\subparagraph{Moving Average Detection}
+\paragraph{Moving Average Detection}
 
 The moving average of $x_i$ is defined by the formula below
 \begin{equation}\label{movAvg}
@@ -89,7 +89,7 @@ be detected in a similar time to the rate based detection. However, if normal
 behavior is observed initially for some time, the alert of abnormal behavior is
 delayed due to the averaging behavior.
 
-\subparagraph{Changepoint Detection}\label{subsec:changepoint}
+\paragraph{Changepoint Detection}\label{subsec:changepoint}
 
 \begin{table*}[tb]
   \centering
@@ -177,7 +177,7 @@ similar information to the sensor.
 The specific changepoint detection rules for each of the three applications
 are summarized in Table \ref{tbl:detect-malware}. 
 
-\subparagraph{The Difference between Changepoint Detection and 
+\paragraph{The Difference between Changepoint Detection and 
 Rate Based Detection}
 
 We use spam detection to show the difference between rate based

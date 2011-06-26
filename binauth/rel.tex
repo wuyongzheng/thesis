@@ -23,7 +23,7 @@ It appears that DigSig provides binary integrity authentication
 but not binary location authentication.\footnote{Mechanisms based solely on
 signatures embedded in the binaries do not have sufficient information
 for binary location authentication.}
-In this paper, we examine the implementation issues and tradeoffs
+In this section, we examine the implementation issues and tradeoffs
 for Windows which is more complex and difficult than in Unix.
 
 Authenticode \cite{authenticode} is Microsoft infrastructure
@@ -88,7 +88,7 @@ if their system is efficient.
 
 % Since it is important to find out whether the performance penalty due to the 
 % authentication is acceptable, this question thus remains unanswered there.
-% In addition, our paper here addresses a much wider scope of 
+% In addition, our work here addresses a much wider scope of 
 % secure program distribution and execution, taking into account various involved 
 % parties (OS, software developers, advisory centers).
 %The proposed scheme calculates MD5 hash values of the binaries,
@@ -96,7 +96,7 @@ if their system is efficient.
 %Each user on the system has an {\em execution control list} (ECL)
 %that specifies which applications the user is allowed to execute.
 %Although we share the same basic mechanism of in-kernel authentication checking with \cite{EMU},
-%our paper here addresses a much wider scope of secure program distribution and execution.
+%our work here addresses a much wider scope of secure program distribution and execution.
 %Firstly, we first ensure that the binary must come with a valid digital signature first
 %before generating the MAC for faster integrity checking.
 %Secondly, we aim to also find out how low the performance penalty due to the integrity

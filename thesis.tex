@@ -1,4 +1,4 @@
-\documentclass[a4paper,openany]{book}
+\documentclass[11pt,a4paper,openany]{book}
 
 \usepackage{amsmath}
 \usepackage{subfigure}
@@ -8,12 +8,14 @@
 \usepackage{color}
 \usepackage{multirow}
 \usepackage[section]{placeins}
+\usepackage[a4paper,includeheadfoot,hmargin=1.5in,vmargin=1.0in]{geometry}
+\usepackage[doublespacing]{setspace}
 
 \newcommand{\code}[1]{{\tt #1}}
 %\newcommand{\TODO}[1]{}
 \newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 
-\setcounter{secnumdepth}{3}
+%\setcounter{secnumdepth}{3}
 
 \begin{document}
 
@@ -23,11 +25,13 @@
 
 \frontmatter
 \maketitle
-\tableofcontents
-% \listoffigures
-% \listoftables
 \input{ackno}
+\tableofcontents
 \input{summary}
+\listoftables
+\listoffigures
+% list of Illustrations
+% list of Symbols
 
 \mainmatter
 \input{intro}
@@ -36,7 +40,8 @@
 \input{lbox/main}
 \input{winresmon/main}
 \input{sensor/main}
-\chapter{Software Trace Visualization}
+\chapter{Visualizing System/Software Traces}
+\input{vis-intro}
 \input{depvis/main}
 \input{lviz/main}
 \chapter{Binary Integrity}
@@ -47,5 +52,6 @@
 \backmatter
 \bibliographystyle{plain}
 \bibliography{thesis}
+% appendix
 
 \end{document}

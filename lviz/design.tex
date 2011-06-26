@@ -8,7 +8,7 @@
 We describe the design of \lviz{}, a system for visualizing Windows system
 traces.
 % \footnote{
-% \lviz{} has a number of visualizations. In this paper, we focus on the \VDP{}
+% \lviz{} has a number of visualizations. In this work, we focus on the \VDP{}
 % visualization.
 % }
 We emphasize that the visualization proposed
@@ -18,7 +18,7 @@ is not specific to Windows.
 \label{sec:systrace}
 
 Our objective is to visualize detailed system traces.
-In the rest of the paper, we will shorten system trace to simply trace.
+In the rest of the section, we will shorten system trace to simply trace.
 Our traces are obtained with an enhanced version of
 WinResMon~\cite{winresmon} which
 captures all operations performed by the Windows kernel
@@ -73,7 +73,7 @@ e.g.  resource pathname, file access flags, etc.
 \item {\bf Return value} from the operation
 is either success or an error number explaining why the operation failed.
 \item {\bf Call stack trace} of the process which generated the event.
-In this paper, we use the deepest function call 
+In this work, we use the deepest function call 
 from the corresponding executable, i.e. 
 excluding functions in libraries,
 but one could also use the full stack trace.
@@ -174,12 +174,12 @@ and is appropriate if the visualization is displayed on monitors to
 make it easy to see events.
 For printed output, a CMY mode, which uses subtractive color,
 tends to be easier to see.
-In this paper, being in print format, we use the CMY mode
+In the thesis, being in print format, we use the CMY mode
 and try to minimize the use of yellow due to its closeness to white.
 % \footnote{
 % % (In \lviz{} switching between RGB and CMY
 % % gives RGB:white $\mapsto$ CMY:black, RGB:red $\mapsto$ CMY:cyan, etc.)
-% % In this paper, all figures and illustrations use the CMY color model,
+% % In the thesis, all figures and illustrations use the CMY color model,
 % In CMY, the primitive colors are $cyan$, $magenta$ and $yellow$,
 % and the composition rules are:
 % $cyan+magenta=blue$;
@@ -239,7 +239,7 @@ Here, we develop a novel DotPlot based visualization which is
 extensible and can be configured for many uses.
 Our visualization, which we call {\em \VDP{}},
 consists of a number of sub-visualizations:
-an {\em extended DotPlot} (or simply, DP in the rest of the paper), two
+an {\em extended DotPlot} (or simply, DP in the rest of the section), two
 Axis Histograms, and some barcodes.
 % We now describe the elements of \VDP{}.
 Fig.~\ref{fig:elements} gives an overview of all the elements:
@@ -326,7 +326,7 @@ e.g. the DP match can be on operation type while the DP color rule could be
 on program name.
 
 When combining colors, it is easier to use a RGB mode which is
-more intuitive. However, in this paper, CMY is used on all figures.
+more intuitive. However, in the thesis, CMY is used on all figures.
 One way is to use CMY as 3 orthogonal dimensions which would allow 3 different
 properties to be visualized.
 For example, a cyan pixel in a DP could mean
@@ -353,7 +353,7 @@ Since barcodes are useful to show properties of the events,
 there can be more than one barcode. Each barcode has its own
 set of coloring rules, see Fig. \ref{fig:cp-xcopy} which has 3 different
 barcodes stacked on the X and Y axis.
-In this paper, we number the barcode from inside (top or left depending
+In the thesis, we number the barcode from inside (top or left depending
 on the axis) to outside, i.e. barcode 1 means the inner most barcode.
 
 {\bf Axis Histograms}:

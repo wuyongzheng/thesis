@@ -9,10 +9,10 @@ Many of the system security problems such as malware stem from the fact that unt
 on the system.
 We can mitigate many of these problems by ensuring that code which is executed only comes
 from trusted software providers/vendors and the code is executed in the correct context.
-In this paper, we show that this can be efficiently achieved even on complex
+In this section, we show that this can be efficiently achieved even on complex
 operating systems such
 as Windows. Our system provides two guarantees:
-(i) we only allow the execution of binaries (in the rest of the paper, we refer
+(i) we only allow the execution of binaries (in the rest of the section, we refer
 to any executable code stored in the file system as a {\em binary})
 whose contents are already known and trusted --- we call this {\em authenticating binary integrity};
 and (ii) as binaries are kept in files, the pathname of the file must 
@@ -25,7 +25,7 @@ A following extreme example illustrates location authentication.
 Suppose the binary integrity of the shell and the file system format executables 
 are verified. If an attacker swaps their pathnames,
 then running a shell would cause the file system to be formatted.
-In this paper, we refer to {\em binary authentication} to mean when 
+In this section, we refer to {\em binary authentication} to mean when 
 both the binary's data integrity and location are verified.
 
 Most operating systems can prevent execution of code
@@ -45,7 +45,7 @@ However, the problem of malware is more acute in Windows.
 There are also many types of executable code,
 e.g. executables (.exe), dynamic linked libraries (.dll), 
 ActiveX controls, control panel applets, and drivers. 
-In this paper, we focus on mandatory binary authentication of all forms
+In this section, we focus on mandatory binary authentication of all forms
 of executables in Windows. 
 Binaries which fail authentication cannot be loaded, thus,
 cannot be executed. We argue that binary authentication together with 
@@ -82,7 +82,7 @@ we believe, is too heavy for a general purpose mechanism.
 % Yet, many problems remain, such as concern over certificate processing and revocation overhead, 
 % and constant interactive user approval dialog which may irritate or annoy the users.
 
-The main contribution of this paper is that we believe that it provides the first
+The main contribution of this work is that we believe that it provides the first
 comprehensive infrastructure for trusted binaries for Windows.
 This is significant given that much of the problems of security on Windows stems from
 inability to distinguish between trusted and untrusted software.
@@ -99,9 +99,9 @@ with a caching strategy.
 % Under intensive file modification usage scenarios, 
 % an uncached strategy can be preferable.
 
-% The paper is organized as follows.
+% The section is organized as follows.
 % Section~\ref{sect:windows} examines special issues in Windows.
 % Section~\ref{sect:related} surveys related work.
 % We describe our scheme and implementation in Section~\ref{sect:scheme}.
 % Section~\ref{sect:cost} presents the benchmarks, and
-% Section~\ref{sect:conclusion} concludes this paper.
+% Section~\ref{sect:conclusion} concludes this section.

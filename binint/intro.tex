@@ -7,7 +7,7 @@ Software in Windows also has many interactions with each other.
 These interactions are often not well understood or specified.
 Software is typically closed source, in binary form only.
 
-In this paper, we use software to mean binary files which are either
+In this section, we use software to mean binary files which are either
 executables or Dynamic Link Libraries (DLLs).
 We have two goals. Firstly, the security objective 
 is to ensure the use of trusted binaries and maintain their integrity.
@@ -39,7 +39,7 @@ Clearly, there is a tradeoff between security and usability --
 we seek a practical middle ground with improved security while
 being compatible with typical software.
 
-In this paper, we present a new security model
+In this section, we present a new security model
 for binaries called {\em BinInt}.
 We implement a prototype of BinInt for Windows 
 which meets our security objectives yet allows
@@ -54,7 +54,7 @@ In install mode, our benchmarks
 show $\sim$12\% overhead which is reasonable since
 the use of install mode is infrequent.
 
-The paper is organized as follows.
+The section is organized as follows.
 Mechanisms for loading binaries in
 Windows and binary-based attacks are reviewed in Sec.~\ref{sec:problems}.
 Sec.~\ref{sec:prevworks} discusses related work.

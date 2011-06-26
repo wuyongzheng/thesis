@@ -1,9 +1,9 @@
-\subsubsection{Handling Exceptions}
+\subsection{Handling Exceptions}
 
 It is important to also deal with cases where there is exceptional
 behavior which may otherwise cause false positives.
 
-\paragraph{Scheduled Outgoing Email}
+\subsubsection{Scheduled Outgoing Email}
 If user has a large amount of email to send, and he opts to send them while going for a coffee break, our system supports that if the user has obtained sufficient email tokens. 
 %for him to send the emails when he is away. 
 The tokens to send email are obtained by directly interacting with the monitor,
@@ -17,7 +17,7 @@ the user goes away.
 Similarly, the tokens allowing the user to send email while he is away expire when the user comes back. The expiration mechanism reduces the opportunity 
 for spam worms to hijack leftover tokens.
 
-\paragraph{Scheduled CPU Intensive Programs}
+\subsubsection{Scheduled CPU Intensive Programs}
 We need to handle carefully the case of non-malicious programs that commonly
 run when no user is present. Besides system auto-updates, these
 programs include nightly backup, nightly virus scan, remote desktop
