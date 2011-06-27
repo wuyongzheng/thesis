@@ -101,6 +101,26 @@ One could use \code{ptrace} to monitor the web server
 but this can have a significant performance penalty and may
 not ensure mandatory or reliable auditing.
 
+Comparing to Solaris DTrace (introduced in Section~\ref{sec:dtrace}),
+although DTrace does integrate in privileges,
+it does not have the same security concerns.
+DTrace has a all-or-nothing security configuration, i.e.
+a user is either able to trace all processes and the kernel
+(thus obtaining confidential information), or not able to use DTrace at all.
+As DTrace is meant to minimize impact, DTrace does not provide
+reliable event monitoring and can drop events.
+Another difference with our framework is the auditing of file operations.
+Since logging access to files is a very important for many kinds of monitoring,
+we provide more powerful specifications on directories and subtrees.
+The DTrace implementation requires extensive changes to Solaris,
+in the words of the developers,
+``it was a hell of a lot of work -- Bryan Cantrill, Solaris
+Kernel Development''.
+While it is difficult to have portable kernel enhancements, we feel our
+approach should be less of a massive change to the kernel type solution and in
+this sense is more lightweight and amenable to implementation
+in different Unixes.
+
 Our prototype implementation shows that it is possible to to get all
 these desirable features in a user-space monitor without requiring special
 privileges. Furthermore, we demonstrate an efficient implementation
