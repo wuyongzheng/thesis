@@ -60,34 +60,40 @@ the monitored program, thus the log message supplied by it should also not be
 trusted. For example, the application does not log or logs something to spoof
 the monitor.
 
-\subsection{\code{ptrace}}
+\subsection{\code{ptrace} and \code{/proc}}
 
-The \code{ptrace(2)} system call provides a means by which a parent process may
-observe and control the execution of another process, and examine and change
-its core image and registers. It is primarily used to implement breakpoint
-debugging and system call tracing. Most UNIX systems, such as Solaris, FreeBSD,
-and Linux implement this system call.
-
-While being traced, the child will stop
-each time a signal is delivered, even if the signal is being ignored. The
-parent will be notified at its next \code{wait(2)} and may inspect and modify the
-child process while it is stopped. The parent then causes the child to
-continue, optionally ignoring the delivered signal (or even delivering a
-different signal instead).
-
-There are many disadvantages on \code{ptrace} as an system
-auditing tool. Firstly, it is very inefficient. Since the child process will
-stop at each system call, there will be a high process switch cost on each
-system call. Further more, the process still has to stop at every system call
-even if we only want to audit one specific system call. Secondly, if the
-process is already been traced by some process. It is not possible for another
-process to trace it. This is not desirable as an auditing tool, because
-sometimes we need different processes to audit on different things. Lastly,
-\code{ptrace} will bring side-effect to the process been traced. For example, if a
-process is attached to with PTRACE ATTACH, its original parent can no longer
-receive notification via wait when it stops, and there is no way for the new
-parent to effectively simulate this notification. This is also not desirable
-because we want the process behave the same as while not been traced.
+A commonly used technique for monitoring is system call tracing or system call
+interposition to monitor the system calls made by a process.
+For portability, systems like Janus \cite{wagner1999janus} or Alcatraz \cite{liang2009alcatraz}
+use the Unix user-level mechanisms \code{ptrace} or \code{/proc} to do
+system call tracing.
+This usage is problematic because it is not
+meant to be a secure monitoring mechanism, e.g.
+\code{ptrace} was meant to support debuggers.
+In the Solaris manual pages, \code{ptrace} is described as being
+``unique and arcane''.
+These kinds of problems and common
+pitfalls with user-level system call interposition
+are discussed in \cite{garfinkel2003traps}, such as:
+(i) race conditions between time of check and time of use (TOCTOU), 
+i.e. a buffer can be modified by another thread;
+(ii) non-inheritance of tracing, i.e. special \code{strace} hacks in Linux;
+and (iii) not transparent with respect to setuid/setgid executables 
+and signals,
+i.e. \code{ptrace} and \code{/proc} disable tracing 
+on setuid/setgid executables.  
+One could write a simple C program as in Figure~\ref{fig:ptrace-bug}
+to escape from ptraceing.
+After several iterations, some
+child processes will not be traced by the tracing program.
+As well as \code{ptrace(2)}, \code{/proc}
+brings side-effect to the traced process.
+When a traced process calls \code{setuid(2)},
+the call will fail because the tracing process would have insufficient
+privileges to the setuided process.
+Because of their subtleties and intrinsic difficulties,
+\code{ptrace} and \code{/proc} are not suitable for general purpose user-level
+monitoring although they may be useful in specific situations.
 
 \begin{figure}[htb]
 \begin{verbatim}
@@ -113,128 +119,11 @@ main()
 \label{fig:ptrace-bug}
 \end{figure}
 
-\code{ptrace}
-suffers from many race condition problems\cite{garfinkel2003traps}. One could write a simple C
-program as in Figure~\ref{fig:ptrace-bug} to escape from ptraceing. After several iterations, some
-child processes will not be traced by the tracing program.
-
-Many Linux kernel
-exploits make use of \code{ptrace} bugs. The famous ones are "Linux Non-Readable File
-Ptrace Vulnerability" in 2000, "Linux Ptrace/Setuid Exec Vulnerability" and
-"Linux ptrace/execve Race Condition Vulnerability" in 2001.
-
-\subsection{Solaris /proc}
-
-Solaris \path{/proc}\cite{faulkner1991process}\footnote{Different UNIX systems implement
-different \path{/proc} file systems.}
-is a file system that provides access to the state of each process
-in the system. \path{/proc} can be used for system call interposition.
-
-\begin{figure}[htb]
-\begin{verbatim}
--rw------- 1 wuyongzh grad 4333568 May 10 16:49 as
--r-------- 1 wuyongzh grad     152 May 10 16:49 auxv
-dr-x------ 2 wuyongzh grad      32 May 10 16:49 contracts
--r-------- 1 wuyongzh grad      32 May 10 16:49 cred
---w------- 1 wuyongzh grad       0 May 10 16:49 ctl
-lr-x------ 1 wuyongzh grad       0 May 10 16:49 cwd ->
-dr-x------ 2 wuyongzh grad    8208 May 10 16:49 fd
--r--r--r-- 1 wuyongzh grad     120 May 10 16:49 lpsinfo
--r-------- 1 wuyongzh grad     912 May 10 16:49 lstatus
--r--r--r-- 1 wuyongzh grad     536 May 10 16:49 lusage
-dr-xr-xr-x 3 wuyongzh grad      64 May 10 16:49 lwp
--r-------- 1 wuyongzh grad    3168 May 10 16:49 map
-dr-x------ 2 wuyongzh grad     800 May 10 16:49 object
--r-------- 1 wuyongzh grad    3848 May 10 16:49 pagedata
-dr-x------ 2 wuyongzh grad    9008 May 10 16:49 path
--r-------- 1 wuyongzh grad      72 May 10 16:49 priv
--r--r--r-- 1 wuyongzh grad     336 May 10 16:49 psinfo
--r-------- 1 wuyongzh grad    3168 May 10 16:49 rmap
-lr-x------ 1 wuyongzh grad       0 May 10 16:49 root ->
--r-------- 1 wuyongzh grad    1536 May 10 16:49 sigact
--r-------- 1 wuyongzh grad    1232 May 10 16:49 status
--r--r--r-- 1 wuyongzh grad     256 May 10 16:49 usage
--r-------- 1 wuyongzh grad       0 May 10 16:49 watch
--r-------- 1 wuyongzh grad    5016 May 10 16:49 xmap
-\end{verbatim}
-\caption{List of the \code{/proc/pid} directory in Solaris 5.10}
-\label{fig:proc}
-\end{figure}
-
-The name of each entry in the \path{/proc}
-directory is a decimal number corresponding to a process-ID. These entries are
-themselves subdirectories. Access to process state is provided by additional
-files contained within each subdirectory. The owner of each \path{/proc} file and
-subdirectory is determined by the user-ID of the process.
-
-There are many files under each \path{/proc/pid} directory as shown in
-Figure~\ref{fig:proc}. Most files describe process state and can only be opened
-for reading. Address space files contain the image of the running process and
-can be opened for both reading and writing. An open for writing allows process
-control; a read-only open allows inspection but not control.
-
-In general, more than one process can open the same \path{/proc} file at the
-same time. Exclusive open is an advisory mechanism provided to allow
-controlling processes to avoid collisions with each other. A process can obtain
-exclusive control of a target process, with respect to other cooperating
-processes, if it successfully opens any \path{/proc} file in the target process
-for writing while specifying \code{O\_EXCL} in the \code{open(2)}. Such an open
-will fail if the target process is already open for writing.
-
-Data may be transferred from or to any locations in the address space of the
-traced process by applying \code{lseek(2)} to position the as file at the
-virtual address of interest followed by \code{read(2)} or \code{write(2)} (or
-by using \code{pread(2)} or \code{pwrite(2)} for the combined operation). The
-address-map file \path{/proc/pid/map} can be read to determine the accessible
-areas (mappings) of the address space.
-
-A tracing process writes specially-formatted commands to the ctl file to
-specify events of interest and actions to be applied to the tracing process.
-These commands appear similar to the arguments given to the \code{ptrace(2)} call: an
-identifier indicating the requested control operation and any argument required
-for that operation. We will describe some commands which are related to system
-auditing.
-
-\begin{enumerate}
-\item \code{PCSTOP}: When applied to the process control file, PCSTOP directs
-the process to stop and waits for it to stop.
-\item \code{PCRUN}: Make a process runnable
-again after a stop. 
-\item \code{PCSTRACE}: Define a set of signals to be traced in the
-process. The receipt of one of these signals by a process causes the process to
-stop.
-\item \code{PCKILL}: If applied to the process control file, a signal is sent to
-the process with semantics identical to those of kill(2).
-\item \code{PCSENTRY}/\code{PCSEXIT}:
-These control operations instruct the process to stop on entry to or exit from
-specified system calls. When entry to a system call is being traced, a process
-stops after having begun the call to the system but before the system call
-arguments have been fetched from the process. When exit from a system call is
-being traced, a process stops on completion of the system call just prior to
-checking for signals and returning to user level. At this point, all return
-values have been stored into the process' registers.
-\item \code{PCWATCH}: Set or clear a
-watched area in the controlled process from a prwatch structure operand. A
-watch-point is triggered when a process in the traced process makes a memory
-reference that covers at least one byte of a watched area and the memory
-reference is as specified in pr wflags. When a process triggers a watch-point,
-it incurs a watch-point trap.
-\end{enumerate}
-
-Comparing to \code{ptrace(2)}, \path{/proc} gives a finer
-grained control over monitored system calls. We can specify only the interested
-system calls to intercept. This can give a great performance improvement if we
-want to monitor a small set of system calls. Another advantage over \code{ptrace(2)}
-is that a process can be traced by more than one tracing process using /proc.
-However, \path{/proc} still suffers from performance penalty caused by process switch
-on each traced system calls. It requires the tracing process' immediate
-response on each traced system calls. As a result, it can be used for process
-confining but not good for auditing.
-
-As well as \code{ptrace(2)}, \path{/proc} will still
-bring side-effect to the traced process. When a traced process calls \code{setuid(2)},
-the call will fail because the tracing process would have insufficient
-privileges to the setuided process.
+The other serious drawback of \code{ptrace} or \code{/proc} is that
+the overhead is considerable, incurring at least two
+context switches per traced system call.
+Our micro benchmarks in \TODO{fill} show that this can lead to an order of magnitude
+slowdown on system call intensive programs.
 
 \subsection{Light-weight Auditing Framework}
 
@@ -256,10 +145,59 @@ what happens if memory is not available for auditing; truly paranoid
 administrators can request that the kernel panic in such situations.
 
 \subsection{Linux Trace Toolkit (LTT) and LTTng}
+ 
+\subsection{Windows Sysinternals}
+\label{sec:sysinternals}
+
+FileMon \cite{filemon} and RegMon \cite{regmon}
+are file and registry monitoring tools for Windows, respectively.
+They monitor operations taking place on
+the registry or specified file system.
+A graphical interface is used to filter and display monitored events in real time.
+We have observed (details in Section \TODO{fill}) that both tools can drop events when the
+events are fast generated.
 
 \subsection{Solaris DTrace}
+\label{sec:dtrace}
+
+DTrace\cite{cantrill2004dynamic} is a dynamic tracing framework
+created on Solaris 10, for troubleshooting kernel and application problems
+on production systems.
+It allows almost all aspects of the kernel to
+be instrumented, with 30,000 probes in the kernel.
+It uses a scripting language, D programs,
+which are run within the kernel to do monitoring.
+DTrace is very powerful because
+they run within the kernel and also because of the large number of
+instrumented probes.
+In-kernel also means that DTrace can be efficient.\footnote{
+However, our micro-benchmarks in Section \TODO{fill} indicate that while it is significantly
+faster than \code{proc}, we have observed a factor of 2x slowdown.
+}
+To ensure safety of running in the kernel, DTrace programs
+are restricted and checked for safety.
+However, we believe that it is far safer to run monitors in user mode.
+
+As kernel tracing mechanisms are meant for debugging and performance analysis,
+they differ from monitors for auditing.
+For example, although DTrace does integrate in privileges,
+it does not have the same security concerns.
+As kernel tracing is meant to minimize impact, DTrace does not provide
+reliable event monitoring and can drop events.
+\TODO{move to lbox: Another difference with our framework is the auditing of file operations.
+Since logging access to files is a very important for many kinds of monitoring,
+we provide more powerful specifications on directories and subtrees.}
+The DTrace implementation requires extensive changes to Solaris, 
+in the words of the developers, 
+``it was a hell of a lot of work -- Bryan Cantrill, Solaris
+Kernel Development''.
+While it is difficult to have portable kernel enhancements, we feel our
+approach should be less of a massive change to the kernel type solution and in
+this sense is more lightweight and amenable to implementation 
+in different Unixes.
 
 \subsection{KProbes, DProbes and SystemTap}
+\label{sec:systemtap}
 
 \subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}
 \label{sec:instrumentation}

@@ -975,10 +975,9 @@ with respect to software configuration and dependencies.
 We briefly mention some other tools/systems below, and highlight the important
 differences with WinResMon.
 
-FileMon \cite{filemon} and RegMon \cite{regmon} are file and registry
-monitoring tools, respectively.  They monitor operations taking place on
-the registry or specified file system in real time.  Although WinResMon shares
-the basic monitoring functionalities with these two tools, WinResMon's
+WinResMon shares the basic monitoring functionalities with
+FileMon and RegMon tools (in Section~\ref{sec:sysinternals}).
+However, WinResMon's
 infrastructure is integrated, and its log database is designed to assist
 system administrators in inspecting software configuration and dependencies.
 
@@ -986,7 +985,7 @@ Strace \cite{strace} is a Linux/UNIX tool used to intercept and log system
 calls invoked by a process.  There is also a Microsoft Windows NT port of
 strace \cite{bindview} with similar functionality.  WinResMon differs from
 strace in that is focused more on resource usage (files, registry, etc) rather
-than system calls.  In Microsoft Windows, a system call viewpoint can be
+than system calls.  In Windows, a system call viewpoint can be
 confusing since there are multiple levels of APIs which translate into the poorly
 documented native API.
 
@@ -996,7 +995,9 @@ processes and applies a specific security policy, WinResMon is meant as a
 monitoring tool to inspect resource usage and interactions among programs in a
 system.
 
-DTrace \cite{cantrill2004dynamic}, SystemTap \cite{prasad2005systemtap} and LBox \cite{wu2005user} are
+DTrace (in Section~\ref{sec:dtrace}),
+SystemTap (in Section~\ref{sec:systemtap}) and
+LBox (in Section~\ref{sec:lbox}) are
 auditing and instrumentation systems on various UNIX operating systems.  They
 are all event based auditing systems, performing a specific action only on a
 specific event.  DTrace and SystemTap allow administrators to dynamically
