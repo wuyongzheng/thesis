@@ -2,8 +2,6 @@
 
 \subsection{Introduction}
 
-\TODO{move: goes to the main intro chapter}
-
 The tasks of software maintenance and configuration require a precise
 understanding of system resources, the individual requirements of each piece
 of software, and interdependencies between every software program on the
@@ -25,7 +23,7 @@ as FAQs or forums, but such information is often incomplete.
 
 In various distributions of Linux, software dependency issues are partly
 addressed by the use of a package manager.  The Red Hat Package Manager (RPM)
-\cite{rpm}, for example, records the currently installed packages and the
+\cite{ewing1996rpm}, for example, records the currently installed packages and the
 files required and provided by these packages in a centralized database.  RPM
 checks dependencies before removing a package to ensure that files required by
 other installed packages are not removed.  Similar checks are done to prevent
@@ -122,7 +120,7 @@ certain administrator privileges to function correctly, the system
 administrator can set up a policy that restricts the administrator privileges
 to the needed resources (files, registry keys, etc).  
 We remark that this approach can be contrasted with confinement systems
-such as systrace \cite{systrace} in Unix.
+such as systrace \cite{provos2003improving} in Unix.
 WinResMon is an auditing tool, it does not confine system calls, but
 provides useful input for system administrators to create policies 
 on resource access which can then be used to limit privileges.
@@ -132,7 +130,7 @@ on resource access which can then be used to limit privileges.
 Managing the Microsoft Windows registry is difficult due to its complexity.
 Spyware often takes advantage of this complexity to bury itself in the
 registry, making it difficult for the user to remove it completely.  In
-\cite{asep}, the authors have listed the most common entry points for spyware
+\cite{wang2004gatekeeper}, the authors have listed the most common entry points for spyware
 to enter a Windows NT system.  The following are some of the configuration
 settings WinResMon can monitor:
 
@@ -590,7 +588,7 @@ captured by intercepting system calls.  In practice, this is actually more
 complex.  Rather than defining and using the actual system calls, the
 Microsoft Windows API is described at a level higher than the operating system
 using the Win32 API.  Although most programs use Win32, they can use the
-native API \cite{ntnativeapi} directly.  The native system call interface API
+native API \cite{nebbett2000windows} directly.  The native system call interface API
 is unfortunately not well documented and supported.  Furthermore, the view of
 the operating system at the native API level is not quite the same as at the
 Win32 level.  This means that intercepting system calls at what regular
@@ -601,7 +599,7 @@ native API level.
 
 WinResMon implements the syscall interceptor by means of a kernel mode driver.
 The driver captures syscall requests made by a process by ``hooking'' the
-native system calls as described in \cite{nthooking}.  Appendix 1 lists the
+native system calls as described in \cite{ddj-nthooking}.  Appendix 1 lists the
 system calls intercepted by WinResMon.  We found these to be the most common
 system calls arising from file, registry, IPC, synchronization, and process
 operations.\footnote{ Since Microsoft Windows is closed source and the native
@@ -610,7 +608,8 @@ completeness.  }
 
 To gather information about processes, WinResMon uses a simpler method.
 Microsoft Windows NT exports a set of process callback functions in the kernel
-space \cite{MSDN}.  WinResMon makes use of {\small\tt PsSetCreateProcessNotifyRoutine()} and
+space \cite{msdn-proccallback}.
+WinResMon makes use of {\small\tt PsSetCreateProcessNotifyRoutine()} and
 {\small\tt PsSetLoadImageNotifyRoutine()} which notifies the call back function
 during process creation or termination.
 
@@ -726,7 +725,7 @@ entry.  After iterating over all relevant records, it closes the handle.
 The extended example below shows the use of WinResMon to solve software
 maintenance problems.
 
-Yahoo Toolbar \cite{yahoo} adds tabbed browsing to Internet Explorer (IE) and
+Yahoo Toolbar adds tabbed browsing to Internet Explorer (IE) and
 adds various icons and links from within IE to different Yahoo services.  The
 following walk-through illustrates monitoring the Yahoo toolbar throughout its
 entire life cycle.  There are three stages:
@@ -991,13 +990,13 @@ than system calls.  In Microsoft Windows, a system call viewpoint can be
 confusing since there are multiple levels of APIs which translate into the poorly
 documented native API.
 
-Systrace \cite{systrace} is a UNIX tool for sandboxing untrusted code.  Unlike
+Systrace \cite{provos2003improving} is a UNIX tool for sandboxing untrusted code.  Unlike
 Systrace, which examines system-call sequences issued by the monitored
 processes and applies a specific security policy, WinResMon is meant as a
 monitoring tool to inspect resource usage and interactions among programs in a
 system.
 
-DTrace \cite{dtrace}, SystemTap \cite{systemtap} and LBox \cite{lbox} are
+DTrace \cite{cantrill2004dynamic}, SystemTap \cite{prasad2005systemtap} and LBox \cite{wu2005user} are
 auditing and instrumentation systems on various UNIX operating systems.  They
 are all event based auditing systems, performing a specific action only on a
 specific event.  DTrace and SystemTap allow administrators to dynamically

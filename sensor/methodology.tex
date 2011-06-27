@@ -113,9 +113,9 @@ delayed due to the averaging behavior.
   \caption{Overview of malware detection rules using changepoint detection. }\label{tbl:detect-malware}
 \end{table*}
 
-The problem of changepoint detection~\cite{ChangpointBook93} is to
+The problem of changepoint detection~\cite{basseville1993detection} is to
 detect changes from normal behavior.
-We use a customized version of CuSum~\cite{Page54} to do such
+We use a customized version of CuSum~\cite{page1954continuous} to do such
 detection. In our model, behaviors are described as a real-valued
 time series $x_1, \ldots, x_n$. Normal behavior is estimated to have a value
 $a$ or smaller. To detect an
@@ -139,7 +139,7 @@ the normal behavior is violated, so $a$ is a lower detection threshold
 for abnormal behavior, $S_n$ is the cumulative sum
 of the actual signal and $N$ is the
 changepoint detection threshold. CuSum can be shown to be optimal
-under certain conditions \cite{ChangpointBook93}. As it is simple
+under certain conditions \cite{basseville1993detection}. As it is simple
 and efficient, it is suitable for real-time processing of streaming
 sensor data.
 

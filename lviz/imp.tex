@@ -135,7 +135,7 @@ It is common that the pattern in a coloring rule only needs a string
 match.
 Since there can be many color rules, we want to avoid applying
 to the matching events one rule at a time.
-We instead employ the Aho-Corasick's string matching algorithm \cite{aho:corasick}
+We instead employ the Aho-Corasick's string matching algorithm \cite{aho1975efficient}
 to compile all the rules (the string patterns) into a single automaton.
 This allows us to identify the color in a single pass
 rather than multiple passes for each rule.

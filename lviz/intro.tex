@@ -15,12 +15,12 @@ system complexity being too high.
 An orthogonal approach to address this issue is by examining
 detailed system behavior.
 Recently, there are a number of monitoring systems which
-give detailed system traces such as DTrace~\cite{dtrace} for Solaris,
-DProbes for Linux and Flight Data Recorder~\cite{fdr}
-and WinResMon~\cite{winresmon} for Windows.
+give detailed system traces such as DTrace~\cite{cantrill2004dynamic} for Solaris,
+DProbes for Linux and Flight Data Recorder~\cite{verbowski6flight}
+and WinResMon~\cite{ramnath2006winresmon} for Windows.
 
 However, the system traces can be very large and also
-difficult to analyze. Statistics from \cite{fdr} show that Windows
+difficult to analyze. Statistics from \cite{verbowski6flight} show that Windows
 server workloads can generate as much as 70M events/day.
 An idle machine can generate about 1M events/day. We also
 observed similar statistics for Windows. Although much of

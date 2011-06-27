@@ -3,13 +3,13 @@
 Implementation of the visualizations entails collecting tra\-ces when
 binaries are loaded and tracking of function call and return.
 Binary loading information is obtained using
-a modified version of WinResMon~\cite{winresmon},
+a modified version of WinResMon~\cite{ramnath2006winresmon},
 which makes use of a kernel driver to obtain
 what binaries are loaded by a process as it runs and
 what child processes are created.
 The EXE dependency graph is created from
 the WinResMon trace file into a dependency graph in
-Graphviz \cite{graphviz} format and rendered by {\tt dot} in Graphviz.
+Graphviz \cite{ellson2002graphviz} format and rendered by {\tt dot} in Graphviz.
 
 The system trace from WinResMon is very robust and allows for continuous
 full system tracing if so desired.
@@ -22,9 +22,9 @@ Thus, it can handle many more cases than with a more detailed
 instruction instrumentation or interpretation approach, as is done
 with PIN below.
 
-The DLL dependency graph is built from a runtime contr\-ol flow trace from
+The DLL dependency graph is built from a runtime control flow trace from
 function calls and returns during execution.
-We employ PIN~\cite{pin} which instruments the binary to allow monitoring
+We employ PIN~\cite{luk2005pin} which instruments the binary to allow monitoring
 of the control flow during execution of call and return instructions
 when a process runs saving these events into a trace file.
 The trace is then analyzed to generate a DLL dependency graph in

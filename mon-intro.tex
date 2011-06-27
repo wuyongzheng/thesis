@@ -1,0 +1,51 @@
+%\section{Introduction}
+
+System monitoring is an important task on ensuring a correct running
+system.
+It is used to confirm or verify the correctness of a running system;
+diagnose system failure;
+identify performance problems;
+and find security problems.
+As system grows larger and more complicated, these tasks becomes more challenging.
+
+A general monitoring infrastructure needs to be
+{\em correct}, {\em secure}, {\em flexible}, and {\em efficient}.
+By {\em correct}, the monitored events must be sound and complete, i.e.
+no events should be missed, duplicated or invented.
+The monitoring infrastructure need to be {\em secure} in both design and implementation.
+For example, it should not leak confidential information to low privilege users.
+It should be carefully implemented so that a malicious monitored
+software would not exploit the infrastructure.
+By {\em flexible}, the infrastructure should be general enough to
+handle different problems.
+For example, an API can be used to extend the monitored events for future software.
+A filter language can be used pre-process events.
+By {\em efficient}, the infrastructure should not introduce too much
+overhead on the monitored software.
+An observer is part of the system and changes the system, similarly,
+a monitor can bring side effects to the monitored program.
+Too much overhead not only slows the system down, but may also make
+it incorrect.
+
+In this chapter, we propose two general monitoring infrastructures.
+The LBox addresses the problem of {\em user-level} monitoring.
+Most traditional monitoring infrastructures are super-user based,
+mainly because they are system-wide.
+With user-level monitoring, LBox can be used by all users in a multi-user
+system, moreover, LBox allows monitor to be recursive.
+However, this poses several new challenges such as
+user isolation, information confinement, and infinite event looping.
+
+Our second monitoring infrastructures, WinResMon addresses the problem
+of extensible resource based monitoring in Windows.
+In open source OSes such as Linux,
+both the internal design and system call API are understandable by
+the developer, thus system based monitoring makes sense.
+However, in Windows, the native calls are not documented and continuously
+changing.
+Though it is possible to monitor native calls, the output would not be
+understandable.
+% The only documented API is the higher level Win32 API, which calls
+% the lower level native calls.
+WinResMon addresses the problem from resource point of view and
+provides an API to query its log database.

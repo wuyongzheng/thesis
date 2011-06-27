@@ -38,7 +38,7 @@ In contrast, {\tt Internet Explorer} on a {\em YouTube} page may load
 86 DLLs from {\tt System32}, 14 other DLLs, 3 drivers and some other
 binaries.
 A more detailed look at the sharing and dependencies of Windows binaries
-can be found in \cite{icse10}.
+can be found in \cite{wu2010comprehending}.
 
 There are numerous mechanisms in Windows which can cause a binary to be used,
 i.e. load the binary.
@@ -151,7 +151,7 @@ resembles the unpack-and-run in the normal installation scenarios.
 
 DLL attacks typically exploit some feature of an application
 to inadvertently load a malicious DLL.
-The ``carpet bomb'' \cite{safari1} attack involves bugs of two different
+The ``carpet bomb'' \cite{safari-carpet-bomb} attack involves bugs of two different
 browsers.
 Safari had a feature\footnote{
 Apple did not consider it as a bug.
@@ -169,7 +169,7 @@ has recently re-surfaced
 
 In some cases, an application has features to execute binaries.
 This can be exploited.
-A vulnerability \cite{winhelp} in handling Windows Help files in
+A vulnerability \cite{winhelp-attack} in handling Windows Help files in
 Internet Explorer was recently discovered.
 A malicious web page can cause Internet Explorer to load a malicious
 WinHelp ({\tt .hlp}) file from an arbitrary path.
@@ -177,7 +177,7 @@ WinHelp also has a feature to allow loading of arbitrary DLLs.
 The bug and the feature together enable a malicious website to execute
 arbitrary code on the client.
 
-The recent Stuxnet worm \cite{stuxnet} also uses a DLL attack.
+The recent Stuxnet worm \cite{matrosov2010stuxnet} also uses a DLL attack.
 Interestingly, Windows 7 does not even give a UAC warning with this attack.
 Stuxnet exploits a vulnerability in Windows Explorer which displays an icon
 for shortcut files by using a DLL specified in the shortcut.

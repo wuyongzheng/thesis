@@ -1,8 +1,7 @@
 \section{LBox: a User-level Logging Framework for Linux}
+\label{sec:lbox}
 
 \subsection{Introduction and Overview}
-
-\TODO{move: motivation goes to chapter 1 intro}
 
 Logging and auditing are important operating system facilities used
 to help monitor correct system operation and to detect potential
@@ -112,7 +111,7 @@ which has low overhead even though the monitors are in user-space.
 \TODO{move and merge with chapter 2}
 A commonly used technique for monitoring is system call tracing or system call
 interposition to monitor the system calls made by a process.
-For portability, systems like Janus \cite{janus} or Alcatraz \cite{alcatraz}
+For portability, systems like Janus \cite{wagner1999janus} or Alcatraz \cite{liang2009alcatraz}
 use the Unix user-level mechanisms \code{ptrace} or \code{proc} to do
 system call tracing.
 This usage is problematic because it is not
@@ -120,10 +119,9 @@ meant to be a secure monitoring mechanism, e.g.
 \code{ptrace} was meant to support debuggers.
 In the Solaris manual pages, \code{ptrace} is described as being
 ``unique and arcane''.
-\cite{garfinkel} discuss 
-these kinds of problems and common
+These kinds of problems and common
 pitfalls with user-level system call interposition
-are discussed in \cite{garfinkel}, such as:
+are discussed in \cite{garfinkel2003traps}, such as:
 (i) race conditions between time of check and time of use (TOCTOU), 
 i.e. a buffer can be modified by another thread;
 (ii) non-inheritance of tracing, i.e. special \code{strace} hacks in Linux;
@@ -143,7 +141,7 @@ the overhead is considerable, incurring at least two
 context switches per traced system call.
 Our micro benchmarks show that this can lead to an order of magnitude
 slowdown on system call intensive programs.
-Another example is Alcatraz \cite{alcatraz},
+Another example is Alcatraz \cite{liang2009alcatraz},
 their user-level system call interception mechanism gives an overhead of 77\%
 on a \code{tar} benchmark.
 Thus, user-level mechanisms also have the drawback
@@ -151,7 +149,7 @@ of high intrinsic overhead.
 
 The obvious alternative is a kernel-level system call interposition,
 e.g. the later version of Janus used a kernel module, \code{mod\_janus}
-\cite{garfinkel}.
+\cite{garfinkel2003traps}.
 We remark that while a kernel-level system call interposition
 is more efficient and can be transparent, one still has to be
 careful about race conditions.

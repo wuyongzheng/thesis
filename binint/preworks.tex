@@ -40,7 +40,7 @@ Special care must be taken to handle file deletion so that files in the
 base system are not accessed.
 
 Kato et al. proposed an one-way isolation system named
-SoftwarePot \cite{softwarepot},
+SoftwarePot \cite{kato2003softwarepot},
 whose main purpose is to allow software to securely circulate among
 different hosts.
 Secure circulation means that software in the sandbox should not interfere
@@ -49,7 +49,7 @@ A security policy specifies files visible to the sandbox,
 path mapping from base system to sandbox, system calls allowed and
 network addresses allowed to interact.
 Liang et al. proposed another one-way isolation system named
-Alcatraz \cite{alcatraz}.
+Alcatraz \cite{liang2009alcatraz}.
 The main difference between SoftwarePot and Alcatraz is that the latter
 enables modification from the sandbox to be {\em committed} to the base
 system.
@@ -84,7 +84,7 @@ unusable software.
 \subsubsection{Signed Binaries}
 \label{sec:signing}
 
-There are systems \cite{binauth, digsig, williams, signedexec, FOOD}
+There are systems \cite{halim2008lightweight,apvrille2004digsig,williams2002anti,doorn01signedexecutables,nanda2006fcd}
 that only allow signed binaries to be loaded or executed.
 In these systems, signature of binaries are either embedded
 in the files themselves or signed by a third party, such
@@ -94,7 +94,7 @@ Executing or loading are only allowed if the signature can be verified.
 There are three basic problems with signed binaries.
 Firstly, the security relies on the trust of the signing keys.
 If key is leaked, the trust is broken.
-For example, the Stuxnet worm \cite{stuxnet} uses
+For example, the Stuxnet worm \cite{matrosov2010stuxnet} uses
 signed drivers with real certificates which are trusted by Windows.
 Secondly, revocation checking is expensive as it cannot be done
 locally and furthermore may not be timely.
@@ -107,7 +107,7 @@ may not prevent deletion.
 
 \paragraph{Self-signed executables}
 
-Self-signed executables \cite{selfsign} is a different approach
+Self-signed executables \cite{wurster2007self} is a different approach
 to signed binaries which allows for software updates.
 In their proposal, all binaries are embedded with their signatures signed
 by the software vendor.

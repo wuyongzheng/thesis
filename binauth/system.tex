@@ -62,7 +62,7 @@ software developer as a proxy for the vendor\_ID.
 %is also co-located in a organized hierarchical way.
 
 A software\_ID gives a one to one mapping between the binary and its ID string.
-This is useful for dealing with vulnerability management problems \cite{vdb}.
+This is useful for dealing with vulnerability management problems \cite{sufatrio2004amo}.
 Suppose a new vulnerability is known for a particular version of a software.
 This means that certain binaries, providing that they correspond to that
 software version may be vulnerable. However, there is no simple and standard
@@ -116,7 +116,7 @@ the targeted binary installation, we generate the MAC values for each binary.
 In the case where binaries are digitally signed by its developer,
 then we verify the signature and then generate the MAC for each binary.
 Thus, only one public-key operation needs to be done at install time.
-We choose to use a keyed hash, the HMAC algorithm \cite{rfc2104},
+We choose to use a keyed hash, the HMAC algorithm \cite{krawczyk1997rfc2104},
 so there is a secret key for the administrator. This is mainly to increase
 the security of the stored hashes.
 To authenticate binary integrity for any future execution of the code,
@@ -271,9 +271,9 @@ filled into the table during system boot.
 
 \item The {\it MAC} is same as a {\it software\_digest} entry in {\it Digest\_file}.
 Our prototype implements the
-HMAC-MD5 \cite{rfc2104}, HMAC-SHA-1 
-and HMAC-SHA-256 \cite{rfc4634} hash algorithms.\footnote{
-Due to recent concerns which show weaknesses and attacks against MD5 \cite{md5-attack}, 
+HMAC-MD5 \cite{krawczyk1997rfc2104}, HMAC-SHA-1 
+and HMAC-SHA-256 \cite{eastlake2006rfc4634} hash algorithms.\footnote{
+Due to recent concerns which show weaknesses and attacks against MD5 \cite{wang2005break}, 
 we also have stronger hash functions, namely SHA-1 and the stronger SHA-256.}
 \item The {\it Authenticated\_bit} remembers whether the binary has
 been previously authenticated.

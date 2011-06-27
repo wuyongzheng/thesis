@@ -4,13 +4,13 @@
 If we consider a computer host to include the host, the user channel
 and the network channel, then host security can be divided into:
 ({\it i}) software security, which ensures the software running in
-the host is authentic, e.g. antivirus \cite{aveff}, system call
-filtering \cite{systrace} and binary authentication \cite{binauth};
+the host is authentic, e.g. antivirus \cite{post1998use}, system call
+filtering \cite{provos2003improving} and binary authentication \cite{binauth};
 ({\it ii}) user security, which ensures the user is authentic, e.g.
 password/biometric authentication, physical perimeters and
 surveillance camera monitoring; and ({\it iii}) network security,
 which ensures the network communication is authentic, e.g. personal
-firewalls \cite{firewallsurvey}. Our approach to enhance host
+firewalls \cite{ingham2002history}. Our approach to enhance host
 security is substantially different from the existing designs in
 three aspects. Firstly, the model we propose fuses data from a few
 channels of external environment sensors to monitor the host
@@ -22,8 +22,8 @@ detects outbound or on-host malware execution, which complements
 intrusion detection.
 
 There are a few works which correlate information from different
-channels to improve host security. BIND\-ER \cite{binder}
-correlates user events (user input), process even\-ts (process
+channels to improve host security. BINDER \cite{cui2005design}
+correlates user events (user input), process events (process
 creation and process termination), and network events (connection
 request, data arrival and domain name lookup) to detect malware.
 Both our malware detection system and BINDER correlate user presence
@@ -31,8 +31,8 @@ information and system behaviour to detect malware. BINDER uses
 information collected by the user's machine, which potentially could
 be manipulated by the compromised host.
 
-The systems proposed by Gu et al. \cite{bothunter} and Yen et al.
-\cite{trafagg} detect botnets by analyzing and correlating network
+The systems proposed by Gu et al. \cite{gu2007bothunter} and Yen et al.
+\cite{yen2008traffic} detect botnets by analyzing and correlating network
 traces. The two systems and our malware detection system use
 information from the network router rather than the host in question
 so as to be able to deal with the case when the host is compromised
@@ -41,7 +41,7 @@ detection system is that we have user presence and activity
 information in addition to network information.
 
 Kumar et al. proposed a system 
-\cite{biomon,biomon-win,biomon2} which continuously monitors
+\cite{kumar2005using,yap2008physical,kwang2009usability} which continuously monitors
 user's biometric identity and locks up the computer if it cannot detect
 the correct user.
 Both their system and our access control system use physical user
@@ -54,7 +54,7 @@ Secondly, their system runs entirely in the user's machine, thus
 it cannot guarantee the authentication once the machine has been compromised.
 
 There are many works on location-based access control (LBAC) 
-wireless networks, e.g. \cite{ardagna06}. 
+wireless networks, e.g. \cite{ardagna2006supporting}. 
 LBAC models assume that the user devices are mobile,
 their locations are tracked for service continuity, or verified
 before granting access.  The problem we address is different in that
@@ -65,9 +65,9 @@ resources by the host.
 
 There are also theoretical models which fuse information from multiple channels
 for intrusion detection.
-Siraj et al. proposed a method \cite{siraj04} to fuse information
+Siraj et al. proposed a method \cite{siraj2004intrusion} to fuse information
 using artificial intelligence techniques.
-Thomas et al. proposed a probabilistic model \cite{thomas09} to address
+Thomas et al. proposed a probabilistic model \cite{thomas2009improvement} to address
 this problem.
 Our work, on the other hand, addresses the physical sensor framework.
 In terms of information fusion, we have employed
