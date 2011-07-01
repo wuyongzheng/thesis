@@ -1,5 +1,24 @@
-% \section{Introduction}
-% \label{sec:intro}
+The previous chapter shows software monitors that execute in the {\em host},
+which is shared with the monitored software.
+We have showed their robustness under the assumption that the kernel is
+authentic.
+However, when the kernel is compromised, the {\em host-based} monitoring
+cannot be trusted.
+We propose {\em external monitoring}, where information is collected from
+monitors external to the host, so that compromising the host would not
+result the monitor being compromised, thus the monitored information can be trusted.
+We have shown\footnote{
+The work is cooperatively done by three students,
+Liming Lu, Jie Yu and me, with two supervisors Ee-Chien Chang and Roland Hock Chuan Yap.
+My part of work is on the external monitoring framework, which
+will be shown in this chapter.
+} \cite{chang2010enhancing} that this can be used
+to detect malware in a host if we correlate user interaction with host behaviour,
+both of which are observable by our external monitor.
+In addition, the monitored information of user interaction can be used to guide
+resource allocation, thus limiting the resource utilization of malware.
+
+\section{Introduction}
 
 Securing computers against malware is increasingly difficult today. 
 Anecdotes abound that the survival time
@@ -29,7 +48,7 @@ malware by network-based security mechanisms, there are many other
 sources of information outside the host that are also useful for
 making detection and security mechanisms more robust.
 
-In this section, we propose a framework which 
+We propose a framework which
 fuses external (with respect to the host machine)
 environment information collected by external sensors
 in decision making to have more robust and enhanced
