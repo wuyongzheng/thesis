@@ -128,7 +128,7 @@ which has low overhead even though the monitors are in user-space.
 
 
 \subsection{The Monitor Framework}
-\label{sec:framework}
+\label{sec:lbox-framework}
 
 A monitor is a user-space process which audits the behavior of other processes.
 Monitors are described by two specifications:
@@ -185,10 +185,10 @@ which are not yet created.
 \end{enumerate}
 
 % An example of the use of process and event specification
-% is the simple monitor given in Figure \ref{eg-prog} from Section \ref{sec-eg}.
+% is the simple monitor given in Figure \ref{fig:lbox-eg-prog} from Section \ref{sec:lbox-eg}.
 % By using boolean expression, process specification can be very flexible.
 \noindent
-An example of the API (see also Section \ref{sec-eg}) is to monitor
+An example of the API (see also Section~\ref{sec:lbox-eg}) is to monitor
 all processes owned by the user Bob
 except for process 1468 and its child processes.
 {\small
@@ -468,7 +468,7 @@ the current process to be the lbox monitor which will
 receive the events generated from the processes defined by \code{proc\_spec}
 which trigger the set of events defined in \code{event\_spec}.
 One caveat is that we disallow self-referential monitoring, see
-section \ref{sec:self}.
+section \ref{sec:lbox-self}.
 
 In our framework, asynchronous events are stored in a kernel buffer
 of size \code{n} defined at monitor creation time. Asynchronous events
@@ -508,9 +508,9 @@ Even nicer would be a scripting language to make monitoring even easy,
 i.e. even a D-like scripting language.
 
 \subsubsection{An Extended Example}
-\label{sec-eg}
+\label{sec:lbox-eg}
 
-Figure \ref{eg-prog} illustrates how a monitor is written in our system.
+Figure \ref{fig:lbox-eg-prog} illustrates how a monitor is written in our system.
 For simplicity, we have used C-like pseudo code to
 hide some details and have not given the complete program.
 Error handling also has been omitted for the most part.
@@ -559,7 +559,7 @@ Error handling also has been omitted for the most part.
 \end{verbatim}
 \end{center}
 \caption{A Simple Monitor}
-\label{eg-prog}
+\label{fig:lbox-eg-prog}
 \end{figure*}
 
 In part 1, two events are to be monitored. Any access to any files
@@ -671,7 +671,7 @@ in which case, a default policy is applied.
 % the auditing interface to normal users.
 
 \subsubsection{Cascading Monitors}
-\label{sec:self}
+\label{sec:lbox-self}
 
 It may be the case that one of the processes being monitor is
 itself a monitor, we call this cascaded monitors.
@@ -722,11 +722,11 @@ should strictly also exclude the monitor pid.
 
 The following example shows a snapshot of a system where a web server is running
 and user Alice is using \code{vim}.
-The left part of Figure~\ref{mon-tree} shows the process tree induced
+The left part of Figure~\ref{fig:lbox-mon-tree} shows the process tree induced
 by the parent-child relationship while the right
 shows the monitor DAG induced by the monitoring relationship.
 The following sequence describes the creation of the snapshot given
-in Figure \ref{mon-tree}:
+in Figure \ref{fig:lbox-mon-tree}:
 
 \begin{enumerate}
 \item The master web server process $4010$ is created.
@@ -752,7 +752,7 @@ monitor $15349$ will receive the event.
 \begin{figure*}
 \includegraphics[scale=0.4]{lbox/mon-both}
 \caption{A Tree of Cascaded Monitors}
-\label{mon-tree}
+\label{fig:lbox-mon-tree}
 \end{figure*}
 
 
@@ -760,7 +760,7 @@ monitor $15349$ will receive the event.
 % a fairly minimal kernel mechanism which is attached
 % to relevant actions and objects is needed.
 % The monitor process can pretty much do anything. 
-% LAFS \cite{lafs}
+% LAFS \cite{wee1995lafs}
 % is a logging and auditing file system where accesses not conforming
 % to a policy are logged.
 % The policy specification
@@ -774,7 +774,7 @@ monitor $15349$ will receive the event.
 % A related but slightly simpler monitor is to audit whether
 % the apache web server is used to access any unexpected files.
 
-% In \cite{finke} a monitoring application is described to report when 
+% In \cite{finke2002process} a monitoring application is described to report when 
 % applications tasks did not run as they were supposed to, e.g. due to some
 % failure. Again, it is easy to write a monitor which can detect whether
 % tasks ran as scheduled.
@@ -865,7 +865,7 @@ The event specification is the following network event, \\
 
 \subsubsection{Other Applications}
 
-LAFS \cite{lafs}
+LAFS \cite{wee1995lafs}
 is a logging and auditing file system where accesses not conforming
 to a policy are logged.
 The policy specification
@@ -875,7 +875,7 @@ Note that it is harder to use {\tt dtrace} to do this LAFS-style tracing
 because of its system call orientation. Here we can make use of 
 inheritance in the directory structure. 
 
-In \cite{finke} a monitoring application is described to report when 
+In \cite{finke2002process} a monitoring application is described to report when 
 applications tasks did not run as they were supposed to, e.g. due to some
 failure. Again, it is easy to write a monitor which can detect whether
 tasks ran as scheduled.
@@ -974,13 +974,13 @@ tasks ran as scheduled.
 
 \subsection{Experimental Evaluation}
 
-Our prototype Linux implementation makes use of LSM \cite{lsm} and
+Our prototype Linux implementation makes use of LSM \cite{wright2002linux} and
 version 2.6.10 of the kernel,
 and thus is convenient to install
 as it consists of loadable kernel modules.
 The interface to the kernel is done through \code{ioctl} to a pseudo filesystem
 in \code{/proc/lbox}.
-The lbox API library in Section \ref{sec:framework} 
+The lbox API library in Section \ref{sec:lbox-framework} 
 gives a more convenient interface that using \code{ioctl} system calls.
 Due to lack of space, we do not go into further details
 of the kernel implementation.
@@ -1066,10 +1066,10 @@ ptrace & \begin{math} 59.04\pm0.15 \end{math} & \begin{math} 12.90\pm0.32 \end{m
 \end{tabular}
 %\end{center}
 \caption{Open micro-benchmark}
-\label{tab-open}
+\label{tab:lbox-open}
 \end{table}
 
-The open micro-benchmark results are given in Table \ref{tab-open}
+The open micro-benchmark results are given in Table \ref{tab:lbox-open}
 with all times in seconds. The average and standard deviation
 is given over 10 runs.
 As the timings are only measured with the Unix user/system and real-time
@@ -1093,7 +1093,7 @@ Using asynchronous events with buffering (0 dir level)
 drops the overhead to $15\%$.
 
 One point of comparison with other systems on Linux would be with
-Systrace \cite{systrace}. 
+Systrace \cite{provos2003improving}. 
 A pure comparison is not valid since in our system any event
 which must be monitored is eventually passed to the monitor.
 Systrace on the other as it does access control first can choose between a
@@ -1141,12 +1141,12 @@ DTrace\footnotemark & \begin{math} 8.41\pm0.02 \end{math} & \begin{math} 1.08\pm
 %\end{center}
 \caption{Open micro-benchmark on Solaris 10}
 % (SunOS 5.10 i386)}
-\label{tab-sol}
+\label{tab:lbox-sol}
 \end{table}
 
 \footnotetext[2]{The D program is ``syscall::open:entry \{ @[execname]=count(); \}''}
 
-Table \ref{tab-sol} shows the
+Table \ref{tab:lbox-sol} shows the
 test on Solaris for the same hardware with the same benchmark program. 
 While the baseline for Solaris is slower than Linux, it is reasonable
 to make relative comparisons.
@@ -1177,7 +1177,7 @@ than Solaris.
 % We use another micro-benchmark on socket
 % operations to show the effect of a more expensive system call.
 % The benchmark creates a TCP socket and connects to a local port.
-% This is repeated for 4000 times and the results are in Table \ref{tab-connect}.
+% This is repeated for 4000 times and the results are in Table \ref{tab:lbox-connect}.
 % We can see that in an expensive system call, the overhead is not noticeable.
 
 % \begin{table}
@@ -1194,7 +1194,7 @@ than Solaris.
 % \end{tabular}
 % %\end{center}
 % \caption{Connect micro-benchmark}
-% \label{tab-connect}
+% \label{tab:lbox-connect}
 % \end{table}
 
 \begin{table*}[ht]
@@ -1227,7 +1227,7 @@ truss with I/O & \begin{math} 1126.7\pm4.4 (511.5\%) \end{math} & \begin{math} 7
 \hline
 \end{tabular}
 \caption{Macro-benchmarks}
-\label{tab-macro}
+\label{tab:lbox-macro}
 \end{table*}
 
 The \code{open} micro-benchmark gives a measure of worst-case overhead
@@ -1261,7 +1261,7 @@ The last two benchmarks, bash and mozilla,
 have also been chosen because these applications
 have been used in Alcatraz.
 For I/O monitoring, we have monitored all the I/O from the application.
-The results given in Table \ref{tab-macro}. 
+The results given in Table \ref{tab:lbox-macro}. 
 The results for \code{strace} and \code{truss} are only meant to illustrate
 the additional overhead of I/O since both programs do reprocess the data
 and thus do have additional overhead but 
@@ -1274,7 +1274,7 @@ is different.
 Even though these are macro-benchmarks, 
 overhead for \code{ptrace} without I/O is significant, at least $15\%$.
 With I/O monitoring, the overhead shoots up.
-Alcatraz \cite{alcatraz} which uses \code{ptrace} has rather
+Alcatraz \cite{liang2009alcatraz} which uses \code{ptrace} has rather
 high overheads for their system call interception, $43\%$ for a \code{make}
 and $79\%$ for \code{mozilla}. Their isolation overhead which is a measure
 of write I/O adds a further $20\%$. Our overheads are much smaller ($< 4\%$)

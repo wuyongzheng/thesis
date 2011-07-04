@@ -1,12 +1,13 @@
 \documentclass[11pt,a4paper,openany]{book}
 
+\usepackage[hyphens]{url}
 \usepackage{amsmath}
 \usepackage{subfigure}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{url}
 \usepackage{color}
 \usepackage{multirow}
+\usepackage{appendix}
 \usepackage[section]{placeins}
 \usepackage[a4paper,includeheadfoot,hmargin=1.5in,vmargin=1.0in]{geometry}
 %\usepackage[doublespacing]{setspace}
@@ -53,6 +54,9 @@
 \backmatter
 \bibliographystyle{plain}
 \bibliography{thesis}
-% appendix
+
+\appendix
+\addappheadtotoc
+\input{sensor/appendix}
 
 \end{document}

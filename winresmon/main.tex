@@ -981,9 +981,9 @@ However, WinResMon's
 infrastructure is integrated, and its log database is designed to assist
 system administrators in inspecting software configuration and dependencies.
 
-Strace \cite{strace} is a Linux/UNIX tool used to intercept and log system
+Strace (described in Sec.~\ref{sec:ptrace}) is a Linux/UNIX tool used to intercept and log system
 calls invoked by a process.  There is also a Microsoft Windows NT port of
-strace \cite{bindview} with similar functionality.  WinResMon differs from
+strace with similar functionality.  WinResMon differs from
 strace in that is focused more on resource usage (files, registry, etc) rather
 than system calls.  In Windows, a system call viewpoint can be
 confusing since there are multiple levels of APIs which translate into the poorly
