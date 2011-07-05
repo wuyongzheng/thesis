@@ -1,36 +1,59 @@
 \section{Background and Related Work}
 
-\TODO{the background of lbox and winresmon merges to here}
+In this chapter, we give some background and related work on system monitoring.
 
-In this chapter, we give some background on system monitoring.
+\TODO{define system monitoring}
 
-Monitoring systems can be classified in a number of ways.
+Related work can be classified in a number of ways.
 From the enforcement point of view, we have discretionary and
 mandatory monitoring.
 Discretionary monitoring requires that the monitored software
 actively report to its monitor.
 The traditional UNIX \code{syslog} is an example of discretionary monitoring.
-A log entry is generated when the monitored software calls the \code{syslog()}
-system call.
-In contrast, mandatory monitoring systems enforce that logs are always
+A log entry is generated when the monitored software calls \code{syslog(2)}.
+The naive \code{printf()} debugging technique is also discretionary monitoring.
+In contrast, mandatory monitoring systems enforce that logs entries are always
 generated when certain actions are performed by the monitored software.
 The \code{ptrace(2)} interface and Solaris Basic Security Module (BSM) Auditing
 are examples of mandatory monitoring.
-Mandatory monitoring is more suited for security purpose because of the enforcement.
+Mandatory monitoring is more suited for security purpose because of its enforcement.
 Discretionary monitoring may give more friendly output since the monitored
 software knows which pieces are more important.
 
-A related classification is transparent/opaque monitoring.
+A correlated classification is transparent/opaque monitoring.
 In transparent monitoring, the monitored software does not need to be adapted
-and sometimes does not aware of being monitored;
+and sometimes is not aware of being monitored;
 whereas in opaque monitoring, the monitored software need to be either
 rewritten and recompiled or transformed manually.
-The two types of classification are related because transparent monitoring
+The two types of classification are usually correlated because transparent monitoring
 is usually mandatory as well, and opaque monitoring is usually discretionary.
-\TODO{add exception}
 
-From OS point of view, the monitoring system can be in user space, kernel space
-or both.
+ From execution environment point of view, the monitor can be executed
+in a number of environments.
+\begin{itemize}
+\item The monitor can be executed in the process (i.e. same address)
+of the monitored software.
+The naive \code{printf()} debugging technique belong to this category.
+A common technique to monitor API or DLL function calls is to rewrite
+the to-be-monitored function with a wrapper function which does the
+logging and then calls the actual function.
+This type of monitor is usually used for debugging purpose, and not for
+security, because the monitoring can be circumvented.
+\item In order to prevent circumvention,
+the monitor can be executed in the kernel (assuming the kernel is authentic).
+The \code{strace} utility uses the kernel \code{ptrace(2)} interface
+to monitor system calls.
+Most of the related work that we are going to introduce are kernel based.
+\item In the same vein, to security monitor kernel events, the monitor
+should execute in a lower level than the kernel, i.e. the hypervisor.
+Examples are the virtual machine monitors.
+\item To get instruction level monitoring, the {\em instrumentation}
+technique is used.
+There are a number of instrumentation methods.
+The earliest instrumentation execute binary program in a similar way
+like interpretation language.
+\TODO{...}
+\end{itemize}
 
 A monitoring system can have side effects to alter the execution of the
 monitored software or no side effects (except maybe performance overhead).
