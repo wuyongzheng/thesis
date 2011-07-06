@@ -184,27 +184,32 @@ context switches per traced system call.
 Our micro benchmarks in \TODO{fill} show that this can lead to an order of magnitude
 slowdown on system call intensive programs.
 
-\subsection{Light-weight Auditing Framework}
+\subsection{Linux Auditing System}
 \label{sec:laudit}
 
-\TODO{rewrite}
+The Linux auditing system (also known as lightweight auditing framework)
+is used to monitor kernel events such as system calls and file system
+operations.
+The system consists of the kernel space event record producer and
+the user space event record consumer (i.e. the audit daemon \code{auditd}).
+At compile time,
+kernel developers insert audit code into the kernel.
+At run time, system administrators control which event and what information
+to record using the \code{auditctl} tool.
+All event records are transmitted through netlink sockets to \code{auditd}.
+The event records are stored in a custom database which can be queried
+using the \code{ausearch} and \code{aureport} tools.
+The auditing system is incorporated into Linux kernel since version 2.6.4,
+and is available in almost all Linux distributions.
 
-The lightweight auditing framework is intended to be a way for the kernel to
-get various types of audit information out to user space without slowing things
-down, especially when auditing is not being used. The framework is meant to
-serve as a complement to SELinux; it is already being shipped as a part of the
-Fedora Core 2 test 2 kernel. There are two kernel-side components to the audit
-code. The first is a generic mechanism for creating audit records and
-communicating with user space. All of that communication is performed via
-netlink sockets; there are no new system calls added as part of the audit
-framework. Essentially, a user-space process creates a NETLINK AUDIT socket,
-writes audit request structures it, and reads back audit reply structures in
-return. The generic part of the audit mechanism can control whether auditing is
-enabled at all, perform rate limiting of messages, and handle a few other
-tasks. On the kernel side, it provides a printk()-like mechanism for sending
-messages to user space. This code also implements a user-specified policy on
-what happens if memory is not available for auditing; truly paranoid
-administrators can request that the kernel panic in such situations.
+The auditing system is a discretionary monitoring system to the kernel because
+monitoring code is manually inserted by the kernel developer and can
+be circumvented by kernel code.
+However, when used for monitoring system calls of a user program,
+it can be considered as mandatory if the kernel is assumed to be authentic.
+The system only performs logging and does not alter the execution,
+thus buffering of event records can be used to reduce context switches
+and improve performance.
 
 \subsection{Windows Sysinternals}
 \label{sec:sysinternals}
