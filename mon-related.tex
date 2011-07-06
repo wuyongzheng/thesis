@@ -44,24 +44,59 @@ the monitor can be executed in the kernel (assuming the kernel is authentic).
 The \code{strace} utility uses the kernel \code{ptrace(2)} interface
 to monitor system calls.
 Most of the related work that we are going to introduce are kernel based.
-\item In the same vein, to security monitor kernel events, the monitor
+\item In the same vein, to securely monitor kernel events, the monitor
 should execute in a lower level than the kernel, i.e. the hypervisor.
 Examples are the virtual machine monitors.
-\item To get instruction level monitoring, the {\em instrumentation}
-technique is used.
+The recent Intel and AMD processors support hardware virtualization
+features which can virtualize and monitor unmodified kernel with almost
+no performance penalty.
+\item The {\em instrumentation} technique is used to get instruction
+level monitoring.
 There are a number of instrumentation methods.
-The earliest instrumentation execute binary program in a similar way
-like interpretation language.
-\TODO{...}
+The earliest one executes binary program in a similar way
+like interpreted language which parses and evaluates the instructions.
+Later ones, such as Pin and Valgrind, alters the instruction stream on-the-fly
+and let the CPU execute the altered instruction stream.
+Section~\ref{sec:instrumentation} will discuss this in detail.
 \end{itemize}
 
-A monitoring system can have side effects to alter the execution of the
-monitored software or no side effects (except maybe performance overhead).
-An example of the former is \code{ptrace(2)} which can be used to filter
-system calls.
-Examples of the later include Solaris BSM and DTrace.
+Another classification is whether the monitoring system is able to
+alter the execution of the monitored software.
+Logging systems such as \code{syslog} only record the events,
+but do not alter the execution (except perhaps performance overhead).
+%Other logging systems include Solaris BSM and DTrace.
+\code{ptrace(2)}, on the other hand, can be used to filter system calls
+or change system call's arguments.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+system & enforce & transp. & level & alter & OS & section\\ \hline \hline
+\code{printf} & disc. & opaque & user & log & all & \\ \hline
+\code{syslog} & disc. & opaque & user & log & POSIX & \ref{sec:syslog} \\ \hline
+\code{ptrace(2)} & mand. & transp. & kernel & alter & POSIX & \ref{sec:ptrace} \\ \hline
+\code{/proc} & mand. & transp. & kernel & alter & Solaris & \ref{sec:ptrace}  \\ \hline
+Linux audit & disc. & opaque & kernel & log & Linux & \ref{sec:laudit} \\ \hline
+FileMon & \multirow{3}{*}{mand.} & \multirow{3}{*}{transp.} & \multirow{3}{*}{kernel} & \multirow{3}{*}{log} & \multirow{3}{*}{Windows} & \multirow{3}{*}{\ref{sec:sysinternals}} \\
+RegMon & & & & & & \\
+ProcMon & & & & & & \\ \hline
+DTrace & both & opaque & kernel & log & Solaris & \ref{sec:dtrace} \\ \hline
+DProbes & \multirow{2}{*}{both} & \multirow{2}{*}{opaque} & \multirow{2}{*}{kernel} & \multirow{2}{*}{log} & \multirow{2}{*}{Solaris} & \multirow{2}{*}{\ref{sec:systemtap}} \\
+SystemTap & & & & & & \\ \hline
+Pin & \multirow{2}{*}{mand.} & \multirow{2}{*}{transp.} & \multirow{2}{*}{instru.} & \multirow{2}{*}{alter} & \multirow{2}{*}{Lin, Win.} & \multirow{2}{*}{\ref{sec:instrumentation}} \\
+DynamoRIO & & & & & & \\ \hline
+valgrind & mand. & transp. & instru. & alter & Linux & \ref{sec:instrumentation} \\ \hline
+\end{tabular}
+\caption{Classification of Monitoring Systems}
+\label{tab:mon-tax}
+\end{table}
+
+Before discussing each related work in detail, Table~\ref{tab:mon-tax}
+lists the classification of them.
 
 \subsection{Traditional \code{syslog}}
+\label{sec:syslog}
 
 Syslog is the main logging tool on a UNIX systems. It centrally manages logging
 for your main system services. Syslog is discretionary in such a sense that it
@@ -150,6 +185,9 @@ Our micro benchmarks in \TODO{fill} show that this can lead to an order of magni
 slowdown on system call intensive programs.
 
 \subsection{Light-weight Auditing Framework}
+\label{sec:laudit}
+
+\TODO{rewrite}
 
 The lightweight auditing framework is intended to be a way for the kernel to
 get various types of audit information out to user space without slowing things
@@ -168,8 +206,6 @@ messages to user space. This code also implements a user-specified policy on
 what happens if memory is not available for auditing; truly paranoid
 administrators can request that the kernel panic in such situations.
 
-\subsection{Linux Trace Toolkit (LTT) and LTTng}
- 
 \subsection{Windows Sysinternals}
 \label{sec:sysinternals}
 
@@ -181,32 +217,47 @@ A graphical interface is used to filter and display monitored events in real tim
 We have observed (details in Section \TODO{fill}) that both tools can drop events when the
 events are fast generated.
 
+\TODO{add procmon}
+
 \subsection{Solaris DTrace}
 \label{sec:dtrace}
 
 DTrace\cite{cantrill2004dynamic} is a dynamic tracing framework
 created on Solaris 10, for troubleshooting kernel and application problems
 on production systems.
-It allows almost all aspects of the kernel to
-be instrumented, with 30,000 \TODO{recheck} probes\footnote{
-Since DTrace is in active development, our information on DTrace
-is based on its current status in June 2011.
-} in the kernel.
-It uses a scripting language, D programs,
-which are run within the kernel to do monitoring.
-DTrace is very powerful because
-they run within the kernel and also because of the large number of
-instrumented probes.
-In-kernel also means that DTrace can be efficient.\footnote{
-However, our micro-benchmarks in Section \TODO{fill} indicate that while it is significantly
-faster than \code{proc}, we have observed a factor of 2x slowdown.
-}
-To ensure safety of running in the kernel, DTrace programs
-are restricted and checked for safety.
-However, we believe that it is far safer to run monitors in user mode.
+Software developers insert probes into the code of the software
+(kernel or user space program) at compile time.
+System administrators or users monitor the execution by writing
+a script in the {\em D language} and associating them with the probes,
+so that when the software executes over the probes, the script is executed.
+There are currently 30,000 \TODO{recheck} probes\footnote{
+Since both Solaris kernel and DTrace are in active development,
+our information is based on its current status in June 2011.}
+in almost all aspects of the kernel.
+The D script runs in the kernel and thus reduces the context switch.
+For example, to count the number of \code{write(2)} system call of a process,
+an integer variable is declared and a script which increments it
+is associated with the \code{syscall::write:entry} probe.
+Only one context switch is needed to output the final count.
+To do this using \code{ptrace(2)}, a pair of context switch is
+needed for each \code{write(2)} system call.
 
-\subsection{KProbes, DProbes and SystemTap}
+Having monitoring code dynamically (That is where the D comes from)
+generated at runtime and executed in kernel is the key feature of
+DTrace.
+This poses a security threat as well however.
+To prevent D script from running into infinite loops,
+loops (or backward branch in general) and user defined functions
+are not supported.
+
+\TODO{Should I this mention here:
+However, our micro-benchmarks in Section~\ref{sec:lbox-bench}
+indicate that while it is significantly
+faster than \code{/proc}, we have observed a factor of 2x slowdown.}
+
+\subsection{DProbes and SystemTap}
 \label{sec:systemtap}
+% http://sourceware.org/systemtap/wiki/SystemtapDtraceComparison
 
 \subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}
 \label{sec:instrumentation}
