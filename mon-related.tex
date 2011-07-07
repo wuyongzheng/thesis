@@ -1,73 +1,165 @@
 \section{Background and Related Work}
 
-\TODO{the background of lbox and winresmon merges to here}
+In this chapter, we give some background and related work on system monitoring.
 
-In this chapter, we give some background on system monitoring.
+\TODO{define system monitoring}
 
-Monitoring systems can be classified in a number of ways.
+Related work can be classified in a number of ways.
 From the enforcement point of view, we have discretionary and
 mandatory monitoring.
 Discretionary monitoring requires that the monitored software
 actively report to its monitor.
 The traditional UNIX \code{syslog} is an example of discretionary monitoring.
-A log entry is generated when the monitored software calls the \code{syslog()}
-system call.
-In contrast, mandatory monitoring systems enforce that logs are always
+A log entry is generated when the monitored software calls \code{syslog(2)}.
+The naive \code{printf()} debugging technique is also discretionary monitoring.
+In contrast, mandatory monitoring systems enforce that logs entries are always
 generated when certain actions are performed by the monitored software.
 The \code{ptrace(2)} interface and Solaris Basic Security Module (BSM) Auditing
 are examples of mandatory monitoring.
-Mandatory monitoring is more suited for security purpose because of the enforcement.
+Mandatory monitoring is more suited for security purpose because of its enforcement.
 Discretionary monitoring may give more friendly output since the monitored
 software knows which pieces are more important.
 
-A related classification is transparent/opaque monitoring.
+A correlated classification is transparent/opaque monitoring.
 In transparent monitoring, the monitored software does not need to be adapted
-and sometimes does not aware of being monitored;
+and sometimes is not aware of being monitored;
 whereas in opaque monitoring, the monitored software need to be either
 rewritten and recompiled or transformed manually.
-The two types of classification are related because transparent monitoring
+The two types of classification are usually correlated because transparent monitoring
 is usually mandatory as well, and opaque monitoring is usually discretionary.
-\TODO{add exception}
 
-From OS point of view, the monitoring system can be in user space, kernel space
-or both.
+ From execution environment point of view, the monitor can be executed
+in a number of environments.
+\begin{itemize}
+\item The monitor can be executed in the process (i.e. same address)
+of the monitored software.
+The naive \code{printf()} debugging technique belong to this category.
+A common technique to monitor API or DLL function calls is to rewrite
+the to-be-monitored function with a wrapper function which does the
+logging and then calls the actual function.
+This type of monitor is usually used for debugging purpose, and not for
+security, because the monitoring can be circumvented.
+\item In order to prevent circumvention,
+the monitor can be executed in the kernel (assuming the kernel is authentic).
+The \code{strace} utility uses the kernel \code{ptrace(2)} interface
+to monitor system calls.
+Most of the related work that we are going to introduce are kernel based.
+\item In the same vein, to securely monitor kernel events, the monitor
+should execute in a lower level than the kernel, i.e. the hypervisor.
+Examples are the virtual machine monitors.
+The recent Intel and AMD processors support hardware virtualization
+features which can virtualize and monitor unmodified kernel with almost
+no performance penalty.
+\item The {\em instrumentation} technique is used to get instruction
+level monitoring.
+There are a number of instrumentation methods.
+The earliest one executes binary program in a similar way
+like interpreted language which parses and evaluates the instructions.
+Later ones, such as Pin and Valgrind, alters the instruction stream on-the-fly
+and let the CPU execute the altered instruction stream.
+Section~\ref{sec:instrumentation} will discuss this in detail.
+\end{itemize}
 
-A monitoring system can have side effects to alter the execution of the
-monitored software or no side effects (except maybe performance overhead).
-An example of the former is \code{ptrace(2)} which can be used to filter
-system calls.
-Examples of the later include Solaris BSM and DTrace.
+Another classification is whether the monitoring system is able to
+alter the execution of the monitored software.
+Logging systems such as \code{syslog} only record the events,
+but do not alter the execution (except perhaps performance overhead).
+%Other logging systems include Solaris BSM and DTrace.
+\code{ptrace(2)}, on the other hand, can be used to filter system calls
+or change system call's arguments.
 
-\subsection{Traditional \code{syslog}}
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+system & enforce & transp. & level & alter & OS & section\\ \hline \hline
+\code{printf} & disc. & opaque & user & log & all & \ref{sec:printf} \\ \hline
+\code{syslog} & disc. & opaque & user & log & POSIX & \ref{sec:syslog} \\ \hline
+\code{ptrace(2)} & mand. & transp. & kernel & alter & POSIX & \ref{sec:ptrace} \\ \hline
+\code{/proc} & mand. & transp. & kernel & alter & Solaris & \ref{sec:ptrace}  \\ \hline
+Linux audit & disc. & opaque & kernel & log & Linux & \ref{sec:laudit} \\ \hline
+FileMon & \multirow{3}{*}{mand.} & \multirow{3}{*}{transp.} & \multirow{3}{*}{kernel} & \multirow{3}{*}{log} & \multirow{3}{*}{Windows} & \multirow{3}{*}{\ref{sec:sysinternals}} \\
+RegMon & & & & & & \\
+ProcMon & & & & & & \\ \hline
+DTrace & both & opaque & kernel & log & Solaris & \ref{sec:dtrace} \\ \hline
+DProbes & \multirow{2}{*}{both} & \multirow{2}{*}{opaque} & \multirow{2}{*}{kernel} & \multirow{2}{*}{log} & \multirow{2}{*}{Solaris} & \multirow{2}{*}{\ref{sec:systemtap}} \\
+SystemTap & & & & & & \\ \hline
+Pin & \multirow{2}{*}{mand.} & \multirow{2}{*}{transp.} & \multirow{2}{*}{instru.} & \multirow{2}{*}{alter} & \multirow{2}{*}{Lin, Win.} & \multirow{2}{*}{\ref{sec:instrumentation}} \\
+DynamoRIO & & & & & & \\ \hline
+valgrind & mand. & transp. & instru. & alter & Linux & \ref{sec:instrumentation} \\ \hline
+\end{tabular}
+\caption{Classification of Monitoring Systems}
+\label{tab:mon-tax}
+\end{table}
 
-Syslog is the main logging tool on a UNIX systems. It centrally manages logging
-for your main system services. Syslog is discretionary in such a sense that it
-requires the program to actively call the \code{syslog(2)} system call in order to
-generate a log message. Syslog is implemented in two halves. One half is a set
-of standard C-library routines. Programs utilize these routines to send
-messages to the log daemon. The other is a daemon process \code{syslogd}. It is
-configured with the \path{/etc/syslog.conf} file. It writes log messages to various
-locations.
+Before discussing each related work in detail, Table~\ref{tab:mon-tax}
+lists the classification of them.
 
-When writing kernel code, one can send log messages to \code{syslog} by calling
-\code{printk}\footnote{\code{printk} is Linux kernel specific} kernel.  This is
-realized through \code{klogd}, the kernel log daemon.  \code{klogd} is a system
-daemon which intercepts and logs Linux kernel messages. It is usually
-configured to forward kernel messages to \code{syslogd}. Traditional logging
-mechanism such as \code{syslog} is discretionary in nature, thus cannot be used
-for security purpose. In the security monitoring context, we should not trust
-the monitored program, thus the log message supplied by it should also not be
-trusted. For example, the application does not log or logs something to spoof
-the monitor.
+\subsection{\code{printf}, Casual Debugging}
+\label{sec:printf}
+
+Directly printing debugging message to console
+is probably the mostly widely used debugging technique
+for simple programs, because of its portability and simplicity.
+In C, \code{printf} is most commonly used for this purpose.
+Other languages and environments have similar representatives
+such as \code{System.out.println} in Java and
+\code{printk} in Linux kernel.
+However, this technique is not used in more sophisticated software.
+Despite the reason that the debugging message can mess up
+with the actual output, \code{printf} lacks the
+separation between the monitor and the monitored program.
+This means that monitoring output can be modified or removed by the monitored
+program, thus a bug in the program can mess up the monitoring output.
+
+
+\subsection{Traditional Syslog}
+\label{sec:syslog}
+
+Seeing the problem of \code{printf}, people developed the syslog
+framework, which is the most widely supported logging framework for UNIX-like systems.
+\code{syslog} separates log generation program and log recording program.
+It works by letting the log generation program call the \code{syslog(2)}
+system call and a dedicated daemon \code{syslogd} receive and record the log.
+Kernel messages generated by \code{printk} is send to \code{syslogd} through
+the middle man \code{klogd} in a similar way.
+
+Although syslog protect the log from log generator,
+we consider it as discretionary monitoring because it
+requires the monitored program (log generator) to actively call
+\code{syslog(2)} in order to generate a log message.
+More specifically, if the monitored program is compromised,
+it cannot modify already logged messages, but can suppress or spoof
+new log messages.
 
 \subsection{\code{ptrace} and \code{/proc}}
+\label{sec:ptrace}
 
-A commonly used technique for monitoring is system call tracing or system call
-interposition to monitor the system calls made by a process.
-For portability, systems like Janus \cite{wagner1999janus} or Alcatraz \cite{liang2009alcatraz}
-use the Unix user-level mechanisms \code{ptrace} or \code{/proc} to do
-system call tracing.
-This usage is problematic because it is not
+System call, the interface between user and kernel space,
+is often monitored for various purpose.
+The UNIX \code{ptrace} and Solaris \code{/proc} are commonly
+used for system call monitoring because of their portability.
+To use \code{ptrace}, the monitor calls the \code{ptrace(2)} system call
+and specifies the process ID of another process to be monitored and waits.
+When the monitored process makes a system call, the monitoring
+process is waked up.
+The monitoring process can then check or modify
+system call parameters or return values.
+The Solaris \code{/proc} works in a similar way except that
+instead of calling \code{ptrace(2)}, it performs IO controls on the
+\path{/proc/[pid]/ctl} file.
+A subset system calls can be specified in \code{/proc},
+while \code{ptrace} must monitor all system calls.
+
+\code{ptrace} and \code{/proc} are mandatory monitoring
+systems because the monitored program cannot evade the monitoring as long
+as it make the system call.
+The are transparent monitoring systems because in general,
+the monitored program is not aware of the monitoring.
+Because of this,
+systems like Janus \cite{wagner1999janus} or
+Alcatraz \cite{liang2009alcatraz} use them to do system call monitoring.
+However, this usage is problematic because it is not
 meant to be a secure monitoring mechanism, e.g.
 \code{ptrace} was meant to support debuggers.
 In the Solaris manual pages, \code{ptrace} is described as being
@@ -122,31 +214,38 @@ main()
 The other serious drawback of \code{ptrace} or \code{/proc} is that
 the overhead is considerable, incurring at least two
 context switches per traced system call.
-Our micro benchmarks in \TODO{fill} show that this can lead to an order of magnitude
+Our micro benchmarks in Section~\ref{sec:lbox-bench} show that
+this can lead to an order of magnitude
 slowdown on system call intensive programs.
 
-\subsection{Light-weight Auditing Framework}
+\subsection{Linux Auditing System}
+\label{sec:laudit}
 
-The lightweight auditing framework is intended to be a way for the kernel to
-get various types of audit information out to user space without slowing things
-down, especially when auditing is not being used. The framework is meant to
-serve as a complement to SELinux; it is already being shipped as a part of the
-Fedora Core 2 test 2 kernel. There are two kernel-side components to the audit
-code. The first is a generic mechanism for creating audit records and
-communicating with user space. All of that communication is performed via
-netlink sockets; there are no new system calls added as part of the audit
-framework. Essentially, a user-space process creates a NETLINK AUDIT socket,
-writes audit request structures it, and reads back audit reply structures in
-return. The generic part of the audit mechanism can control whether auditing is
-enabled at all, perform rate limiting of messages, and handle a few other
-tasks. On the kernel side, it provides a printk()-like mechanism for sending
-messages to user space. This code also implements a user-specified policy on
-what happens if memory is not available for auditing; truly paranoid
-administrators can request that the kernel panic in such situations.
+The Linux auditing system (also known as lightweight auditing framework)
+is used to monitor kernel events such as system calls and file system
+operations.
+The system consists of the kernel space event record producer and
+the user space event record consumer (i.e. the audit daemon \code{auditd}).
+At compile time,
+kernel developers insert audit code into the kernel.
+At run time, system administrators control which event and what information
+to record using the \code{auditctl} tool.
+All event records are transmitted through netlink sockets to \code{auditd}.
+The event records are stored in a custom database which can be queried
+using the \code{ausearch} and \code{aureport} tools.
+The auditing system is incorporated into Linux kernel since version 2.6.4,
+and is available in almost all Linux distributions.
 
-\subsection{Linux Trace Toolkit (LTT) and LTTng}
- 
-\subsection{Windows Sysinternals}
+The auditing system is a discretionary monitoring system to the kernel because
+monitoring code is manually inserted by the kernel developer and can
+be circumvented by kernel code.
+However, when used for monitoring system calls of a user program,
+it can be considered as mandatory if the kernel is assumed to be authentic.
+The system only performs logging and does not alter the execution,
+thus buffering of event records can be used to reduce context switches
+and improve performance.
+
+\subsection{Windows Sysinternals Tools}
 \label{sec:sysinternals}
 
 FileMon \cite{filemon} and RegMon \cite{regmon}
@@ -154,8 +253,22 @@ are file and registry monitoring tools for Windows, respectively.
 They monitor operations taking place on
 the registry or specified file system.
 A graphical interface is used to filter and display monitored events in real time.
-We have observed (details in Section \TODO{fill}) that both tools can drop events when the
-events are fast generated.
+A later tool named Process Monitor combines features from both tools
+and adds thread/process related event monitoring and event filtering.
+The tools are closed source, so we study them by monitoring them
+using our monitoring tool WinResMon (in Sec.~\ref{sec:winresmon}).
+We found that they work by intercepting system calls and making
+use of the kernel file system filter API.
+Up on execution, a kernel driver is created in a temporary directory.
+The driver is then loaded into the kernel and start to intercept
+the kernel operations.
+A named pipe is used to transmit event records.
+
+The monitoring tools are standalone GUI programs, which do not
+provide API to be used by other software.
+We have observed that when events are fast generated, all tools
+can drop events.
+The details are covered in in Section~\ref{sec:resmon-overhead}.
 
 \subsection{Solaris DTrace}
 \label{sec:dtrace}
@@ -163,26 +276,39 @@ events are fast generated.
 DTrace\cite{cantrill2004dynamic} is a dynamic tracing framework
 created on Solaris 10, for troubleshooting kernel and application problems
 on production systems.
-It allows almost all aspects of the kernel to
-be instrumented, with 30,000 \TODO{recheck} probes\footnote{
-Since DTrace is in active development, our information on DTrace
-is based on its current status in June 2011.
-} in the kernel.
-It uses a scripting language, D programs,
-which are run within the kernel to do monitoring.
-DTrace is very powerful because
-they run within the kernel and also because of the large number of
-instrumented probes.
-In-kernel also means that DTrace can be efficient.\footnote{
-However, our micro-benchmarks in Section \TODO{fill} indicate that while it is significantly
-faster than \code{proc}, we have observed a factor of 2x slowdown.
-}
-To ensure safety of running in the kernel, DTrace programs
-are restricted and checked for safety.
-However, we believe that it is far safer to run monitors in user mode.
+Software developers insert probes into the code of the software
+(kernel or user space program) at compile time.
+System administrators or users monitor the execution by writing
+a script in the {\em D language} and associating them with the probes,
+so that when the software executes over the probes, the script is executed.
+There are currently 30,000 \TODO{recheck} probes\footnote{
+Since both Solaris kernel and DTrace are in active development,
+our information is based on its current status in June 2011.}
+in almost all aspects of the kernel.
+The D script runs in the kernel and thus reduces the context switch.
+For example, to count the number of \code{write(2)} system call of a process,
+an integer variable is declared and a script which increments it
+is associated with the \code{syscall::write:entry} probe.
+Only one context switch is needed to output the final count.
+To do this using \code{ptrace(2)}, a pair of context switch is
+needed for each \code{write(2)} system call.
 
-\subsection{KProbes, DProbes and SystemTap}
+Having monitoring code dynamically (That is where the D comes from)
+generated at runtime and executed in kernel is the key feature of
+DTrace.
+This poses a security threat as well however.
+To prevent D script from running into infinite loops,
+loops (or backward branch in general) and user defined functions
+are not supported.
+
+\TODO{Should I this mention here:
+However, our micro-benchmarks in Section~\ref{sec:lbox-bench}
+indicate that while it is significantly
+faster than \code{/proc}, we have observed a factor of 2x slowdown.}
+
+\subsection{DProbes and SystemTap}
 \label{sec:systemtap}
+% http://sourceware.org/systemtap/wiki/SystemtapDtraceComparison
 
 \subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}
 \label{sec:instrumentation}

@@ -5,8 +5,8 @@ authentic.
 However, when the kernel is compromised, the {\em host-based} monitoring
 cannot be trusted.
 We propose {\em external monitoring}, where information is collected from
-monitors external to the host, so that compromising the host would not
-result the monitor being compromised, thus the monitored information can be trusted.
+monitors external to the host, so that the information can be trusted
+even in a compromized host.
 We have shown\footnote{
 The work is cooperatively done by three students,
 Liming Lu, Jie Yu and me, with two supervisors Ee-Chien Chang and Roland Hock Chuan Yap.
@@ -15,7 +15,7 @@ will be shown in this chapter.
 } \cite{chang2010enhancing} that this can be used
 to detect malware in a host if we correlate user interaction with host behaviour,
 both of which are observable by our external monitor.
-In addition, the monitored information of user interaction can be used to guide
+In addition, the information of user interaction can be used to guide
 resource allocation, thus limiting the resource utilization of malware.
 
 \section{Introduction}
@@ -25,7 +25,7 @@ Anecdotes abound that the survival time
 of an unpatched PC running Windows XP connected to the Internet 
 is in the order of minutes~\cite{Survival1,Survival2}.
 Worms can be quite effective in infecting systems, e.g.
-the Conficker worm~\cite{Conficker}
+the Conficker worm~\cite{conficker6}
 is estimated to have infected 6\% of computers on the Internet.
 
 Often the goal of the attackers is to infect a host to make it part
@@ -163,7 +163,7 @@ such coarse data is already useful in identifying certain
 mismatches between the host's and user's physical activities.
 
 The rest of this section is organized as follows. Sec.
-\ref{sec:framework} introduces the framework of integrating the data
+\ref{sec:sensor-framework} introduces the framework of integrating the data
 from external sources to the access control or intrusion detection
 logic.
 We apply the framework to malware detection in Sec.
@@ -171,5 +171,5 @@ We apply the framework to malware detection in Sec.
 external to the host enhances the detection of malware activity.
 The framework is extended to rate and access control applications in
 Sec. \ref{sec:app-ac-rate}.
-Related work is discussed in Sec. \ref{sec:related}
-and Sec. \ref{sec:conclusion} concludes.
+Related work is discussed in Sec. \ref{sec:sensor-related}
+and Sec. \ref{sec:sensor-conclusion} concludes.
