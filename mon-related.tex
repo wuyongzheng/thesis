@@ -306,9 +306,50 @@ However, our micro-benchmarks in Section~\ref{sec:lbox-bench}
 indicate that while it is significantly
 faster than \code{/proc}, we have observed a factor of 2x slowdown.}
 
-\subsection{DProbes and SystemTap}
+\subsection{SystemTap}
 \label{sec:systemtap}
 % http://sourceware.org/systemtap/wiki/SystemtapDtraceComparison
+
+SystemTap is developed to bring the idea of dynamic instrumentation
+in DTrace into Linux and possibly other UNIX variants.
+Before we describe SystemTap, let us first look at its predecessor
+DProbes and the underlying KProbes, which was introduced earlier than
+DTrace.
+
+KProbes is a Linux kernel framework which allows dynamic instrument
+of kernel code.
+The KProbes API consists of two components, the probe registration
+functions and the probe activation functions.
+The probe registration functions mark points in the code that can be
+instrumented.
+What it actually does is inserting a few \code{nop} instructions.
+The probe activation functions associate registered code points
+with probe handlers, which are called when the code points are executed.
+What it actually does is rewriting the \code{nop} instructions with
+a jump instruction targeting to the handler.
+There are some optimization techniques, such as return address rewriting,
+but the basic idea is the same.
+
+KProbes is not convenient to use because its API are solely in kernel,
+thus only kernel developers can use it.
+DProbes is developed to allow user space program to make use of the
+probe activation functions.
+The way DProbes works is similar to DTrace, where a compiler
+is used to compile a script which defines the probe handler,
+and the compiler feeds the compiled script to the kernel
+to execute.
+What is different is that instead of compiling into intermediate
+byte code as in DTrace, DProbes compiles directly into native machine code
+which is feed to KProbes' activation functions.
+The DProbes language is rather simple comparing to DTrace.
+It is written in an assembly-like language,
+based on the Reverse Polish Notation.
+Logic, arithmetic and control flow operations are supported.
+To prevent infinite loops, the number of branches is capped.
+
+SystemTap also uses KProbes as the underlying kernel mechanism.
+It uses a more advanced C-like language, where functions are
+supported and a collection of library functions are provided.
 
 \subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}
 \label{sec:instrumentation}
