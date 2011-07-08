@@ -51,13 +51,15 @@ The recent Intel and AMD processors support hardware virtualization
 features which can virtualize and monitor unmodified kernel with almost
 no performance penalty.
 \item The {\em instrumentation} technique is used to get instruction
-level monitoring.
-There are a number of instrumentation methods.
-The earliest one executes binary program in a similar way
-like interpreted language which parses and evaluates the instructions.
-Later ones, such as Pin and Valgrind, alters the instruction stream on-the-fly
-and let the CPU execute the altered instruction stream.
+level monitoring such as memory load, memory store, and branch events.
+% There are a number of instrumentation methods.
+% The earliest one executes binary program in a similar way
+% like interpreted language which parses and evaluates the instructions.
+% Later ones, such as Pin and Valgrind, alters the instruction stream on-the-fly
+% and let the CPU execute the altered instruction stream.
 Section~\ref{sec:instrumentation} will discuss this in detail.
+\item To get lower level information such as TLB or cache miss rate,
+hardware monitoring need to be used.
 \end{itemize}
 
 Another classification is whether the monitoring system is able to
@@ -351,5 +353,32 @@ SystemTap also uses KProbes as the underlying kernel mechanism.
 It uses a more advanced C-like language, where functions are
 supported and a collection of library functions are provided.
 
-\subsection{Instrumentation tool: Pin, valgrind and DynamoRIO}
+\subsection{Binary Instrumentation}
 \label{sec:instrumentation}
+
+The above mentioned monitoring systems are targeting at specific
+code points, which are usually software specific.
+Sometimes we need to monitor the instruction level behaviour.
+For example, in order to study the control flow of a program,
+we need to monitor all branching instructions.
+We consider there to be three ways to achieve this.
+The first way is to {\em emulate} the CPU, i.e.
+implement the CPU in software.
+The advantage is that cross architecture emulation is possible, thus
+it is quite portable.
+However, emulation is very slow.
+The second way is static binary instrumentation.
+The monitored binary is translated to add the monitoring code.
+The resulting binary is executed natively in the CPU,
+thus is much faster than emulation.
+The problem is that static disassembly in not reliable, especially
+in the case of variable opcode size and dynamic generated code.
+The third way is dynamic binary instrumentation.
+Each basic block (contiguous instructions without branches in the middle)
+is translated just before execution.
+This is also known as just-in-time translation.
+There are a number of dynamic instrumentation systems available,
+such as Pin\cite{luk2005pin}, DynamoRIO\cite{bruening2004dynamorio}
+and Valgrind\cite{nethercote2003valgrind}.
+In our module dependency visualization work (Sec~\ref{sec:depvis}),
+we monitor all function calls in a program using Pin.
