@@ -101,26 +101,6 @@ One could use \code{ptrace} to monitor the web server
 but this can have a significant performance penalty and may
 not ensure mandatory or reliable auditing.
 
-Comparing to Solaris DTrace (introduced in Section~\ref{sec:dtrace}),
-although DTrace does integrate in privileges,
-it does not have the same security concerns.
-DTrace has a all-or-nothing security configuration, i.e.
-a user is either able to trace all processes and the kernel
-(thus obtaining confidential information), or not able to use DTrace at all.
-As DTrace is meant to minimize impact, DTrace does not provide
-reliable event monitoring and can drop events.
-Another difference with our framework is the auditing of file operations.
-Since logging access to files is a very important for many kinds of monitoring,
-we provide more powerful specifications on directories and subtrees.
-The DTrace implementation requires extensive changes to Solaris,
-in the words of the developers,
-``it was a hell of a lot of work -- Bryan Cantrill, Solaris
-Kernel Development''.
-While it is difficult to have portable kernel enhancements, we feel our
-approach should be less of a massive change to the kernel type solution and in
-this sense is more lightweight and amenable to implementation
-in different Unixes.
-
 Our prototype implementation shows that it is possible to to get all
 these desirable features in a user-space monitor without requiring special
 privileges. Furthermore, we demonstrate an efficient implementation
@@ -971,6 +951,52 @@ tasks ran as scheduled.
 % the directory traversal should be fast.
 % Other kinds of objects can be equally fast, for example,
 % with a socket connection event, we only need to do the netmask test.
+
+\subsection{Comparing to DTrace}
+\label{sec:lbox-dtrace}
+
+There are some similarities with Solaris DTrace (Sec\ref{sec:dtrace}),
+which is published at about the same time as this work.
+Both systems aim to bring minimal side effects to the monitored program
+in order to be used on production systems.
+Both systems have a flexible in-kernel event filter mechanism.
+However, there are some key differences.
+
+Firstly, although DTrace does integrate in privileges,
+it does not have the same security concerns.
+DTrace has a all-or-nothing security configuration, i.e.
+a user is either able to trace all processes and the kernel
+(thus obtaining confidential information), or not able to use DTrace at all.
+This is because DTrace is designed for system administrators.
+LBox is designed for all users in a multi-user environment,
+thus has to prevent one user's information from being monitored
+by another user.
+
+Secondly, the DTrace implementation requires extensive changes to Solaris,
+in the words of the developers,
+``it was a hell of a lot of work -- Bryan Cantrill, Solaris
+Kernel Development''.
+While it is difficult to have portable kernel enhancements, we feel our
+approach should be less of a massive change to the kernel type solution and in
+this sense is more lightweight and amenable to implementation
+in different UNIX variants.
+
+Thirdly, as DTrace is meant to minimize impact, it does not provide
+reliable event monitoring and can drop events.
+We believe that both reliable event monitoring and minimal side effect
+are important.
+LBox gives the users the choice in a per-event basis on this trade off.
+
+Lastly, DTrace allows user supplied code written in the D language
+to be executed in kernel.
+Although there is constrains on what are allowed,
+this increases the complexity of the kernel thus
+poses security threats to the OS.
+The sole purpose of having monitoring code executing in the kernel is
+to reduce context switches and eliminate information traffic between user
+space and kernel space thus improving efficiency.
+LBox achieves this by having event buffer to reduce context switches;
+and flexible event filters to reduce number of events.
 
 \subsection{Experimental Evaluation}
 \label{sec:lbox-bench}

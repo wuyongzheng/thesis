@@ -1,5 +1,5 @@
 \subsection{Binary Authentication and Software IDs}
-\label{sect:scheme}
+\label{sec:binauth-scheme}
 
 We want a lightweight binary authentication scheme which can work
 under many settings without too much reliance on other infrastructure.
@@ -125,7 +125,7 @@ only the generated HMAC needs to be checked.
 % \footnote{
 % There are subtle trust issues 
 % in the event of certificate expiration/revocation, 
-% see Sec. ~\ref{sect:analysis}.}
+% see Sec. ~\ref{sec:binauth-analysis}.}
 In what follows, we mostly write MAC which already covers the choice of HMAC.
 
 One way of storing the generated MAC is by embedding it into the binary.
@@ -306,7 +306,7 @@ To control binary execution, we intercept the section creation action
 \begin{itemize}
 \item Intercepting file opening ({\tt NtCreateFile()} and {\tt NtOpenFile()}).
 This would need to authenticate any file opened with with execute access mode.
-As discussed in Sec.~\ref{sect:windows}, however, this introduces
+As discussed in Sec.~\ref{sec:binauth-windows}, however, this introduces
 unnecessary overheads and can cause some correct programs to fail if the files
 do not pass authentication.
 There are also technical difficulties to distinguish between
@@ -419,7 +419,7 @@ end procedure
 \label{fileopen}
 \end{figure}
 \subsubsection{Security Analysis}
-\label{sect:analysis}
+\label{sec:binauth-analysis}
 
 The security of binary authentication relies on the strength
 of the chosen hash functions (MD5, SHA-1, SHA-256) as well as
