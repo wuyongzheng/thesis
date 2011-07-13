@@ -28,12 +28,12 @@ Thus, without reading its contents,
 it is not possible to distinguish a binary from any other file.
 
 \item {\bf Complex Process Execution:}
-A process is created using {\tt CreateProcess()} which is a Win32 library
+A process is created using \code{CreateProcess()} which is a Win32 library
 function. However, this is not a system call since Windows is a microkernel,
 and in reality this is broken up at the native API into:
-{\tt NTCreateFile()}, {\tt NTCreateSection()}, {\tt NTMapViewOfSection()},
-{\tt NTCreateProcess()}, {\tt NTCreateThread()}.
-Notice that {\tt NTCreatePro-\\cess()} at the microkernel level 
+\code{NTCreateFile()}, \code{NTCreateSection()}, \code{NTMapViewOfSection()},
+\code{NTCreateProcess()}, \code{NTCreateThread()}.
+Notice that \code{NTCreateProcess()} at the microkernel level
 performs only a small part of what is needed to run a process.
 Due to this, it is more complex to incorporate mandatory authentication in Windows.
 
