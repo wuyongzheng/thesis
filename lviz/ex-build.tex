@@ -4,7 +4,7 @@
 \begin{figure}[htb]
 \begin{center}
 \includegraphics[width=1.0\columnwidth]{lviz/make-fail.png}
-\caption{Event-ordered \VDP{} comparing a successful (x-axis)
+\caption{Event-ordered VDP comparing a successful (x-axis)
 software build process and a failed (y-axis) one.
 %DP matching: program, operation and value (pathname);
 %DP color: any=black;
@@ -27,7 +27,7 @@ Bar3 color : & cyan $\rightarrow$ reading {\tt .c} files;\\
 \begin{figure*}[htb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{lviz/make-pp.png}
-\caption{Program point event-ordered \VDP{} of project build: pseudo program point trace (y-axis).
+\caption{Program point event-ordered VDP of project build: pseudo program point trace (y-axis).
 }
 DP match: program name + program point;
 DP color: black $\rightarrow$ any;
@@ -58,7 +58,7 @@ and then read a number of header files (long magenta bar in region {\em 8}).
 Different {\tt cl.exe} processes read a different number of header files,
 see sizes of regions {\em 3}, {\em 4}, {\em 5}, {\em 6} differ.
 
-In a self-comparison \VDP{}, there will be a 45$^\circ$
+In a self-comparison VDP, there will be a 45$^\circ$
 diagonal line from top-left to bottom-right corner.
 % The diagonal line means that the events
 % on both x-axis and y-axis match (which is obviously true for self-comparison).
@@ -70,7 +70,7 @@ when the build terminates.
 By zooming in (not shown),
 we see that the failure occurs at the third invocation of
 {\tt cl.exe}, just before reading the C file.
-Thus, the \VDP{} shows how file I/O works in the build and we use this
+Thus, the VDP shows how file I/O works in the build and we use this
 to identify a failed build.
 One might argue that the compiler's error message is a better solution.
 However, firstly,
@@ -107,25 +107,25 @@ For each header file, there is one file open and close event,
 with a differing number of file read operations depending
 on the file size.
 This makes the squiggles irregular.
-Since this \VDP{} is based on program points, it shows directly the 
+Since this VDP is based on program points, it shows directly the 
 structure of the function calls. Thus, it visualizes
 the code while Fig.~\ref{fig:make-fail} compares the operations
 due to system calls.
 It is also different from the source code visualization in \cite{lefebvre2009tralfamadore}
 and we do not need to rely on availability of source code.
 
-The configurations play an important role in a \VDP{}.
-Fig.~\ref{fig:make-matching} shows two \VDPs{} 
+The configurations play an important role in a VDP.
+Fig.~\ref{fig:make-matching} shows two VDPs 
 which are visually different from each other and also Fig.~\ref{fig:make-fail}
 but they are all visualizations of the same underlying trace.
-The \VDPs{} in Fig.~\ref{fig:make-matching} and 
+The VDPs in Fig.~\ref{fig:make-matching} and 
 Fig.~\ref{fig:make-fail} only differ in the DP matching rule and
 the rest of the configuration is the same.
 % The rest of the configuration and the two traces are exactly the same.
-The left side \VDP{} in Fig.~\ref{fig:make-matching} uses only the event 
+The left side VDP in Fig.~\ref{fig:make-matching} uses only the event 
 operation as the DP matching rule.
 It can be used to highlight same or different operations.
-The right side \VDP{} uses the program name, and can be used to
+The right side VDP uses the program name, and can be used to
 show different programs used in the project build process.
 
 \begin{figure}[htb]

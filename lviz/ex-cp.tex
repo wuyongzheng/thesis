@@ -7,7 +7,7 @@
 % \begin{figure}[htb]
 % \begin{center}
 % \includegraphics[width=1.0\columnwidth]{lviz/cp-xcopy.png}
-% \caption{Self-comparison event-ordered \VDP{} of {\tt xcopy}
+% \caption{Self-comparison event-ordered VDP of {\tt xcopy}
 % copying 8 files of different sizes with the following configuration rules: 
 % }
 % \begin{tabular}{ll}
@@ -33,12 +33,12 @@ Fig.~\ref{fig:cp-xcopy} showing reading (magenta) and writing (cyan) operations.
 \end{figure}
 
 We use an example of a simple program and operation,
-namely, file copying using \xcopy{}, to explain various
-aspects of the \VDP{} visualization.
-Fig.~\ref{fig:cp-xcopy} shows a self-comparison event-ordered \VDP{} of
-\xcopy{} copying 8 files with sizes
+namely, file copying using {\tt xcopy}, to explain various
+aspects of the VDP visualization.
+Fig.~\ref{fig:cp-xcopy} shows a self-comparison event-ordered VDP of
+{\tt xcopy} copying 8 files with sizes
 1MB, 10KB, 10MB, 100KB, 1MB, 10KB, 10MB and 100KB and in that given order.
-A self-comparison \VDP{} has a 45$^\circ$ diagonal line from top-left to 
+A self-comparison VDP has a 45$^\circ$ diagonal line from top-left to 
 bottom-right corner because events on the diagonal always match.
 The structure of the files being copied is visible as blue squares in
 Region {\em 3}, {\em 4}, {\em 5} and {\em 6} which show copying the
@@ -49,11 +49,11 @@ visible for the large files.  The smaller 10KB and 100KB files are
 too small to be seen at this scale but are visible when zoomed in.
 By correlating Bar1 and Bar2,
 we find that there are some file related operations in the early phase,
-but those files are neither source nor destination files of \xcopy{}.
+but those files are neither source nor destination files of {\tt xcopy}.
 This might seem surprising. To answer that question, we
 click on Region 7, which shows that
 the files in question are DLLs. Thus, the top-left region 
-shows \xcopy{} loading DLLs.
+shows {\tt xcopy} loading DLLs.
 
 Bar3 shows that Region {\em 2} has many registry operations which might
 be surprising for a file copying task.
@@ -78,7 +78,7 @@ Fig.~\ref{fig:cp-xcopy}.
 \begin{figure}[tbh]
 \begin{center}
 \includegraphics[width=1.0\columnwidth]{lviz/cp-xvc.png}
-\caption{Event-ordered \VDP{} comparing {\tt cp} (x-axis) and {\tt xcopy} (y-axis) copying
+\caption{Event-ordered VDP comparing {\tt cp} (x-axis) and {\tt xcopy} (y-axis) copying
 the same files. 
 The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 }
@@ -89,7 +89,7 @@ The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 \begin{figure}[htb]
 \begin{center}
 \includegraphics[width=0.6\columnwidth]{lviz/cp-64k.png}
-\caption{Time-ordered \VDP{} comparing {\tt cp-64k} (x-axis)
+\caption{Time-ordered VDP comparing {\tt cp-64k} (x-axis)
 and {\tt xcopy} (y-axis).
 The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 }
@@ -97,9 +97,9 @@ The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 \end{center}
 \end{figure}
 
-In general, a \VDP{} is used with two traces rather than a single
-trace as in a self-\VDP{}.
-% Fig. \ref{fig:cp-xcopy} shows a \VDP{} which compares of a {\tt xcopy}
+In general, a VDP is used with two traces rather than a single
+trace as in a self-VDP.
+% Fig. \ref{fig:cp-xcopy} shows a VDP which compares of a {\tt xcopy}
 % trace against itself, i.e. a self-similarity comparison.
 % Two different traces can also be compared with one trace on the X axis
 % and the other trace on the y-axis.
@@ -107,7 +107,7 @@ Fig.~\ref{fig:cp-xvc} compares {\tt cp} (x-axis: a Windows version
 of GNU {\tt cp}) and {\tt xcopy} (y-axis) copying the same 8 files.
 % {\tt cp} is the Windows version of the file copying program included
 % in GNU coreutils.
-The \VDP{} is much wider than its height, giving
+The VDP is much wider than its height, giving
 wide blue rectangles instead of blue squares 
 (Fig.~\ref{fig:cp-xvc} versus Fig.~\ref{fig:cp-xcopy}).
 % \TODO{double check width:height, shouldnt it be 16x?}
@@ -130,15 +130,15 @@ This is consistent with the width-height ratio in the visualization.
 % \end{figure}
 
 In order to compare the performance of {\tt cp} and {\tt xcopy},
-we can use a time-ordered \VDP{}.
-% In time based \VDP{}, events are distributed on the axises based on their
-% relative time to the first event, while in event based \VDP{}
+we can use a time-ordered VDP.
+% In time based VDP, events are distributed on the axises based on their
+% relative time to the first event, while in event based VDP
 % events are distributed uniformaly.
 Changing the visualization to a time-ordered one (not shown)
 shows that {\tt cp} runs slower than {\tt xcopy} though less than 16x.
 We then modified {\tt cp} to obtain another version
 {\tt cp-64k} which uses 64K buffers.
-Fig.~\ref{fig:cp-64k} shows the time-ordered \VDP{} comparing
+Fig.~\ref{fig:cp-64k} shows the time-ordered VDP comparing
 {\tt cp-64k} (x-axis) and {\tt xcopy} (y-axis).
 From Region {\em 2}, we can see that copying of the largest file
 is performed in about the same time in both programs.

@@ -5,10 +5,10 @@
 % text. Also, they are not as close as possible to the reference in the text.
 % }
 
-We describe the design of \lviz{}, a system for visualizing Windows system
+We describe the design of \code{lviz}, a system for visualizing Windows system
 traces.
 % \footnote{
-% \lviz{} has a number of visualizations. In this work, we focus on the \VDP{}
+% \code{lviz} has a number of visualizations. In this work, we focus on the VDP
 % visualization.
 % }
 We emphasize that the visualization proposed
@@ -39,13 +39,13 @@ due to operations on processes, files, network and the registry.
 An event contains the following properties: (the example events
 in Fig. \ref{fig:logex} use the ordering below)
 \begin{itemize}
-\item {\bf PID/TID} is the ID of the process/thread which 
+\item {\bf PID/TID} is the ID of the process/thread which
 performs the operation.
 %Since it is reusable, it is not unique over time.
 \item {\bf Program name} is the pathname of the program binary.
 %\item {\bf Group name and User name} is the owner of the process.
 \item {\bf Group} and {\bf User name} of the process.
-%Unlike UNIX, in Windows there are multiple privileged users. 
+%Unlike UNIX, in Windows there are multiple privileged users.
 % where root is the only privileged user,
 % in Windows there are more than one privileged user, such as
 % ``{\tt NT AUTHORITY\BS SYSTEM}'',
@@ -73,8 +73,8 @@ e.g.  resource pathname, file access flags, etc.
 \item {\bf Return value} from the operation
 is either success or an error number explaining why the operation failed.
 \item {\bf Call stack trace} of the process which generated the event.
-In this work, we use the deepest function call 
-from the corresponding executable, i.e. 
+In this work, we use the deepest function call
+from the corresponding executable, i.e.
 excluding functions in libraries,
 but one could also use the full stack trace.
 This information is useful to associate a program point in the
@@ -83,7 +83,7 @@ application code with the event.
 
 % There are 46 operation types in total, 6 related to file,
 % 7 related to registry, 5 related to process, and 28 related to network.
-Examples of events are file operations, 
+Examples of events are file operations,
 e.g.  file\_create, file\_close and file\_read;
 registry operations, e.g. reg\_setvalue;
 process operations, e.g.  thread\_create;
@@ -93,9 +93,9 @@ Additional information depending on the specific operation is also recorded.
 For example, file\_create, which represents both opening an existing file
 and creating a new file, the operation parameters include the pathname of
 the opened or created file, access flags, file attributes, creation disposition
-(create new, open existing, 
-% truncate existing, or append to existing files), 
-etc.) and other Windows OS specific information. 
+(create new, open existing,
+% truncate existing, or append to existing files),
+etc.) and other Windows OS specific information.
 Fig.~\ref{fig:logex} shows two examples of events.
 WinResMon can optionally capture the data associated with an
 event. (see Sec. \ref{sec:wbbench} which uses network packet data)
@@ -133,12 +133,12 @@ STATUS\_OBJECT\_NAME\_NOT\_FOUND
 \label{fig:logex}
 \end{figure}
 
-% A system trace is stored in a compressed text file, where each line 
+% A system trace is stored in a compressed text file, where each line
 % records an event.
 % We choose this format because it makes filtering and processing easy through
 % existing UNIX stream text processing programs.
 % The drawback of text file is the difficulty in random accessing,
-% however, our visualization programs are implemented to sequentially 
+% however, our visualization programs are implemented to sequentially
 % access the trace.
 
 % \TODO{reviewer 3:
@@ -167,17 +167,17 @@ given purpose.  It must also be able to scale at different detail levels.
 % % interactive zooms to see finer detail.
 
 Our visualizations use color for greater visual
-bandwidth as well as customization flexibility. 
+bandwidth as well as customization flexibility.
 We support both RGB and CMY color modes.
 The RGB color mode displays events on a black background
-and is appropriate if the visualization is displayed on monitors to 
+and is appropriate if the visualization is displayed on monitors to
 make it easy to see events.
 For printed output, a CMY mode, which uses subtractive color,
 tends to be easier to see.
 In the thesis, being in print format, we use the CMY mode
 and try to minimize the use of yellow due to its closeness to white.
 % \footnote{
-% % (In \lviz{} switching between RGB and CMY
+% % (In \code{lviz} switching between RGB and CMY
 % % gives RGB:white $\mapsto$ CMY:black, RGB:red $\mapsto$ CMY:cyan, etc.)
 % % In the thesis, all figures and illustrations use the CMY color model,
 % In CMY, the primitive colors are $cyan$, $magenta$ and $yellow$,
@@ -195,7 +195,7 @@ and try to minimize the use of yellow due to its closeness to white.
 % pixels on black than it is to see light color print on white paper.
 % Since color in RGB is additive,
 % it is also more intuitive for reasoning.
-% % and the processing algorithms in \lviz{} mainly employ 24-bit RGB.
+% % and the processing algorithms in \code{lviz} mainly employ 24-bit RGB.
 %We highlight that the reader can see
 %more detail in the PDFs by zooming in.
 
@@ -228,7 +228,7 @@ two different sequences.
 \begin{figure}[tb]
 \begin{center}
 \includegraphics[width=0.5\columnwidth]{lviz/elements.png}
-\caption{Elements of \VDP{}: axis histograms (Region 1,2);
+\caption{Elements of VDP: axis histograms (Region 1,2);
 barcodes (3,4); and extended DotPlot (5). This figure is same as
 Fig.~\ref{fig:cp-xcopy} with the added annotation.}
 \label{fig:elements}
@@ -237,11 +237,11 @@ Fig.~\ref{fig:cp-xcopy} with the added annotation.}
 
 Here, we develop a novel DotPlot based visualization which is
 extensible and can be configured for many uses.
-Our visualization, which we call {\em \VDP{}},
+Our visualization, which we call {\em VDP},
 consists of a number of sub-visualizations:
 an {\em extended DotPlot} (or simply, DP in the rest of the section), two
 Axis Histograms, and some barcodes.
-% We now describe the elements of \VDP{}.
+% We now describe the elements of VDP.
 Fig.~\ref{fig:elements} gives an overview of all the elements:
 $(i)$ the DP (region 5);
 $(ii)$ the x-axis histogram (region 1) and
@@ -251,16 +251,16 @@ y-axis barcodes (region 4).
 A larger diagram of the same visualization highlighting various
 details is in Fig.~\ref{fig:cp-xcopy}.
 
-An important aspect of the \VDP{} is that it is intended to 
+An important aspect of the VDP is that it is intended to
 be extensively customizable. Thus, it gives rise to a family of visualizations.
 In Sec. \ref{sec:lviz-study}, we show how to apply and customize
-the \VDP{} for different purposes. The elements of a \VDP{} as follows.
+the VDP for different purposes. The elements of a VDP as follows.
 
 {\bf DP}:
 % We overload the DotPlot (DP) to refer either to our
 % entire DotPlot visualization or to the extended DotPlot graphic.
 Our DP visualization extends a binary DotPlot in a number of ways.
-Since a trace can be long, several events are aggregated 
+Since a trace can be long, several events are aggregated
 together into a single pixel in a window.
 DotPlots which contains aggregated events are drawn as grayscale images
 which are then colored using the DP coloring rules for customizing
@@ -287,14 +287,14 @@ to time-ordering
 except that the events will be plotted as a rectangular region
 with dimensions corresponding to its duration obtained from
 the corresponding events on each axis.
-Time-ordering, on the other hand, plots 
+Time-ordering, on the other hand, plots
 an event as a single dot.
 
 {\bf DP Matching Rules}:
 Unlike a binary DP, our extended DP can look quite different depending
 on how matching and coloring rules are specified.
 The DP matching rule specifies whether two events
-match. The specification allows for matching on 
+match. The specification allows for matching on
 the properties of an event, e.g. PID/TID, program name,
 operation type, etc. (see Sec.~\ref{sec:systrace})
 It essentially allows any combination of information about
@@ -319,7 +319,7 @@ This gives flexibility to emphasize or hide any kind of information
 in the trace.
 For example, in the RGB mode, the DP color rules
 can specify that events which are
-file operations are colored red, 
+file operations are colored red,
 registry operations to be blue, and network operations to be green.
 Note that the DP color rule matches independently of the DP matching rule,
 e.g. the DP match can be on operation type while the DP color rule could be
@@ -330,8 +330,8 @@ more intuitive. However, in the thesis, CMY is used on all figures.
 One way is to use CMY as 3 orthogonal dimensions which would allow 3 different
 properties to be visualized.
 For example, a cyan pixel in a DP could mean
-the events all have property A and an adjacent magenta pixel 
-would be a different property B. 
+the events all have property A and an adjacent magenta pixel
+would be a different property B.
 Intersection or union of properties, e.g. property A and B,
 allows cyan and magenta to combine giving blue.
 Another way is to simply color properties using custom colors.
@@ -361,30 +361,30 @@ The axis histogram sub-visualization
 serves as another kind of ruler for each of the traces on the X and Y axis,
 see region 1 and 2 in Fig.~\ref{fig:elements}, providing
 time-event correlation information to the traces.
-It consists of 
+It consists of
 ticks (small blue square on the outer edge) representing unit time intervals
 and an associated histogram.
-Ticks are evenly distributed in a time-ordered or time-duration-ordered \VDP{}
-but can be irregularly distributed in an event-ordered \VDP{},
+Ticks are evenly distributed in a time-ordered or time-duration-ordered VDP
+but can be irregularly distributed in an event-ordered VDP,
 since there may be many or few events within a unit time interval.
-Closely spaced ticks in an event-ordered \VDP{} mean low event frequency.
+Closely spaced ticks in an event-ordered VDP mean low event frequency.
 
 The histogram component (see region 1 in Fig.~\ref{fig:cp-xcopy})
-is used to visualize the density of events or time 
+is used to visualize the density of events or time
 of the trace.
-The histogram in a time-ordered or time-duration \VDP{}
+The histogram in a time-ordered or time-duration VDP
 represents the number of aggregated events.
-In an event-ordered \VDP{},
+In an event-ordered VDP,
 it represents the total time taken (recall that an event has start and end
 time) on the aggregated events.
 
-\subsubsection{A \VDP{} Example}
+\subsubsection{A VDP Example}
 
 \begin{figure}[tb]
 \begin{center}
 \includegraphics[width=1.0\columnwidth]{lviz/cp-xcopy.png}
-\caption{Self-comparison event-ordered \VDP{} of {\tt xcopy}
-copying 8 files of different sizes with the following configuration rules: 
+\caption{Self-comparison event-ordered VDP of {\tt xcopy}
+copying 8 files of different sizes with the following configuration rules:
 }
 \begin{tabular}{ll}
 DP match : & operation + parameter (pathname)\\
@@ -407,15 +407,15 @@ Bar3 color : & black $\rightarrow$ registry operation
 % discussion at this point.
 % }
 
-Fig.~\ref{fig:cp-xcopy} illustrates the event-ordered \VDP{}
+Fig.~\ref{fig:cp-xcopy} illustrates the event-ordered VDP
 of a trace of running
-\xcopy{} to copy two directories with files of different sizes.
-The \VDP{} uses self comparison of the \xcopy{} trace with
+{\tt xcopy} to copy two directories with files of different sizes.
+The VDP uses self comparison of the {\tt xcopy} trace with
 the DP matching rule on operation and parameter (resource pathname).
-The \VDP{} configuration consisting of a DP ordering, DP matching rule,
+The VDP configuration consisting of a DP ordering, DP matching rule,
 DP coloring rules and barcode coloring rules
 is given in the caption of the figure.
-The non-white regions inside the DP show when \xcopy{} is using the
+The non-white regions inside the DP show when {\tt xcopy} is using the
 same resource with the same operation and parameter.
 Its color represents the resource.
 Each blue square is the aggregated visualization effect from
@@ -435,27 +435,27 @@ This allows us to see quite different detail from an aggregated view.
 We can see the effects of visualizations at different scales,
 Fig.~\ref{fig:cp-xcopy} shows the aggregate behavior which
 is a different picture from the magnified view in
-Fig.~\ref{fig:cp-zoom} which shows the individual file operations in \xcopy{}.
+Fig.~\ref{fig:cp-zoom} which shows the individual file operations in {\tt xcopy}.
 Zooming creates a new window as one may want to see many different
 detail levels at the same time. Clicking inside the DP selects
 a pixel to give more details of the events aggregated in that pixel. When
 the mode is event-ordering, the events displayed are those events contained
 in that pixel. Whereas with time-ordering or time-duration-ordering,
 the events are those events which intersect in time with the time interval
-represented by that pixel. 
+represented by that pixel.
 
-% {Zoom and Click}. 
+% {Zoom and Click}.
 % Zoom is one of the most important features that we must have.
 % The first time the DotPlot is created, it encompases the entire log files
 % that may contain hundred of thousands events.
 % The pixel shown in this state contains aggregated number of events
 % and the color might be seen as the addition of multiple colors.
-% Zoom allows us to go deep into a particular region of interest 
+% Zoom allows us to go deep into a particular region of interest
 % and explore the traces in a more fine grained manner.
 % Clicking on the DotPlot area will print out the events
 % residing in the clicked region which is very helpful in exploration process.
-% 
-% 
+%
+%
 % We designed our DotPlots UI to implement the above control operations.
 % We use an extensive configuration file to specify most of the parameters for the visualization
 % and we use command line interface to interact with the UI.
@@ -467,7 +467,7 @@ represented by that pixel.
 % The command line accepts 4 commands: "dpe" to render a DotPlot Event-Ordering,
 % "dpt" is for DotPlot Time-Ordering, "dptd" is for DotPlot Time-Duration-Ordering,
 % and "reload" to reload the configuration file.
-% 
+%
 % A UI frame will pop out when one of the "dpe", "dpt", "dptd" command is put.
 % The UI looks like \TODO{Figure ?}
-% 
+%

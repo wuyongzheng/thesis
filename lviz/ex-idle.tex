@@ -3,7 +3,7 @@
 
 \begin{figure*}[htb]
 \includegraphics[width=1.0\textwidth]{lviz/idle-dp.png}
-\caption{Time-ordered \VDP{} comparing two idle systems.
+\caption{Time-ordered VDP comparing two idle systems.
 {\bf a.} (left) comparing one hour interval between two machines;
 {\bf b.} (middle) zoom in of Region {\em a2};
 {\bf c.} (right) zoom in of {\em a3}.
@@ -41,7 +41,7 @@ Previous examples compared the trace of particular programs
 % against another
 % so that we can compare the behavior of the two programs
 (or to understand
-how a program behaves using a self-similarity \VDP{}).
+how a program behaves using a self-similarity VDP).
 We now show that visualization can also be useful for system traces
 as a whole -- a system trace is the complete trace of the entire operating
 system for a period of time.
@@ -52,12 +52,12 @@ When Windows is idle (i.e. no user interaction),
 system services and system processes still run.
 We want to visualize whether such services and programs have 
 (some expected) periodic behavior.
-Fig.~\ref{fig:idle-dp}a (left) shows a time-ordered \VDP{} from two 
+Fig.~\ref{fig:idle-dp}a (left) shows a time-ordered VDP from two 
 different idle machines for an hour at different times.
 The size of the x and y-axis traces are 
 851528 and 652713 events respectively.
 % \footnote{
-% Our \VDP{} tool handles large traces with real-time interaction.
+% Our VDP tool handles large traces with real-time interaction.
 % }
 The configuration is described in the figure caption.
 Bar1 and Bar2 show which events belong to
@@ -111,13 +111,14 @@ Selecting those network events we find the
 program is {\tt wuauclt.exe} (Windows update) --
 both machines run Windows update at different time points explaining
 the increase in network events.
-% Selecting events in \VDP{} shows that the events are associated
+% Selecting events in VDP shows that the events are associated
 % with {\tt wuauclt.exe} (Windows update) -- thus, it is Windows update
 % running at a different point of time in both traces.
 The dark Region {\em c1} shows that many of the events are the same 
 in both machines in Windows update.
 These events are file read and write to
-{\tt C:\BS windows\BS softwaredistribution\BS datastore\BS datastore.edb}
+\path{C:\windows\softwaredistribution\datastore\datastore.edb}
+%{\tt C:\BS windows\BS softwaredistribution\BS datastore\BS datastore.edb}
 (the Windows update database).
 % We also see that network activity (outermost barcode) is higher in 
 % Region {\em c3} during Windows update.
@@ -131,7 +132,7 @@ This example shows that different machines not synchronized to
 each other have common periodic patterns and behavior.
 We note that as we used idle traces, the frequency
 of events will be low and a direct visualization is quite
-faint. As such, \VDP{} employs equalization on the image 
+faint. As such, VDP employs equalization on the image 
 to make the low frequency events more visible.
 
 % \TODO{reviewer 2:

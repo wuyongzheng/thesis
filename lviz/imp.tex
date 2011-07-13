@@ -1,11 +1,11 @@
-\subsection{\VDP{} Implementation and Scalability}
+\subsection{VDP Implementation and Scalability}
 \label{sec:lviz-imp}
 
-There are two important challenges in implementing \VDP{} in \lviz.
+There are two important challenges in implementing VDP in \code{lviz}.
 Firstly, traces are usually much larger than the size of the screen.
 The challenge is to be able to still have usable visualizations given that
 there will not be sufficient pixels to show every event.
-Secondly, rendering a \VDP{} on large traces needs to be sufficiently fast to
+Secondly, rendering a VDP on large traces needs to be sufficiently fast to
 meet interactive UI needs (i.e sub-second response).
 Finally, our implementation takes advantage of parallelism given
 the trend in multi-core processors.
@@ -58,12 +58,12 @@ a display window size with width $W$ and height $H$.
 For large traces, e.g. $N=10^6$, clearly $N \gg W$ and $N \gg H$,
 and a binary DotPlot with two traces of $N=10^6$ corresponds to an
 image with $10^{12}$ pixels (terrapixel).
-Our \VDP{} visualization aggregates multiple events into a single pixel,
+Our VDP visualization aggregates multiple events into a single pixel,
 normalizing it to RGB intensities between $0\ldots255$.
 Unlike a digital photo, the intensity of a pixel could be up to $N$,
 since aggregating events could end up with all of them
 in a single pixel which could easily exceed 255.
-\lviz{} provides two options to deal with this issue by borrowing 
+\code{lviz} provides two options to deal with this issue by borrowing 
 ideas from image processing.
 The first is to simply normalize the values.
 We extend normalization to include gamma correction, i.e. given an input value $x$,
@@ -87,7 +87,7 @@ a well known technique in image processing.
 
 Fig.~\ref{fig:gamma} shows our {\tt xcopy} example visualized
 with various normalization options.
-In this example with an event-ordered \VDP,
+In this example with an event-ordered VDP,
 the intensity of a pixel shows how many matching events there are in the DP.
 We see that histogram equalization (the default) is usually effective
 in allowing matching burst events (high intensity) to seen together
@@ -95,10 +95,10 @@ with spread out events (low intensity).
 While smaller $\gamma$ shows details of the high intensity events,
 larger $\gamma$ shows low intensity events.
 
-Most of the cost of rendering a \VDP{} has to do with various forms of
+Most of the cost of rendering a VDP has to do with various forms of
 matching: applying DP matching, DP coloring and barcode rules.
 We can optimize the rendering to reduce matching costs by pre-processing
-the traces. \lviz{} performs the pre-processing steps when reading the
+the traces. \code{lviz} performs the pre-processing steps when reading the
 traces. Subsequent visualizations such as zooming in then make use of
 the pre-computed results of the pre-processing phase.
 
@@ -141,8 +141,8 @@ This allows us to identify the color in a single pass
 rather than multiple passes for each rule.
 
 The two pre-processing steps above are performed once and
-cached in memory for later use when rendering the \VDP{}.
-The \VDP{} rendering has to be fast as it is
+cached in memory for later use when rendering the VDP.
+The VDP rendering has to be fast as it is
 used interactively for real-time browsing 
 which entails zooming in on a region within the DP.
 As the number of events in a trace, $N$, grows in order of hundreds of thousands,
@@ -199,7 +199,7 @@ is $G S^2=10^6$.
 Another good case is when there is only one digest group,
 so $S=10^6$ and the number of operations is $G(S + WH)=1.24\times10^6$.
 
-\lviz{} is multi-threaded to make use of multi-core processors.
+\code{lviz} is multi-threaded to make use of multi-core processors.
 The pre-processing steps and rendering algorithms can be easily parallelized.
 The events in the trace can be split up into several sub-traces and 
 the pre-processing can be applied to each sub-trace
@@ -214,13 +214,13 @@ when the execution is single-threaded.
 In our rendering algorithm, each digest group can be processed
 independently and in parallel as there is no dependency between digest groups.
 We also render all the sub-components
-of a \VDP, the DP, barcodes, and histograms in parallel.
+of a VDP, the DP, barcodes, and histograms in parallel.
 It took about 0.5 seconds to render the trace where the DP has 550K events
 on both axis.
-Thus, \lviz{} can process large traces with sufficient real-time response
+Thus, \code{lviz} can process large traces with sufficient real-time response
 when the user interactively zooms/resizes the VDP or changes the histogram.
 
-To speed up subsequent runs, \lviz{} creates a cache containing the results
+To speed up subsequent runs, \code{lviz} creates a cache containing the results
 of the pre-computations of the digest, DP color, barcodes color
 of each event since they require the most computation
 and are the bottleneck of the system. The cache avoids recalculating the

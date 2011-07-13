@@ -5,7 +5,7 @@
 % There are a number of related works on execution trace visualization,
 % some are graph based, some are hierarchical,
 % some are Cartesian coordinate based.
-% We focus on Cartesian coordinate base visualization to which \VDP{} belongs.
+% We focus on Cartesian coordinate base visualization to which VDP belongs.
 % The Cartesian coordinate based visualization is commonly used when each
 % visualized entity (function, event, object, line of source code, etc.)
 % is associated with some numerical properties.
@@ -41,7 +41,7 @@ lines of text logs and coloring them by message types.
 SeeLog~\cite{eick1996displaying} visualizes Unix accounting trace files by
 plotting events by time and process.
 SeeLog can be viewed as a restricted variant of the
-\VDP{} visualization.
+VDP visualization.
 Magpie \cite{barham2004using} is a performance analysis tool designed for web servers.
 It uses collected system events including file I/O, computation,
 thread scheduling and network to analyze the resources usage of
@@ -54,7 +54,7 @@ Bodic et al. \cite{bodik2005combining} propose another visualization tool for
 web servers.
 It shows frequency of different HTTP requests
 and highlight anomalies that may indicate site failures.
-\VDP{} on the other hand is a general trace visualizer but
+VDP on the other hand is a general trace visualizer but
 it can be used for similar diagnosis (see Sec.~\ref{sec:wbbench}).
 TuningFork \cite{bacon2007tuningfork} is a trace analysis tool for real-time systems
 including visualizing unsatisfied real time constraints in
@@ -63,11 +63,11 @@ real-time systems.
 EVolve~\cite{wang2003evolve} is a visualization framework for understanding
 Java program by visualization execution traces from the JVM and
 has a DotPlot visualization.
-% It includes a DotPlot module which has some similarity with \VDP{}.
-However, \VDP{} uses an extended DotPlot (see Sec.~\ref{sec:lviz-vis})
+% It includes a DotPlot module which has some similarity with VDP.
+However, VDP uses an extended DotPlot (see Sec.~\ref{sec:lviz-vis})
 and generates different visualizations (see Fig.~\ref{fig:make-matching})
 depending on its configuration.
-\lviz{} is designed to scale for large traces and
+\code{lviz} is designed to scale for large traces and
 to be efficient to meet user interaction needs.
 Voigt et al.~\cite{voigt2009object} propose a visualization method which correlates
 class method invocation, object invocation and time.

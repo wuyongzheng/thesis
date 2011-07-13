@@ -6,32 +6,32 @@ Firstly, we show that visualization can be beneficial for problems
 in software understanding and diagnosis. We demonstrate this
 for traces with a single program as well as with
 several programs and a complete system trace.
-Secondly, we show that a DotPlot-based visualization, \VDP{}, is effective
+Secondly, we show that a DotPlot-based visualization, VDP, is effective
 in visualizing a range of problems.
-One feature which distinguishes \lviz{} is that as we work
-at the operating system level with system and stack traces, 
+One feature which distinguishes \code{lviz} is that as we work
+at the operating system level with system and stack traces,
 we do not need source code of the software.
 We believe that the range of understanding and diagnosis applications
 shows that visualization of operating system traces is an interesting approach.
 It also complements other kinds of analysis such
 as program analysis and data mining.
 
-Our \VDP{} visualization is only one general purpose visualization.
+Our VDP visualization is only one general purpose visualization.
 There are some other problems where dependency visualizations
 (Sec.~\ref{sec:depvis}) or special
-variants of \VDP{} would be more appropriate. For example, to understand
-resource usage, a special kind of \VDP{} with resources and traces overlaid
-with resource lifetimes would give more information than a regular \VDP{}.
+variants of VDP would be more appropriate. For example, to understand
+resource usage, a special kind of VDP with resources and traces overlaid
+with resource lifetimes would give more information than a regular VDP.
 We have not taken advantage of source code and this can further enhance
 the visualization but it would need monitoring infrastructure which
 can correlate execution with the source.
 We also remark that although we do not make use of source code, we
-see that visualizations using program points can be used to understand 
+see that visualizations using program points can be used to understand
 how the code works (at the native code level).
 
-We have developed the \VDP{} tool for Windows because such visualizations
+We have developed the VDP tool for Windows because such visualizations
 are more beneficial given the closed source nature and system complexity
-of Windows. 
-However, \VDP{} is not reliant on a particular monitoring 
+of Windows.
+However, VDP is not reliant on a particular monitoring
 infrastructure and the same visualization ideas can be applied
 to other systems with a rich source of execution traces, e.g. Unix.
