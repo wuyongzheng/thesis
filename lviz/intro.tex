@@ -1,11 +1,16 @@
 % \subsection{Introduction}
 
-\TODO{rewrite to make it connected}
 Software is increasingly complex with many interactions with other software
 and the operating system.
+The previous visualization shows the complexity in the
+aspect of module dependency.
+Other factors include persistent state interaction, inter-process communication,
+networking, etc.
 This complicates understanding software/component behavior and diagnosing
 problems or performance.
-The close source nature of Microsoft Windows (or simply, Windows) exemplifies this trend.
+As discussed in Section~\ref{sec:win-issue},
+the close source nature of Microsoft Windows (or simply, Windows)
+exemplifies this trend.
 Suppose our task is to understand/diagnose/debug some software on Windows.
 Ideally, system/software documentation or source code
 analysis would give the answer.
@@ -17,24 +22,10 @@ detailed system behavior.
 Recently, there are a number of monitoring systems which
 give detailed system traces such as DTrace~\cite{cantrill2004dynamic} for Solaris,
 DProbes for Linux and Flight Data Recorder~\cite{verbowski6flight}
-and WinResMon~\cite{ramnath2006winresmon} for Windows.
-
-However, the system traces can be very large and also
-difficult to analyze. Statistics from \cite{verbowski6flight} show that Windows
-server workloads can generate as much as 70M events/day.
-An idle machine can generate about 1M events/day. We also
-observed similar statistics for Windows. Although much of
-the interactions between the processes and software in the
-system is contained in the system trace, in practice, the detail
-can be overwhelming.
-
-% \TODO{reviewer 3:
-% It is still not completely clear why the OS is playing such an important rol in this paper, since
-% the case studies just cover small parts of the OS and show other programs as well. Probably it is
-% much more clear to define (formally) what an event is and how it can be interpreted in software
-% programs or parts of an operating system. Probably this model can be used for other kind of data
-% sets as well, for instance a network log of packages send from one source to another.
-% }
+and WinResMon (Sec.\ref{sec:winresmon}) for Windows.
+However, as shown earlier in this chapter,
+the system traces can be very large and also
+difficult to analyze.
 
 We propose \lviz{}, a visualization tool for
 understanding such large and complex system traces.
@@ -50,27 +41,8 @@ the prototype of \lviz{} is efficient and can handle large system traces
 with real-time response. For example, a trace of size 120MB with 558K events 
 is loaded in under 3 seconds
 and after that it can be interactively displayed/zoomed in around 0.5 seconds.
-
-% \TODO{reviewer 2:
-% In section 1, you mention the VDP (what's that?) but I do not see a
-% definition of that term before it's being used.  fixed.
-% }
-
-% \TODO{reviewer 3:
-% What does the abbreviation VDP stands for? It is never introduced!  fixed.
-% }
-
-% \TODO{reviewer 3:
-% Why should we use dotplots for traces? Why not something else?
-% }
-
 The \VDP{} can be used on different traces and for different purpose
 by using different configurations.
 In Sec.~\ref{sec:lviz-study}, we use some case studies to show that
 \VDP{} can be used for solving performance problems,
 program failure diagnosis and finding execution patterns/anomalies.
-
-% \TODO{reviewer 3:
-% The authors do not need to mention that the pictures are in color; that is
-% standard for the visualization community.  fixed.
-% }
