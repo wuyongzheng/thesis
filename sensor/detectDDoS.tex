@@ -57,7 +57,7 @@ $p_{net}$ when user is present and absent, it can be as large as 600
 for some flows, so different upper bounds of normal $p_{net}$ should
 be used for user presence and absence and for each flow.
 
-\begin{figure*}
+\begin{figure*}[htb]
   \centering
   \subfigure[2351 active TCP flows during user presence]{
     \label{fig:tcpflow_presentrate}
@@ -77,16 +77,11 @@ be used for user presence and absence and for each flow.
   \label{fig:flowrates}
 \end{figure*}
 
-
-
-
-
-\begin{figure*}[tb]
+\begin{figure*}[htb]
 \centering \subfigure[Distribution of flow net outgoing packet
 rates]{\includegraphics[width=0.48\textwidth]{sensor/net-outrate}}
 \subfigure[Difference in the flow rates when user is present and
 absent]{\includegraphics[width=0.48\textwidth]{sensor/net-outrate-diff}}
-\vspace*{-3mm}
 \caption{Distribution of the maximum net outgoing
 packet rate $p_{net}$ with 13,620 TCP and UDP flows, each flow is
 observed for 10 minutes during user presence and absence}
@@ -102,21 +97,19 @@ $N=800$ packets, accumulated over 20 minutes. It ensures an attack
 flow can be detected if at least 2 UDP packets are sent a second on
 average.
 
-\begin{figure}[tb]
-\begin{center}
-\begin{minipage}[t]{.5\textwidth}
-\includegraphics[width=1\columnwidth]{sensor/ddos-atkflow.png}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.7\textwidth]{sensor/ddos-atkflow.png}
 \caption{Net outgoing packet rate of the DDoS attack flow in
-different attack patterns.}
+different attack patterns}
 \label{fig:ddos-atkflow}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{.49\textwidth}
-\includegraphics[width=1\columnwidth]{sensor/load-temp.png}
-\caption{Correlation of CPU load and CPU temperature.}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.7\textwidth]{sensor/load-temp.png}
+\caption{Correlation of CPU load and CPU temperature}
 \label{fig:temp-cpuload}
-\end{minipage}
-\end{center}
 \end{figure}
 
 Some non-attack flows have large net outgoing packet rate. However,
@@ -157,7 +150,7 @@ attack within 3 minutes.
   Fluctuating DDoS & 1 sec &  3.6  & 3   \\ [0.5ex]
   \hline
   \end{tabular}
-  \caption{Detection time of DDoS attacks of different attack patterns.}
+  \caption{Detection time of DDoS attacks of different attack patterns}
   \label{tbl:detect-DDoS}
 \end{table}
 

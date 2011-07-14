@@ -8,7 +8,7 @@ to help monitor correct system operation and to detect potential
 security problems.
 In Unix systems, logging is traditionally {\em application based}.
 The application itself controls what is being logged through
-the system logging mechanism \code{syslog}, e.g.
+the system logging mechanism \code{syslog} (Sec.~\ref{sec:syslog}), e.g.
 security audit log messages generated 
 by \code{login}, \code{su}, etc.
 The drawback of application logging is since it is under the
@@ -64,7 +64,7 @@ Finally we also require that the monitor be {\em transparent} to the monitored
 processes --- thus the act of being monitored has no side effects to the
 monitorees.
 We remark that traditional Unix mechanisms such as \code{ptrace} and 
-\code{proc} do not provide these guarantees.
+\code{proc} (Sec.~\ref{sec:ptrace}) do not provide these guarantees.
 
 A key objective is that the monitoring mechanism be efficient and scalable.
 By efficiency, we mean that fine-grained monitoring is possible with low
@@ -955,7 +955,7 @@ tasks ran as scheduled.
 \subsection{Comparing to DTrace}
 \label{sec:lbox-dtrace}
 
-There are some similarities with Solaris DTrace (Sec\ref{sec:dtrace}),
+There are some similarities with Solaris DTrace (Sec.~\ref{sec:dtrace}),
 which is published at about the same time as this work.
 Both systems aim to bring minimal side effects to the monitored program
 in order to be used on production systems.
@@ -1314,7 +1314,7 @@ auditing and security monitoring.
 We achieve transparent auditing
 at a fine-grained level of applications while providing guarantees
 on the security of the auditing process. We are careful to avoid problems
-with privilege escalation and access to information beyong the user's
+with privilege escalation and access to information beyond the user's
 privileges. Furthermore, we avoid problems associated with denial of
 service which can be caused by self-referential monitoring or tracing.
 
@@ -1323,7 +1323,7 @@ of operations on operating system objects and resources. This makes it
 easy to write a custom monitor since the semantics is close to that
 of user code rather than having to understand kernel internals.
 
-A user-level monitor is desirable given it is more safe than an in-kernel one.
+A user-level monitor is desirable given it is safer than an in-kernel one.
 The question is whether a user-level monitor is sufficiently efficient. 
 Our framework is designed so that the cost of monitoring
 is commensurate with the amount of events and information needed.

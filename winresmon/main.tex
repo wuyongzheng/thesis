@@ -11,10 +11,10 @@ administration task of ensuring that software on a system is configured and
 maintained correctly over time.  Examples of software dependencies include:
 
 \begin{itemize}
-\item file sharing: including dynamic libraries and external data storage.
-\item sharing of software configurations: usually in the form of registry keys
+\item File sharing: including dynamic libraries and external data storage.
+\item Sharing of software configurations: usually in the form of registry keys
 in Microsoft Windows.
-\item interprocess communication and synchronization.
+\item Interprocess communication and synchronization.
 \end{itemize}
 
 Although software maintenance tasks might seem conceptually trivial, they can
@@ -31,7 +31,8 @@ other installed packages are not removed.  Similar checks are done to prevent
 installing a package which contains files that conflicts with other existing
 packages.
 
-In Microsoft Windows, however, software installation can be complex, and the
+As discussed in Section~\ref{sec:win-issue},
+in Microsoft Windows, however, software installation can be complex, and the
 exact dependencies between different software programs might not be clear.
 The confusion is further compounded by many implicit software
 interdependencies, e.g. registry keys which are part of shared software
@@ -207,8 +208,13 @@ uninstallation portions of the log.
 A record entry contains common information and specific information
 relevant to that record type.
 The common information consists of: {\em record-type}, 
-{\em time}, {\em process-id}, and the {\em error-code} 
+{\em start-time}, {\em end-time}, {\em process-id}, {\em thread-id}
+{\em user-id} and the {\em error-code} 
 (in the case of failure).  
+We can optionally record the user space stack trace, which is a list
+of function return addresses who directly or indirectly make the
+system call.
+The stack trace feature is used in our trace visualization (Sec.~\ref{sec:lviz}).
 The specific information recorded by different record types are:
 
 \begin{enumerate}
@@ -315,9 +321,9 @@ archiver.  Any of the following conditions can trigger a log switch: \\
 
 \begin{itemize}
 \item The size of the current log file reaches the specified {\tt
-Max\_log\_size}. \\
+Max\_log\_size}.
 \item The number of entries in the current log file reaches
-{\tt Max\_log\_entries}. \\
+{\tt Max\_log\_entries}.
 \item The user manually initiates a log switch process.
 \end{itemize}
 
@@ -736,7 +742,7 @@ entire life cycle.  There are three stages:
 
 The provided installer refuses to run under a standard user account as it
 needs administrator privileges. Upon successful installation under an
-administrator account, it creates the following keys and DLLs:
+administrator account, it creates the following DLLs and keys:
 
 \noindent DLLs:\\
 \path{C:\Program Files\Yahoo!\Companion\Installs\cpn\yt.dll}\\
@@ -750,14 +756,14 @@ administrator account, it creates the following keys and DLLs:
 
 \noindent Before Installation: \\
 Search Page: \\
-\path{http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=iesearch} \\
+\url{http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=iesearch} \\
 Search Bar:  -
 
 \noindent After Installation: \\
 Search Page: \\
-\path{http://us.rd.yahoo.com/customize/ycomp/defaults/sp/*http://www.yahoo.com} \\
+\url{http://us.rd.yahoo.com/customize/ycomp/defaults/sp/*http://www.yahoo.com} \\
 Search Bar: \\
-\path{http://us.rd.yahoo.com/customize/ycomp/defaults/sb/*http://www.yahoo.com/search/ie.html} \\
+\url{http://us.rd.yahoo.com/customize/ycomp/defaults/sb/*http://www.yahoo.com/search/ie.html} \\
 Yahoo! Toolbar Helper: \\
 \path{02478D38-C3F9-4EFB-9B51-7695ECA05670} -
 \path{C:\Program Files\Yahoo!\Companion\Installs\cpn0\yt.dll}
@@ -1000,7 +1006,7 @@ SystemTap are designed for general system call instrumentation.
 
 \subsection{Conclusion}
 
-This section presented the motivation, design, implementation and usage of
+We presented the motivation, design, implementation and usage of
 WinResMon.  Its main use is to inspect resource access and software dependency
 issues in Microsoft Windows environments.  As WinResMon is extensible, system
 administrators can also build tools using WinResMon for custom queries and

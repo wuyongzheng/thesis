@@ -74,7 +74,7 @@ or change system call's arguments.
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-system & enforce & transp. & level & alter & OS & section\\ \hline \hline
+System & Enforce & Transp. & Level & Alter & OS & Sec. \\ \hline \hline
 \code{printf} & disc. & opaque & user & log & all & \ref{sec:printf} \\ \hline
 \code{syslog} & disc. & opaque & user & log & POSIX & \ref{sec:syslog} \\ \hline
 \code{ptrace(2)} & mand. & transp. & kernel & alter & POSIX & \ref{sec:ptrace} \\ \hline
@@ -90,7 +90,11 @@ Pin & \multirow{2}{*}{mand.} & \multirow{2}{*}{transp.} & \multirow{2}{*}{instru
 DynamoRIO & & & & & & \\ \hline
 valgrind & mand. & transp. & instru. & alter & Linux & \ref{sec:instrumentation} \\ \hline
 \end{tabular}
-\caption{Classification of Monitoring Systems}
+\caption{Classification of Monitoring Systems.
+``Sec.'', ``transp.'', ``disc.'', ``mand.'', ``instru.'', ``Lin.'' and ``Win.''
+are abbreviations of
+Section, transparent, discretionary, mandatory, instrumentation, Linux and Windows
+respectively.}
 \label{tab:mon-tax}
 \end{table}
 
@@ -302,11 +306,6 @@ This poses a security threat as well however.
 To prevent D script from running into infinite loops,
 loops (or backward branch in general) and user defined functions
 are not supported.
-
-\TODO{Should I this mention here:
-However, our micro-benchmarks in Section~\ref{sec:lbox-bench}
-indicate that while it is significantly
-faster than \code{/proc}, we have observed a factor of 2x slowdown.}
 
 \subsection{SystemTap}
 \label{sec:systemtap}
