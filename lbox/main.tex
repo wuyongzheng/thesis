@@ -1226,33 +1226,28 @@ than Solaris.
 
 \begin{table*}[ht]
 \centering
-\begin{tabular}{ | l || c | c | c | }
+\noindent\makebox[\textwidth]{%
+\begin{tabular}{|l|c|c|c|}
 \hline
- & web server (request/sec) & make bash (sec) & install mozilla (sec) \\
+ & web server (request/sec) & make bash (sec) & install Mozilla (sec) \\
 \hline\hline
 Linux clean & \begin{math} 8903.1\pm21.8 \end{math} & \begin{math} 34.3\pm0.2 \end{math} & \begin{math} 1.8\pm0.1 \end{math} \\
 \hline
 lbox no I/O, file miss & \begin{math} 8773.1\pm19.4 (1.5\%) \end{math} & \begin{math} 34.4\pm0.2 (0.17\%) \end{math} & \begin{math} 1.8\pm0.0 (0\%) \end{math} \\
-\hline
 lbox no I/O, file hit & \begin{math} 8762.0\pm25.6 (1.6\%) \end{math} & \begin{math} 34.4\pm0.2 (0.17\%) \end{math} & \begin{math} 1.8\pm0.0 (0.56\%) \end{math} \\
-\hline
 lbox with I/O & \begin{math} 8728.9\pm18.4 (2.0\%) \end{math} & \begin{math} 34.4\pm0.2 (0.29\%) \end{math} & \begin{math} 1.7\pm0.1 (3.9\%) \end{math} \\
-\hline
 strace no I/O & \begin{math} 3577.6\pm8.5 (148.9\%) \end{math} & \begin{math} 39.6\pm0.1 (15.3\%) \end{math} & \begin{math} 2.2\pm0.1 (21.1\%) \end{math} \\
-\hline
 strace with I/O & \begin{math} 1981.4\pm6.9 (349.3\%) \end{math} & \begin{math} 100.7\pm0.1 (293.2\%) \end{math} & \begin{math} 23.2\pm0.1 (1189.4\%) \end{math} \\
-\hline\hline
+\hline
+\hline
 Solaris clean & \begin{math} 6889.1\pm42.6 \end{math} & \begin{math} 43.8\pm0.1 \end{math} & \begin{math} 1.6\pm0.1 \end{math} \\
 \hline
 DTrace no I/O & \begin{math} 6776.2\pm53.6 (1.7\%) \end{math} & \begin{math} 44.4\pm0.1 (1.4\%) \end{math} & \begin{math} 1.6\pm0.1 (0\%) \end{math} \\
-\hline
 DTrace with I/O & \begin{math} 6326.9\pm52.4 (8.9\%) \end{math} & \begin{math} 44.5\pm0.0 (1.6\%) \end{math} & \begin{math} 1.6\pm0.0 (0.6\%) \end{math} \\
-\hline
 truss no I/O & \begin{math} 1382.0\pm2.0 (398.5\%) \end{math} & \begin{math} 70.9\pm0.0 (61.8\%) \end{math} & \begin{math} 7.7\pm0.0 (372.2\%) \end{math} \\
-\hline
 truss with I/O & \begin{math} 1126.7\pm4.4 (511.5\%) \end{math} & \begin{math} 74.6\pm1.5 (70.2\%) \end{math} & \begin{math} 13.4\pm0.13 (724.7\%) \end{math} \\
 \hline
-\end{tabular}
+\end{tabular}}
 \caption{Macro-benchmarks}
 \label{tab:lbox-macro}
 \end{table*}
@@ -1277,16 +1272,16 @@ the http requests (reading) and http responses (writing).
 
 \item \code{make bash}: this builds the bash shell.
 
-\item install mozilla: this installs mozilla. The
+\item install Mozilla: this installs Mozilla. The
 Linux and Solaris differ. The Linux one has a custom
 install program while the Solaris version is simply untar.
 This means the results are not comparable except in a relative
 to each operating system alone.
 \end{itemize}
 
-The last two benchmarks, bash and mozilla,
+The last two benchmarks, bash and Mozilla,
 have also been chosen because these applications
-have been used in Alcatraz.
+have been used in Alcatraz \cite{liang2009alcatraz}.
 For I/O monitoring, we have monitored all the I/O from the application.
 The results given in Table \ref{tab:lbox-macro}. 
 The results for \code{strace} and \code{truss} are only meant to illustrate
@@ -1296,14 +1291,14 @@ serves to bound the cost of \code{ptrace} and \code{proc}.
 We see that in all cases, lbox monitoring has very low overheads, below
 $2\%$ without I/O and less than $4\%$ with complete I/O monitoring of the
 applications.
-The mozilla install cannot be directly compared since the actual install
+The Mozilla install cannot be directly compared since the actual install
 is different.
 Even though these are macro-benchmarks, 
 overhead for \code{ptrace} without I/O is significant, at least $15\%$.
 With I/O monitoring, the overhead shoots up.
-Alcatraz \cite{liang2009alcatraz} which uses \code{ptrace} has rather
+Alcatraz which uses \code{ptrace} has rather
 high overheads for their system call interception, $43\%$ for a \code{make}
-and $79\%$ for \code{mozilla}. Their isolation overhead which is a measure
+and $79\%$ for Mozilla. Their isolation overhead which is a measure
 of write I/O adds a further $20\%$. Our overheads are much smaller ($< 4\%$)
 but we don't do isolation.
 

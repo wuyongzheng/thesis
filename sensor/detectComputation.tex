@@ -60,21 +60,25 @@ significantly limits the amount of computation which can be performed.
 For comparison, the thresholds of CPU temperature for rate based detection is set as $T_r = a + N/t = 39.83$\degree, and the threshold for moving average detection is $T_m = 40$\degree. We note that the instantly measured CPU temperature that our sensor outputs has granularity of degrees.
 
 \begin{table}[tb]
-  \centering
-  \begin{tabular}{|c|c|c|c|}
-  \hline
-  Detection & Rate & Moving & Changepoint \\
-  Algorithm & (sec) & Average (min) & (min) \\
-  \hline
-  Game            & 14 & 11  & 10.4   \\
-  \hline
-  Matlab           & 4 & 8.5 & 5.2   \\
-  \hline
-  Password Cracker & 2 & 7.1 & 4.5   \\ [0.5ex]
-  \hline
-  \end{tabular}
-  \caption{Detection time of CPU intensive activities, using rate based detection, moving average detection, and changepoint detection (The upper bound of normal CPU temperature is $a=38.5$\degree, and the detection threshold $N=2400$\degree in $t=30$ mins).}
-  \label{tbl:detect-CPU}
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Detection & Rate & Moving & Changepoint \\
+Algorithm & (sec) & Average (min) & (min) \\
+\hline
+Game            & 14 & 11  & 10.4   \\
+\hline
+Matlab           & 4 & 8.5 & 5.2   \\
+\hline
+Password Cracker & 2 & 7.1 & 4.5   \\ [0.5ex]
+\hline
+\end{tabular}
+\caption{Detection time of CPU intensive activities,
+using rate based detection, moving average detection,
+and changepoint detection (The upper bound of normal CPU temperature
+is $a=38.5\degree$C,
+and the detection threshold $N=2400$ in $t=30$ mins).}
+\label{tbl:detect-CPU}
 \end{table}
 
 Fig. \ref{fig:temp-activities} shows the temperature during various

@@ -106,7 +106,8 @@ and each program each invocation may dynamically load a different set of DLLs.
 Thus, it is hard to keep track of what DLLs are loaded, and it is
 unfair to simulate with all DLLs used.
 
-\begin{table*}[tb]
+\begin{sidewaystable*}
+%\begin{table*}[tb]
 \centering
 \begin{tabular}{|l||c|c||c|c||c|c||c|c|}
 \hline
@@ -150,7 +151,8 @@ Cached-MAC      & $23.25$ & ${\bf 2.14\%}$ & $30.58$ & ${\bf 1.72\%}$
 factors for each benchmark scenario are shown with underline, whereas the best are in bold.
 We define $slowdown_x = (time_x - time_{clean}) / time_{clean}$.}
 \label{table:bigtable}
-\end{table*}
+%\end{table*}
+\end{sidewaystable*}
 
 The results are given in Table \ref{table:bigtable} but
 we have not shown ``noop 400K'' and ``noop 4M'' 

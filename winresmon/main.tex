@@ -153,8 +153,6 @@ with applications.  For example, {\small\tt .DOC} is registered to Microsoft Wor
 \end{itemize}
 \end{enumerate}
 
-\TODO{challenges. windows issues. Section~\ref{sec:binauth-windows} has some}
-
 \subsection{System Design}
 
 The WinResMon system infrastructure shown in Figure~\ref{usp} consists of the
@@ -533,10 +531,11 @@ int main (int argc, char **argv)
 \subsection{Implementation}
 
 \begin{figure}[h]
+\centering
 \begin{picture}(240,150)
 \thinlines
-\put(38,96){\framebox(60,15){iexplore.exe}}
-\put(121,96){\framebox(70,15){trace generator}}
+\put(38,96){\framebox(70,15){iexplore.exe}}
+\put(121,96){\framebox(80,15){trace generator}}
 \put(50,6){\framebox(129,16){syscall dispatcher}}
 \put(50,42){\framebox(129,16){syscall interceptor}}
 \put(126,129){\framebox(61,14){trace file}}
@@ -798,7 +797,7 @@ next battery runs with WinResMon loaded. The last battery is run with
 FileMon~\cite{filemon} loaded for file access benchmarks and RegMon~\cite{regmon} 
 loaded for registry access benchmarks. Each micro-benchmark repeats an operation $n$ times. 
 We performed each benchmark four times to get the average execution time.
-Tables \ref{perf-file}, \ref{perf-reg} and \ref{perf-proc} show the average and standard 
+Table \ref{tab:winresmon-perf-fr} and \ref{perf-proc} show the average and standard 
 deviation of the execution time in seconds.
 
 The file access benchmarks consist of:
@@ -839,8 +838,7 @@ The benchmarks for process creation are:
 \item[$(P_2)$] Create a dummy GUI process and wait for its termination.
 \end{description}
 
-\begin{table*}
-\small
+\begin{sidewaystable*}
 \centering
 \begin{tabular}{|l|l|c|c|c|}
 \hline
@@ -854,37 +852,6 @@ File Operation & $n$ & Clean & WinResMon & FileMon \\
 ($F_6$) Write 4096 bytes       & 10M  & $116.355 \pm 0.716$ & $448.933 \pm 2.192$ ($285.8\%$)   & $212.828 \pm 2.950$ ($82.9\%$) \\
 ($F_7$) Create a new directory & 100K & $46.546 \pm 0.344$  & $57.750 \pm 9.565$ ($24.1\%$)     & $56.395 \pm 0.282$ ($21.2\%$) \\
 \hline
-\end{tabular}
-\caption{Performance comparison on file access (in seconds)}
-\label{perf-file}
-\end{table*}
-
-Table~\ref{perf-file} shows the execution time (in seconds) for the file
-access benchmarks.  In order to avoid any extraneous overhead from the FileMon
-GUI, the window is always minimized during the experiments.  It appears that
-FileMon does not capture all the operations during the performed
-micro-benchmark, though.  For example, during the ``Read 1 byte'' test, 10M
-events occurred, but FileMon only captured about 15K.  During the ``Create a
-new file'' test, 600K events occurred, but only about 18K were actually
-captured.  We observe that WinResMon, by contrast, captured all
-operations in all the tests.
-
-Table~\ref{perf-reg} shows the execution time (in seconds) of the registry
-related benchmarks.  This benchmark is conducted similarly to the file benchmark. 
-It appears that RegMon also drops events.  For example, during one
-of the ``Query value'' test, 1M events occurred, but only 993,938 were actually
-captured by RegMon.
-
-Note that FileMon, RegMon and WinResMon address different goals.
-FileMon and RegMon are meant for short term monitoring while WinResMon is
-designed for long term use and is therefore always running in the background.
-These two benchmark comparisons merely give us a baseline on how WinResMon
-compares with other, similar monitoring software.
-
-\begin{table*}
-\small
-\centering
-\begin{tabular}{|l|l|c|c|c|}
 \hline
 Registry Operation & $n$ & Clean & WinResMon & RegMon \\
 \hline
@@ -895,9 +862,30 @@ Registry Operation & $n$ & Clean & WinResMon & RegMon \\
 ($R_5$) Set value             & 1M   & $22.890 \pm 0.153$ & $46.379 \pm 0.090$ ($102.6\%$)  & $182.473 \pm 7.272$ ($697.1\%$) \\
 \hline
 \end{tabular}
-\caption{Performance comparison on registry access (in seconds)}
-\label{perf-reg}
-\end{table*}
+\caption{Performance comparison on file and registry access ($n$ operations in seconds).}
+\label{tab:winresmon-perf-fr}
+\end{sidewaystable*}
+
+Table~\ref{tab:winresmon-perf-fr} shows the execution time (in seconds)
+for the file and registry access benchmarks.
+In order to avoid any extraneous overhead from the FileMon and RegMon
+GUI, the window is always minimized during the experiments.
+It appears that both FileMon and RegMon do not capture all the operations
+during the performed micro-benchmark, though.
+For example, during the ``Read 1 byte'' test, 10M
+events occurred, but FileMon only captured about 15K.
+During the ``Create a new file'' test, 600K events occurred,
+but only about 18K were actually captured.
+During the ``Query value'' test, 1M events occurred, but only 993,938
+were actually captured by RegMon.
+We observe that WinResMon, by contrast, captured all
+operations in all the tests.
+
+Note that FileMon, RegMon and WinResMon address different goals.
+FileMon and RegMon are meant for short term monitoring while WinResMon is
+designed for long term use and is therefore always running in the background.
+These two benchmark comparisons merely give us a baseline on how WinResMon
+compares with other, similar monitoring software.
 
 \begin{table*}
 \small

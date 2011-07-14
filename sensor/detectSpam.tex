@@ -134,30 +134,32 @@ and the detection is not sensitive to the instantaneous email rate.
 \subsubsection{Email Detection}
 
 \begin{table*}[bt]
-  \centering
-  \begin{tabular}{|c|l|}
-  \hline
-  SMTP     & the SMTP request command is {\tt MAIL}. \\
-  \hline
-           & The destination IP is in the set of {\tt hotmail.com} server IPs,  \\
-  {\tt hotmail.com}  & the protocol is HTTP,
-           the HTTP request method is {\tt POST}, and \\
-           & the HTTP request URI starts with {\tt /mail/SendMessageLight.aspx?} \\
-  \hline
-           & The destination IP is in the set of {\tt netease.com} server IPs, \\
-  {\tt netease.com}  & the protocol is HTTP,
-           the HTTP request method is {\tt POST}, and \\
-           & the HTTP request URI ends with {\tt \&func=mbox:compose} \\
-  \hline
-           & The destination IP is in the set of {\tt gmail.com} server IPs, \\
-  {\tt gmail.com}    & the protocol is HTTP,
-           the HTTP request method is {\tt POST}, and \\
-           & the HTTP request URI contains {\tt \&view=up\&act=sm} \\
-  \hline
-  SquirrelMail & A particular HTTP request immediately after an email is sent. \\ [0.5ex]
-  \hline
-  \end{tabular}
-  \caption{Rules for email detection. }\label{tbl:detect-email}
+\centering
+\noindent\makebox[\textwidth]{%
+\begin{tabular}{|c|l|}
+\hline
+SMTP     & the SMTP request command is {\tt MAIL}. \\
+\hline
+         & The destination IP is in the set of {\tt hotmail.com} server IPs,  \\
+{\tt hotmail.com}  & the protocol is HTTP,
+         the HTTP request method is {\tt POST}, and \\
+         & the HTTP request URI starts with {\tt /mail/SendMessageLight.aspx?} \\
+\hline
+         & The destination IP is in the set of {\tt netease.com} server IPs, \\
+{\tt netease.com}  & the protocol is HTTP,
+         the HTTP request method is {\tt POST}, and \\
+         & the HTTP request URI ends with {\tt \&func=mbox:compose} \\
+\hline
+         & The destination IP is in the set of {\tt gmail.com} server IPs, \\
+{\tt gmail.com}    & the protocol is HTTP,
+         the HTTP request method is {\tt POST}, and \\
+         & the HTTP request URI contains {\tt \&view=up\&act=sm} \\
+\hline
+SquirrelMail & A particular HTTP request immediately after an email is sent. \\ [0.5ex]
+\hline
+\end{tabular}}
+\caption{Rules for email detection.}
+\label{tbl:detect-email}
 \end{table*}
 
 We detect the sending of outgoing email is done by matching packets 
