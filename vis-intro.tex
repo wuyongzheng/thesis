@@ -56,9 +56,17 @@ the ``diff'' of two dependencies.
 The work has been published in \cite{wu2010comprehending}.
 
 Section~\ref{sec:lviz} shows our second visualization, \code{lviz}, which
-is a tool for many different purposes including software failure diagnostics,
+is a visualization tool for many different purposes including
+software failure diagnostics,
 analysing performance issues, anomaly discovery, etc.
-The visualization is based on DotPlot, which has been used for
+The visualization is based on DotPlot, which compares two traces
+and plot the common (or different) items.
+It was early used for
 analysing similarities in DNA sequences \cite{maizel1981enhanced}.
-\TODO{expand}
+\code{lviz} extends the traditional DotPlot through a number of visual elements
+so that we can easily associate the visual representation with events in the
+trace and identify the key events.
+As we will see in a number of case studies,
+\code{lviz} is highly customizable can be used to look at problems
+across a large spectrum.
 The work has been published in \cite{wu2010visualizing}.

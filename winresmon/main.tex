@@ -22,7 +22,8 @@ be time consuming and difficult, especially in large or complex environments.
 System administrators often rely on documentation and on-line information such
 as FAQs or forums, but such information is often incomplete.
 
-In various distributions of Linux, software dependency issues are partly
+As discussed in Section~\ref{sec:wi-management},
+in various distributions of Linux, software dependency issues are partly
 addressed by the use of a package manager.  The Red Hat Package Manager (RPM)
 \cite{ewing1996rpm}, for example, records the currently installed packages and the
 files required and provided by these packages in a centralized database.  RPM
@@ -31,8 +32,7 @@ other installed packages are not removed.  Similar checks are done to prevent
 installing a package which contains files that conflicts with other existing
 packages.
 
-As discussed in Section~\ref{sec:win-issue},
-in Microsoft Windows, however, software installation can be complex, and the
+In Microsoft Windows, however, software installation can be complex, and the
 exact dependencies between different software programs might not be clear.
 The confusion is further compounded by many implicit software
 interdependencies, e.g. registry keys which are part of shared software
@@ -181,7 +181,7 @@ service (daemon) which collects event information sent from the syscall
 interceptor and generates resource access traces.  Ideally, the logger is
 meant to run {\em all the time} so as to record the entire life cycle of how
 resources are used by software.\footnote{ One might only run the
-logger at select times instead, but this means WinResMon could miss critical information. }
+logger at selected times instead, but this means WinResMon could miss critical information.}
 
 A log trace file consists of a list of records, each representing 
 an access operation on one of the following types of resource:
@@ -214,7 +214,7 @@ The common information consists of: {\em record-type},
 We can optionally record the user space stack trace, which is a list
 of function return addresses who directly or indirectly make the
 system call.
-The stack trace feature is used in our trace visualization (Sec.~\ref{sec:lviz}).
+This stack trace feature is used in our trace visualization (Sec.~\ref{sec:lviz}).
 The specific information recorded by different record types are:
 
 \begin{enumerate}
@@ -508,20 +508,16 @@ int main (int argc, char **argv)
   char buff[256];
 
   if (argc != 3) {
-    printf("example: %s software_name"
-        " c:\...\installer.exe",
-        argv[0]);
+    printf("example: %s software_name c:\...\installer.exe", argv[0]);
     exit(1);
   }
 
   buff[sizeof(buff)-1] = '\0';
-  _snprintf(buff, sizeof(buff)-1,
-      MAGIC_INSTALL_BEGIN "%s|%s",
+  _snprintf(buff, sizeof(buff)-1, MAGIC_INSTALL_BEGIN "%s|%s",
       argv[2], argv[1]);
   winresmon_userlog(buff, strlen(buff));
   system(argv[2]); // fork and wait
-  _snprintf(buff, sizeof(buff)-1,
-      MAGIC_INSTALL_END "%s|%s",
+  _snprintf(buff, sizeof(buff)-1, MAGIC_INSTALL_END "%s|%s",
       argv[2], argv[1]);
   winresmon_userlog(buff, strlen(buff));
   return 0;
@@ -554,7 +550,7 @@ int main (int argc, char **argv)
 \put(161,111){\vector(0,18){18}}
 \put(208,82){user}
 \put(200,62){kernel}
-\put(6,80){1. CreateFile()}
+\put(0,80){1. CreateFile()}
 \put(20,28){2. pass down}
 \put(100,28){3. return}
 \put(138,80){4. send event}
@@ -702,11 +698,9 @@ trace_handle = trace_select(
     FORWARD);
 if (trace_handle == NULL)
    exit(1);
-while ((entry = trace_next(trace_handle))
-    != NULL) {
+while ((entry = trace_next(trace_handle)) != NULL) {
   printf("time=%s, registry=%s",
-      entry->fields[0],
-      entry->fields[1]);
+      entry->fields[0], entry->fields[1]);
 }
 trace_close(trace_handle);
 \end{verbatim}
@@ -973,12 +967,12 @@ We briefly mention some other tools/systems below, and highlight the important
 differences with WinResMon.
 
 WinResMon shares the basic monitoring functionalities with
-FileMon and RegMon tools (in Section~\ref{sec:sysinternals}).
+FileMon and RegMon tools (Sec.~\ref{sec:sysinternals}).
 However, WinResMon's
 infrastructure is integrated, and its log database is designed to assist
 system administrators in inspecting software configuration and dependencies.
 
-Strace (described in Sec.~\ref{sec:ptrace}) is a Linux/UNIX tool used to intercept and log system
+Strace (Sec.~\ref{sec:ptrace}) is a Linux/UNIX tool used to intercept and log system
 calls invoked by a process.  There is also a Microsoft Windows NT port of
 strace with similar functionality.  WinResMon differs from
 strace in that is focused more on resource usage (files, registry, etc) rather
@@ -992,9 +986,9 @@ processes and applies a specific security policy, WinResMon is meant as a
 monitoring tool to inspect resource usage and interactions among programs in a
 system.
 
-DTrace (in Section~\ref{sec:dtrace}),
-SystemTap (in Section~\ref{sec:systemtap}) and
-LBox (in Section~\ref{sec:lbox}) are
+DTrace (Sec.~\ref{sec:dtrace}),
+SystemTap (Sec.~\ref{sec:systemtap}) and
+LBox (Sec.~\ref{sec:lbox}) are
 auditing and instrumentation systems on various UNIX operating systems.  They
 are all event based auditing systems, performing a specific action only on a
 specific event.  DTrace and SystemTap allow administrators to dynamically
@@ -1020,6 +1014,19 @@ and unsupported nature of the APIs in the Microsoft Windows NT kernel.
 We would also like to further increase the efficiency of the
 logging mechanism.
 
+In Chapter~\ref{sec:vis}, we will show how WinResMon's log can be explored
+through visualization.
+While we have shown how our query API can be used to answer software
+dependency questions,
+in Section~\ref{sec:depvis}, we will show how we can visualize
+a particular type of dependency --- module dependency.
+WinResMon's log not only can be considered as a database recording
+the program-resource relation, but also can be considered as a trace
+recording program behaviours.
+In Section~\ref{sec:lviz}, we will visualize WinResMon's log in order
+to study program behaviours, including repeated patterns, abnormal events
+and behaviour differences,
+which are useful to discover various of problems.
 
 % \begin{thebibliography}{99}
 % 

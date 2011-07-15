@@ -5,6 +5,10 @@ thesis.pdf:
 	pdflatex thesis
 	pdflatex thesis
 
+.PHONY: fast
+fast:
+	pdflatex thesis
+
 .PHONY: html
 html:
 	latex2html -split 0 -info '' -dir html thesis
