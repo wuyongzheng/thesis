@@ -1,5 +1,5 @@
 \subsection{Related Work}
-\label{sec:prevworks}
+\label{sec:binint-prevworks}
 
 
 \subsubsection{Isolation Models}
@@ -10,7 +10,7 @@ A straight forward form of isolation is to have
 multiple independent systems or virtual machines (VM).
 This is useful for protecting one application against another though
 it might not protect against the PDF and WinHelp attacks discussed in
-Sec.~\ref{sec:usageattack} which are against the applications themselves.
+Sec.~\ref{sec:binint-usageattack} which are against the applications themselves.
 There is also the question of whether it is effectively feasible to 
 run each software within its own VM.
 On the one hand,
@@ -82,7 +82,7 @@ Simply allowing and denying them will lead to either insecure sandboxing or
 unusable software.
 
 \subsubsection{Signed Binaries}
-\label{sec:signing}
+\label{sec:binint-signing}
 
 There are systems \cite{halim2008lightweight,apvrille2004digsig,williams2002anti,doorn01signedexecutables,nanda2006fcd}
 that only allow signed binaries to be loaded or executed.

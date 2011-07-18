@@ -1,56 +1,5 @@
-\subsection{Windows Binary Security Issues}
-\label{sec:problems}
-
-The Windows NT operating system
-is difficult to secure
-because of its closed source and complex nature.
-To understand the issues, we first discuss how
-binaries are used in Windows followed
-by some representative attacks.
-
-\subsubsection{Binary Usage in Windows}
-
-A {\em binary} in Windows is a file containing executable code.
-Binaries in Windows occur in many contexts,
-the following is a non-exhaustive list:
-applications/executables ({\tt exe}),
-command files ({\tt com}),
-Dynamic Linked Libraries ({\tt dll}),
-ActiveX controls ({\tt ocx}),
-device drivers ({\tt drv},
-screensavers ({\tt scr}),
-control panel applets ({\tt cpl}),
-Input Method Editors ({\tt ime}),
-and codecs ({\tt acm}, {\tt ax}).
-Obviously a binary needs to be in the correct format.
-In Windows, the only way to identify a binary
-is its format, the filename extension is only a convention.
-
-A single process in Windows typically uses many binaries which
-can originate from many sources.
-For example, a software installation may introduce many binaries including
-shared libraries which can be loaded by many/all processes.
-To illustrate, even a small program like {\tt notepad}
-loads 13 binaries from 3 different directories.
-(It happens here that because the AVG antivirus is installed, the
-binary {\tt avgrsstx.dll} is also loaded).
-In contrast, {\tt Internet Explorer} on a {\em YouTube} page may load
-86 DLLs from {\tt System32}, 14 other DLLs, 3 drivers and some other
-binaries.
-A more detailed look at the sharing and dependencies of Windows binaries
-can be found in \cite{wu2010comprehending}.
-
-There are numerous mechanisms in Windows which can cause a binary to be used,
-i.e. load the binary.
-Subsequently, code in the binary may be executed.
-Some of the common mechanisms used both by legitimate software
-as well as malware are:
-DLL injection, DLL search order hijacking, Autorun/Autoplay, Autostart,
-shell extensions, Windows Services, {\tt rundll\linebreak[0]32.exe},
-and Browser Helper Objects.
-
-\subsubsection{Normal Usage versus Malicious Attacks}
-\label{sec:usageattack}
+\subsection{Normal Usage versus Malicious Attacks}
+\label{sec:binint-usageattack}
 
 A security model must be able to distinguish
 malicious attacks from normal software usage.
@@ -117,7 +66,7 @@ We highlight how the attacks behave in a similar fashion to the normal usage
 scenarios described earlier and the security mechanism needs
 to distinguish between normal usage versus an attack.
 
-\paragraph{Running Unintended Executables}
+\subsubsection{Running Unintended Executables}
 
 A common attack is to employ social engineering techniques to get
 the user to run a malware executable.
@@ -136,7 +85,7 @@ Notice that the behaviour of both a direct or file extension social
 engineering attack is similar to the regular
 software running scenario.
 
-\paragraph{Application Data with Embedded Binaries}
+\subsubsection{Application Data with Embedded Binaries}
 
 Malware binaries can be embedded within documents.
 A recent vulnerability in PDF readers \cite{pdfattack} illustrates this
@@ -147,7 +96,7 @@ Notice that the behavior in the attack
 resembles the unpack-and-run in the normal installation scenarios.
 
 
-\paragraph{DLL Attacks}
+\subsubsection{DLL Attacks}
 
 DLL attacks typically exploit some feature of an application
 to inadvertently load a malicious DLL.

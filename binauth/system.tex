@@ -1,6 +1,7 @@
-\subsection{Binary Authentication and Software IDs}
+\subsection{BinAuth and Software IDs}
 \label{sec:binauth-scheme}
 
+We now present our binary authentication system, BinAuth.
 We want a lightweight binary authentication scheme which can work
 under many settings without too much reliance on other infrastructure.
 Furthermore, it should help in the management of binaries, and incurs low overhead.
@@ -90,13 +91,13 @@ The salt expands the name space to reduce the risk of a hash function collision.
 
 \begin{figure}[tb]
 \begin{center}
-\includegraphics[scale=0.55]{binauth/hashing}
+\includegraphics[width=0.6\textwidth]{binauth/hashing}
 \caption{SignatureToMac: Deriving the MAC}
 \label{fig:hashing}
 \end{center}
 \end{figure}
 
-\subsubsection{Binary Authentication System Architecture}
+\subsubsection{BinAuth System Architecture}
 
 % \TODO{Password issues:
 % Password not stored on the machine.
@@ -111,7 +112,7 @@ The salt expands the name space to reduce the risk of a hash function collision.
 
 In the following discussion, we assume here that binaries already come 
 tagged with a software\_ID. 
-During the binary authentication set-up, preferably done immediately after 
+During the BinAuth set-up, preferably done immediately after 
 the targeted binary installation, we generate the MAC values for each binary.
 In the case where binaries are digitally signed by its developer,
 then we verify the signature and then generate the MAC for each binary.
@@ -143,7 +144,7 @@ Further security can be achieved by integrating binary authentication
 with a TPM infrastructure. We do not do so in the prototype as that is
 somewhat orthogonal.
 }
-We can also customize binary authentication on a per user basis rather
+We can also customize BinAuth on a per user basis rather
 than system-wide which is a white-list of
 binaries approved for execution.
 % Having a MAC repository like this additionally allows us to
@@ -198,7 +199,7 @@ version control and vulnerability management.
 
 \begin{figure}[tb]
 \begin{center}
-\includegraphics[scale=0.6]{binauth/verifier}
+\includegraphics[width=1.0\textwidth]{binauth/verifier}
 \caption{Verifier: The Verifier in-kernel authentication process}
 \label{fig:verifier}
 \end{center}
@@ -421,7 +422,7 @@ end procedure
 \subsubsection{Security Analysis}
 \label{sec:binauth-analysis}
 
-The security of binary authentication relies on the strength
+The security of BinAuth relies on the strength
 of the chosen hash functions (MD5, SHA-1, SHA-256) as well as
 the HMAC algorithm.
 Thus, we assume that any change in a binary can be detected through a changed MAC.
@@ -430,7 +431,7 @@ In our authentication on binary with digital signature,
 the subsequent invocations using MAC verification is sufficient 
 to ensure the authenticity of the binary.
 In other words, MAC authentications ``{\em preserve}'' the previously
-established properties of binary authentication derived from digital signature.
+established properties of BinAuth derived from digital signature.
 A subtlety comes when the certificate expires or is revoked 
 at some point in time after SignatureToMac.
 We view that the question of whether one should keep trusting the binary for execution
@@ -502,7 +503,7 @@ TOCTTOU stands for Time-Of-Check-To-Time-Of-Use.
 It refers to a race condition bug of an access control system
 where the resource is changed during the time
 of checking the resource to the time of using the resource.
-In the binary authentication context, the binary may be modified
+In the BinAuth context, the binary may be modified
 after the time it is authenticated and before the time it is executed.
 However, we observed that all binaries are exclusive-write-locked
 when it is opened.
@@ -521,8 +522,7 @@ Thus the attack is only possible when the SMB server is compromised.
 One way to prevent this is to disallow binary loading from SMB share.
 
 \item {\bf Driver Loading:}
-The binary authentication system authenticates all binaries including
-kernel driver.
+BinAuth authenticates all binaries including kernel drivers.
 This means all drivers are authenticated thus driver attacks such as
 kernel rootkits and malware drivers can be prevented.
 

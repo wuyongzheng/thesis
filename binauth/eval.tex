@@ -211,19 +211,19 @@ while uncached is the opposite.
 Our micro-benchmark opens a file for writing 100K times to
 measure the worst case overhead incurred by file modification monitoring.
 We have 3 experiments:
-(i) a clean system without binary authentication;
+(i) a clean system without BinAuth;
 %  ($CleanMod$);
-(ii) binary authentication with cache and the modified file is a binary;
+(ii) BinAuth with cache and the modified file is a binary;
 % ($BinMod$);
-and (iii) binary authentication with cache and the modified file
+and (iii) BinAuth with cache and the modified file
 is not a binary.
 %  ($DataMod$).
 
 The results for the file modification micro-benchmark
-show that for binary authentication with a cache, it
+show that for BinAuth with a cache, it
 doesn't matter whether the file being written to is a binary or not.
 Both cases incur about 60\% overhead compared to a clean system.
-Since binary authentication with no-cache has no overheads for file
+Since BinAuth with no-cache has no overheads for file
 modifications, this means that under some usage scenarios where file modification
 is very high,
 the uncached strategy may be preferable over cached even when Verifier overhead

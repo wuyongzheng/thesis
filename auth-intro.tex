@@ -1,1 +1,65 @@
-xxx \cite{wu2009esi}
+
+Securing Windows is a challenge because of its large
+attack surface which can lead to many ways where
+binaries (Sec.~\ref{sec:wi-binary}) can be loaded and subsequently executed.
+Many of the system security problems such as malware
+stem from the fact that untrusted binaries are executed.
+This is further complicated by
+software in Windows having many interactions with each other.
+These interactions are often not well understood or specified.
+\TODO{define binary integrity.}
+Our monitoring infrastructure (Sec.~\ref{sec:winresmon}) helps
+us to discover these interactions.
+With the knowledge of the interactions with binaries,
+we can tackle the security problems from the {\em binary integrity}
+point of view.
+In this chapter, we present our security system which ensures
+binary integrity in Windows.
+
+The security system has two goals. Firstly, the security objective
+is to ensure the use of trusted binaries and maintain their integrity.
+This protects against attacks which attempt to modify or remove binaries
+commonly used in malware or denial of service attacks.
+We prevent malware attacks which rely on
+getting a malicious executable to be run or
+a malicious DLL to load.
+In addition, we prevent the malware from being persistent.
+
+Secondly, the security mechanism needs to be usable with typical
+software in binary form.
+It needs to be compatible with the software life cycle of software in the
+system, i.e.
+software may be installed, then used, then updated, and 
+finally uninstalled. 
+Portions of installed software, e.g. DLLs,
+may be shared with other software. 
+Ideally, the security mechanism should be (mostly) transparent to 
+this software life cycle.
+While it may not be possible to be completely transparent/compatible 
+for arbitrary binaries, it should support the mechanisms used 
+by typical software.
+We remark that as we are concerned with
+closed source and binaries,
+approaches which change the process of installation/update,
+usually requiring (some source code), are not relevant.
+Clearly, there is a tradeoff between security and usability --
+we seek a practical middle ground with improved security while
+being compatible with typical software.
+
+This chapter is organized as follows.
+In Section~\ref{sec:binauth},
+we first present {\em BinAuth} which achieves the first goal.
+BinAuth can be used in a relatively static environment where the binaries 
+rarely change or binary changes are well managed by the system administrator.
+The aim is to have a reliable and efficient security mechanism
+to authenticate binaries.
+This joint work has been published in \cite{halim2008lightweight,wu2009esi}.
+The author of this thesis focuses mainly on designing, implementing and testing
+the kernel mechanism and the user space signing tools.
+The Software ID scheme and the hash-based message authentication code
+is designed by other team members.
+We then extend it in Section~\ref{sec:binint} to make it more usable
+in a general non-static setting.
+Our new system, BinInt, allows easy installing and updating software
+while still prevent untrusted software from running.
+The work has been published in \cite{wu2011towards}.

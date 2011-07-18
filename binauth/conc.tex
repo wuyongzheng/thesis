@@ -1,7 +1,7 @@
 \subsection{Conclusion}
 \label{sec:binauth-conc}
 
-We have shown a comprehensive system which authenticates both content and pathname
+We have shown BinAuth, a comprehensive system which authenticates both content and pathname
 for Windows to ensure that only trusted binaries are executed. 
 Unlike other operating systems, Windows poses significant challenges.
 We show that it is possible to ensure that only trusted binaries can be loaded
@@ -9,13 +9,14 @@ from files for execution.
 This can also be combined with a simple software ID
 scheme which simplifies binary version management, and dealing
 with vulnerability alerts and patches.
-Our system is lightweight and integrates well with PKI and 
+BinAuth is lightweight and integrates well with PKI and 
 trust mechanisms without
 having to rely on them.
 The overheads of our prototype are quite low when caching is is used.
 In the case of workloads with heavy file modifications, an uncached strategy might be preferable.
 The overheads are still low in this case, since the system overhead
-will be dominated by I/O rather than binary authentication, so the overall binary authentication
+will be dominated by I/O rather than binary authentication,
+so the overall binary authentication
 would still be low as a percentage of overall system overhead. 
 In summary, although this is a prototype, it significantly adds
 to the security of any Windows system but at the same time is sufficiently
