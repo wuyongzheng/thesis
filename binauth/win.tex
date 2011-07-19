@@ -39,14 +39,14 @@ performs only a small part of what is needed to run a process.
 Due to this, it is more complex to incorporate mandatory authentication in Windows.
 
 \item {\bf DLL loading:}
-To load a DLL, a process usually uses the Win32 API, {\tt LoadLib-\\rary()}.
+To load a DLL, a process usually uses the Win32 API, {\tt LoadLibrary()}.
 However, this is broken up in a similar way to process execution above.
 % In order to load a particular DLL, a process first calls
-% {\tt NtCreate-\\File()} \footnote{A process usually 
+% {\tt NtCreateFile()} \footnote{A process usually
 % just calls {\tt LoadLibrary()} Win32 API, but we refer to the Native APIs here.}
 % to open that DLL file.
 % It subsequently calls {\tt NtCreateSection()} to create a section object,
-% and then pass the section object to {\tt NtMapViewOf-\\Section()} to map the file 
+% and then pass the section object to {\tt NtMapViewOfSection()} to map the file
 % into its address space.
 
 %However, many system DLLs known as ``KnownDLLs" \cite{knowndlls},

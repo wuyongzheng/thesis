@@ -301,8 +301,8 @@ recomputed as we cannot keep track of modification to files on network shares.
 \end{enumerate}
 
 To control binary execution, we intercept the section creation action 
-({\tt NtCreate-\\Section()} system call) which is better than:
-% As also discussed in \cite{bassov}, intercepting ({\tt NtCreateSec-\\tion()}
+({\tt NtCreateSection()} system call) which is better than:
+% As also discussed in \cite{bassov}, intercepting ({\tt NtCreateSection()}
 % is a better option than two other alternatives:
 \begin{itemize}
 \item Intercepting file opening ({\tt NtCreateFile()} and {\tt NtOpenFile()}).
@@ -337,7 +337,7 @@ However, the uncached verifier will not need to perform file monitoring.
 A binary with pathname $P$ is considered modified, if the following occurs:
 \begin{itemize}
 \item $P$ is created: Hence, we monitor system call
-{\tt NtCreateFile()} and {\tt NtOpen-\\File()}.
+{\tt NtCreateFile()} and {\tt NtOpenFile()}.
 \item $P$ is opened with write access mode: the previous two
 system calls are also intercepted for this purpose.
 \footnote{An alternative way is to monitor the file (block) writing operation ({\tt NtWriteFile()}).
@@ -345,10 +345,10 @@ However, it is less efficient because file block writings take place more freque
 than file openings as one opened file for modification might be subject to 
 multiple block writings. Furthermore, it cannot capture file-memory mapping.}
 \item Another file is renamed to $P$: 
-We monitor file renaming ({\tt NtSetInformation-\\File\linebreak[0](\linebreak[0]FileRenameInformation\linebreak[0])})
+We monitor file renaming ({\tt NtSetInformationFile\linebreak[0](\linebreak[0]FileRenameInformation\linebreak[0])})
 system call.
 \item A drive containing $P$ is mounted:
-We monitor drive mounting {\tt IRP\_MJ\_VOLUME-\\\_MOUNT}.
+We monitor drive mounting {\tt IRP\_MJ\_VOLUME\_MOUNT}.
 \end{itemize}
 
 \noindent

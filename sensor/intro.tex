@@ -1,26 +1,28 @@
-The previous chapter shows software monitors that execute in the {\em host},
+Chapter~\ref{sec:mon} shows software monitors that execute in the {\em host},
 which is shared with the monitored software.
 We have showed their robustness under the assumption that the kernel is
 authentic.
 However, when the kernel is compromised, the {\em host-based} monitoring
 cannot be trusted.
-We propose {\em external monitoring}, where information is collected from
+In this chapter,
+we propose {\em external monitoring}, where information is collected from
 monitors external to the host, so that the information can be trusted
-even in a compromized host.
-We have shown\footnote{
-The work is cooperatively done by three students,
-Liming Lu, Jie Yu and me, with two supervisors Ee-Chien Chang and Roland Hock Chuan Yap.
-My part of work is on the external monitoring framework, which
-will be shown in this chapter.
-} \cite{chang2010enhancing} that this can be used
-to detect malware in a host if we correlate user interaction with host behaviour,
+even in a compromised host.
+We show that this can be used to detect malware in a host if
+we correlate user interaction with host behaviour,
 both of which are observable by our external monitor.
 In addition, the information of user interaction can be used to guide
 resource allocation, thus limiting the resource utilization of malware.
+The collaborative work has been published in \cite{chang2010enhancing}.
+The author of this thesis focuses on the monitoring framework
+(Sec.~\ref{sec:sensor-framework}),
+the detection of compute resources misuse (Sec.~\ref{sec:sensor-passwordcrack})
+and access/rate control (Sec.~\ref{sec:sensor-acrate}).
+The detection of network related misuse is done by other other collaborators.
 
 \section{Introduction}
 
-Securing computers against malware is increasingly difficult today. 
+Securing computers against malware is becoming increasingly difficult today.
 Anecdotes abound that the survival time
 of an unpatched PC running Windows XP connected to the Internet 
 is in the order of minutes~\cite{Survival1,Survival2}.
@@ -162,14 +164,14 @@ possibly noisy. Nevertheless, our experimental evaluations show
 such coarse data is already useful in identifying certain 
 mismatches between the host's and user's physical activities.
 
-The rest of this section is organized as follows. Sec.
-\ref{sec:sensor-framework} introduces the framework of integrating the data
+The rest of this chapter is organized as follows.
+Section~\ref{sec:sensor-framework} introduces the framework of integrating the data
 from external sources to the access control or intrusion detection
 logic.
-We apply the framework to malware detection in Sec.
-\ref{sec:app-malware} to demonstrate that information
+We apply the framework to malware detection in
+Section~\ref{sec:app-malware} to demonstrate that information
 external to the host enhances the detection of malware activity.
 The framework is extended to rate and access control applications in
-Sec. \ref{sec:app-ac-rate}.
-Related work is discussed in Sec. \ref{sec:sensor-related}
-and Sec. \ref{sec:sensor-conclusion} concludes.
+Section~\ref{sec:sensor-acrate}.
+Related work is discussed in Section~\ref{sec:sensor-related}
+and Section~\ref{sec:sensor-conclusion} concludes.
