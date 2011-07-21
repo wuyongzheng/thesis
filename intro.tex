@@ -1,6 +1,31 @@
 \chapter{Introduction}
 
+Software is increasingly complex with many interactions with other software
+and the operating system.
+The complex interactions make the software ecosystem very hard to understand.
+Without proper understanding,
+it is difficult to configure/maintain software and to fix problems.
+The complexity also increases the attack surface, which measures the
+bugs or features exploitable by malicious attackers.
+Operating system monitoring is an effective way to understand these
+interactions, especially when the source code is not available.
+Monitoring can also verify correctly running software or discover
+unexpected behaviours such as performance problems or malicious attacks.
+However, there are challenges with system monitoring.
+The interactions may not be well defined or understandable.
+The monitoring system itself can inevitably affect the monitored system
+in an undesirable way.
+The monitoring system cannot be trusted if the host on which it
+runs is compromised.
+Lastly the huge amount of information produced is hard to maintain and
+analyze.
+
+This introductory chapter is organized as follows.
+Section~\ref{sec:motivation} motivates the research on operating system monitoring.
+Section~\ref{sec:contribution} summarizes the contributions of our research.
+
 \section{Motivation}
+\label{sec:motivation}
 
 \TODO{merge the intro of the papers here.}
 
@@ -322,6 +347,7 @@ All these features make a challenging task to obtain unique identifiers to files
 This problem is answered in our binary authentication work (Sec.~\ref{sec:binauth}).
 
 \section{Contribution}
+\label{sec:contribution}
 
 \TODO{3 parts: monitoring (lbox, winresmon);
 software understanding (depvis, lviz);
