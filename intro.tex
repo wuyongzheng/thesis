@@ -2,39 +2,35 @@
 
 Software is increasingly complex with many interactions with other software
 and the operating system.
-The complex interactions make the software ecosystem very hard to understand.
+The complex interactions make the software ecosystem hard to understand.
 Without proper understanding,
 it is difficult to configure/maintain software and to fix problems.
 The complexity also increases the attack surface, which measures the
-bugs or features exploitable by malicious attackers.
+bugs or features exploitable by malicious attacks.
 Operating system monitoring is an effective way to understand these
-interactions, especially when the source code is not available.
+interactions.
 Monitoring can also verify correctly running software or discover
 unexpected behaviours such as performance problems or malicious attacks.
 However, there are challenges with system monitoring.
-The interactions may not be well defined or understandable.
+The interactions may not be well defined or understandable,
+especially when the source code or proper documentation is not available.
 The monitoring system itself can inevitably affect the monitored system
 in an undesirable way.
 The monitoring system cannot be trusted if the host on which it
 runs is compromised.
-Lastly the huge amount of information produced is hard to maintain and
+Lastly, the huge amount of information produced is hard to maintain and
 analyze.
 
 This introductory chapter is organized as follows.
 Section~\ref{sec:motivation} motivates the research on operating system monitoring.
+Section~\ref{sec:win-issue} discusses the some background and difficulties related
+to system monitoring in the Windows operating system.
 Section~\ref{sec:contribution} summarizes the contributions of our research.
 
 \section{Motivation}
 \label{sec:motivation}
 
-\TODO{merge the intro of the papers here.}
-
-Software is increasingly complex:
-1. hard to understand;
-2. hard to find problem;
-3. easy to introduce error
-
-Monitoring is an effective way of understanding, diagnosing and 
+\TODO{...}
 
 \section{Windows Issues}
 \label{sec:win-issue}
@@ -351,4 +347,4 @@ This problem is answered in our binary authentication work (Sec.~\ref{sec:binaut
 
 \TODO{3 parts: monitoring (lbox, winresmon);
 software understanding (depvis, lviz);
-system security (sensor, winresmon)}
+system security (sensor, binauth)}
