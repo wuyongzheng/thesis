@@ -8,6 +8,10 @@ As system grows larger and more complicated, these tasks becomes more challengin
 
 A general monitoring infrastructure needs to be
 {\em correct}, {\em secure}, {\em flexible}, and {\em efficient}.
+\TODO{transparent: fully transparent may not be achievelable.
+focus on functional transprency
+%http://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements
+}.
 By {\em correct}, the monitored events must be sound and complete, i.e.
 no events should be missed, duplicated or invented.
 The monitoring infrastructure need to be {\em secure} in both design and implementation.
@@ -46,7 +50,7 @@ However, as we discussed in Section~\ref{sec:win-issue},
 in Windows, the native calls are not documented and continuously
 changing.
 Though it is possible to monitor native calls, the output would not be
-understandable.
+generally understandable.
 WinResMon addresses the problem from a resource usage point of view.
 It monitors resource usage of all processes in the system.
 Its main use is to inspect resource access and software dependency issues.

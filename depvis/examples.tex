@@ -1,11 +1,11 @@
 \subsection{Explaining the Visualizations}
 
-\begin{figure*}[thb]
+\begin{figure}[tbh]
 \centering
-\includegraphics[width=1.0\columnwidth]{depvis/wget-function.pdf}
-\caption{DLL dependency graph of {\tt wget} grouped by functionality}
-\label{fig:wget-function}
-\end{figure*}
+\includegraphics[width=0.5\textwidth]{depvis/wget-exe-split.pdf}
+\caption{EXE dependency graph of wget}
+\label{fig:wget-exe-split}
+\end{figure}
 
 We illustrate the two dependency graphs on a small example, namely, the
 {\tt wget} program doing a download of an {\tt https} page.
@@ -17,6 +17,20 @@ grouped dependencies.
 When there is only a single EXE in the graph, it reduces to a single level
 tree. See Fig \ref{fig:boot} and \ref{fig:browsers} to see the graph
 when there are multiple EXEs.
+
+\begin{figure*}[htb]
+\centering
+\includegraphics[width=0.9\textwidth]{depvis/wget-nogroup.pdf}
+\caption{DLL dependency graph of {\tt wget} without grouping}
+\label{fig:wget-nogroup}
+\end{figure*}
+
+\begin{figure*}[thb]
+\centering
+\includegraphics[width=1.0\columnwidth]{depvis/wget-function.pdf}
+\caption{DLL dependency graph of {\tt wget} grouped by functionality}
+\label{fig:wget-function}
+\end{figure*}
 
 Fig.~\ref{fig:wget-nogroup} shows the DLL
 dependency graph for wget without grouping; while

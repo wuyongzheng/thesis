@@ -48,7 +48,7 @@ Most of the related work that we are going to introduce are kernel based.
 should execute in a lower level than the kernel, i.e. the hypervisor.
 Examples are the virtual machine monitors.
 The recent Intel and AMD processors support hardware virtualization
-features which can virtualize and monitor unmodified kernel with almost
+features which can virtualize and monitor an unmodified kernel with almost
 no performance penalty.
 \item The {\em instrumentation} technique is used to get instruction
 level monitoring such as memory load, memory store, and branch events.
@@ -181,14 +181,14 @@ and signals,
 i.e. \code{ptrace} and \code{/proc} disable tracing 
 on setuid/setgid executables.  
 One could write a simple C program as in Figure~\ref{fig:ptrace-bug}
-to escape from ptraceing.
+to escape from \code{ptrace}.
 After several iterations, some
 child processes will not be traced by the tracing program.
-As well as \code{ptrace(2)}, \code{/proc}
-brings side-effect to the traced process.
-When a traced process calls \code{setuid(2)},
+As well as \code{ptrace}, \code{/proc}
+brings a side-effect to the traced process.
+In both systems, when a traced process calls \code{setuid(2)},
 the call will fail because the tracing process would have insufficient
-privileges to the setuided process.
+privileges to the \code{setuid} process.
 Because of their subtleties and intrinsic difficulties,
 \code{ptrace} and \code{/proc} are not suitable for general purpose user-level
 monitoring although they may be useful in specific situations.
@@ -265,14 +265,14 @@ The tools are closed source, so we study them by monitoring them
 using our monitoring tool WinResMon (in Sec.~\ref{sec:winresmon}).
 We found that they work by intercepting system calls and making
 use of the kernel file system filter API.
-Up on execution, a kernel driver is created in a temporary directory.
+Upon execution, a kernel driver is created in a temporary directory.
 The driver is then loaded into the kernel and start to intercept
 the kernel operations.
 A named pipe is used to transmit event records.
 
 The monitoring tools are standalone GUI programs, which do not
 provide API to be used by other software.
-We have observed that when events are fast generated, all tools
+We have observed that when events are rapidly generated, all their tools
 can drop events.
 The details are covered in in Section~\ref{sec:resmon-overhead}.
 
@@ -317,7 +317,7 @@ Before we describe SystemTap, let us first look at its predecessor
 DProbes \cite{moore2001dprobes} and the underlying KProbes \cite{mavinakayanahalli2006kprobes},
 which was introduced earlier than DTrace.
 
-KProbes is a Linux kernel framework which allows dynamic instrument
+KProbes is a Linux kernel framework which allows dynamic instrumentation
 of kernel code.
 The KProbes API consists of two components, the probe registration
 functions and the probe activation functions.

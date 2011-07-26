@@ -1,9 +1,9 @@
 \subsubsection{A Software Build Case Study}
 \label{sec:build}
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.0\columnwidth]{lviz/make-fail.png}
+\includegraphics[width=0.8\columnwidth]{lviz/make-fail.png}
 \caption{Event-ordered VDP comparing a successful (x-axis)
 software build process and a failed (y-axis) one.
 %DP matching: program, operation and value (pathname);
@@ -25,16 +25,13 @@ Bar3 color : & cyan $\rightarrow$ reading {\tt .c} files;\\
 \end{figure}
 
 \begin{figure*}[htb]
-\begin{center}
 \includegraphics[width=1.0\textwidth]{lviz/make-pp.png}
-\caption{Program point event-ordered VDP of project build: pseudo program point trace (y-axis).
-}
+\caption{Program point event-ordered VDP of project build: pseudo program point trace (y-axis).}
 DP match: program name + program point;
 DP color: black $\rightarrow$ any;
 Barcode coloring rules are the same as in Fig.~\ref{fig:make-fail};
 Bar3 in y-axis is undefined as the pseudo trace does not have operation type.
 \label{fig:make-pp}
-\end{center}
 \end{figure*}
 
 We now apply visualization to diagnose program failure.
