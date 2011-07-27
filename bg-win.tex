@@ -12,7 +12,7 @@ We now discuss some of the these which are related to the thesis.
 The Windows operating system is a closed source system.
 Firstly, the kernel is closed source.
 This makes kernel monitoring very difficult.
-Dynamic instrumentation tools like DTrace and SystemTap do not exist because
+Dynamic instrumentation tools like DTrace and SystemTap are not relevant because
 their probes are specific to code points or functions in the kernel.
 Without understanding the purpose of each function, probes are meaningless.
 It makes kernel extension difficult as well.
@@ -29,7 +29,7 @@ Unfortunately, there is no officially supported technique to achieve this.
 
 Secondly, the semantic of system calls is closed.
 Unlike UNIX, programs do not directly invoke systems in Windows.
-They call higher level APIs, which may call some other APIs, which call
+They call higher level APIs, which may call some other APIs, which make
 the system call.
 The association between higher level APIs and the systems is complex and
 again closed.
@@ -44,8 +44,8 @@ However, not all programs follow the documented API.
 To make reliable monitoring, system call have to be monitored.
 
 Thirdly, the interaction among the components is closed.
-Windows is a micro-kernel OS.
-Some tasks, such as networking, printing and graphical interface are partially
+Windows has microkernel operating system features which make
+some tasks, such as networking, printing and graphical interface be partially
 handled by user space services.
 In other words, a process can perform tasks on behave of another process.
 This feature can be exploited to circumvent monitoring or
@@ -135,7 +135,7 @@ to decide if the operation should be allowed.
 
 A software management system controls the installation, updating and
 removal of software in the operating system.
-Open source OS, such as Linux, commonly uses a package manage system.
+Open source OS, such as Linux, commonly uses a package management system.
 Examples are the Redhat Package Manager (RPM) for Redhat and Fedora Linux,
 the Debian package management system for Debian and Ubuntu Linux.
 Mobile operating systems such Apple's iOS and Google's Android have
@@ -163,7 +163,7 @@ For example, some software install binaries in the \path{C:\windows\system32}
 directory which is used to store core system files.
 Even worse, a software installer can overwrite binaries installed by another
 software.
-Secondly, the software dependencies is unknown.
+Secondly, the software dependencies are unknown.
 Package managers such as RPM keeps detailed and accurate
 package dependencies and conflicts
 so that when installing a software, it installs its dependencies as well.
@@ -171,11 +171,34 @@ Because Windows lacks this knowledge, software tends to bundle its dependencies.
 This introduces a lot of duplicates in the system and makes software
 update difficult.
 
+Even with software management systems, the problems cannot be fully solved
+because the systems do not provide mandatory protection.
+They can only maintain the software installation under the assumptions that
+(i) the software package is centrally created and signed by
+a single distributer, e.g. RedHat;
+(ii) software is installed properly using their tools; and
+(iii) the installed files are not modified outside the
+software management system.
+However, any of the assumption can be false.
+There is often some software that is not included by the distributor,
+either because it is new or it does not satisfy the distributor's
+requirement.
+Third party software packages are then made.
+Examples are the Google Chrome web browser for most Linux distributions
+and the Cydia application repository for Apple's iOS.
+These packages can conflict with existing or future first party packages.
+Package signature can partially solve the problem, but users usually
+ignore the signature.
+The software management systems do not provide mandatory protection
+mechanisms to prevent installed files from being modified.
+Once the root privilege (or any software installation equivalent privilege)
+is acquired, any file from any software can be modified.
+
 \subsection{Binaries}
 \label{sec:wi-binary}
 
 Several of our work, including module dependency (Sec.~\ref{sec:depvis})
-and binary authentication (Chap.~\ref{sec:auth}) concern about binaries in Windows.
+and binary integrity (Chap.~\ref{sec:auth}) focus on binaries in Windows.
 Throughout the thesis, we use the term binary to denote a file that contains
 native executable code and can be directly loaded by the operating system kernel.
 There are generally three types of binaries in modern operating systems.
@@ -184,8 +207,8 @@ Executable files in Windows are conventionally (not necessarily)
 given the \code{.exe} file extension.
 % Executable files in UNIX variants are usually located in \path{/bin} or
 % {\path/usr/bin}.
-A process loads one and only one executable file.
-A {\em dynamic linked library} (or DLL) contains native code which are designed
+A process loads a single executable file.
+A {\em dynamic linked library} (or DLL) contains native code which is designed
 to be shared by different software.
 A process can load many DLLs and a DLL can be loaded by many processes.
 In Windows, DLLs are usually given the extension \code{.dll}, but other extensions
@@ -272,28 +295,34 @@ operating system settings like TCP buffer size;
 per-user configurations like desktop background;
 and software configurations like default font size
 for Adobe Photoshop.
-The centrally managed configuration database is
-a unique feature of Windows.
-Our WinResMon (Sec.~\ref{sec:winresmon}) benefits from this feature
-by monitoring the registry related system calls.
+The centrally managed configuration database is a unique\footnote{
+There are other central configuration systems such as
+GConf for GNOME applications.
+However, they are not as widely adopted as the registry in Windows.
+} feature of Windows.
+UNIX variants usually manage configurations in a per application basis.
+Each application keeps its own configuration file (typically a
+text file in \path{/etc/} or the home directory).
+Our WinResMon (Sec.~\ref{sec:winresmon}) monitors the registry
+related system calls.
 It can monitor program accessing {\em individual} settings.
-If a text based configuration file,
-which is common in UNIX variants, is used, this is much more difficult
+If a text based configuration file is used, this is much more difficult
 and may require data flow analysis.
+In this sense, WinResMon benefits from this feature.
 In Section~\ref{sec:lviz-study}, we will use our LViz to study the
 software behaviours of accessing configurations by visualizing the
 log generated by WinResMon.
 
-Windows has a different way of organizing file system hierarchy.
+Windows has a different way in organizing file system hierarchy.
 While UNIX variants organize the file system in a single tree,
-Windows adopts the notion of drive or volume.
+Windows adopts the notion of drive (or volume).
 Each drive contains a septate file system tree, thus all drives
 form a file system forest.
 Historically, file and directory names are constrained by the 8.3
 standard,
 i.e. maximum eight letters name with three letters extension.
 Later versions of Windows allow longer name, but for backward
-compatibility, each long file name is automatically assigned a
+compatibility, each long file name is automatically assigned by kernel a
 8.3 name, so that it can be accessed by legacy software.
 For example, \path{C:\Program Files} is equipment to \path{C:\PROGRA~1}.
 This feature is often exploited to circumvent security systems with

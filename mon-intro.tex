@@ -1,3 +1,13 @@
+\rule{\textwidth}{1pt}
+{\em
+This chapters shows our two monitoring infrastructures ---
+LBox\cite{wu2005user} and WinResMon\cite{ramnath2006winresmon}.
+They will be used as the underlying monitoring systems for our other works
+in later chapters.
+}\\
+\rule{\textwidth}{1pt}
+\medskip
+
 System monitoring is an important task on ensuring a correct running
 system.
 It can be used to confirm or verify the correctness of a running system;
@@ -7,21 +17,36 @@ and find security problems.
 As system grows larger and more complicated, these tasks becomes more challenging.
 
 A general monitoring infrastructure needs to be
-{\em correct}, {\em secure}, {\em flexible}, and {\em efficient}.
+{\em correct}, {\em secure}, {\em transparent}, {\em flexible}, and {\em efficient}.
+By {\em correct}, the monitored events must be sound and complete, i.e.
+no events should be missed, duplicated or invented.
+In some situation, events can be generated faster than the monitor can handle.
+In this case, a choice must be made to either discard the events
+or suspend the monitored program.
+When we monitor for security purpose, the latter is preferred.
+However, this could affect the monitored software and sometimes may even
+cause dead lock.
+The Solaris DTrace (Sec.~\ref{sec:dtrace}) adopts the former for the
+reliability and performance of the monitored software.
+We believe that a monitoring system should let the user make the choice,
+because different scenarios may have different trade-off.
+
 \TODO{transparent: fully transparent may not be achievelable.
 focus on functional transprency
 %http://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements
 }.
-By {\em correct}, the monitored events must be sound and complete, i.e.
-no events should be missed, duplicated or invented.
+
 The monitoring infrastructure need to be {\em secure} in both design and implementation.
 For example, it should not leak confidential information to low privilege users.
 It should be carefully implemented so that a malicious monitored
 software would not exploit the infrastructure.
+
+
 By {\em flexible}, the infrastructure should be sufficiently general to
 handle different problems.
 For example, an API can be used to extend the monitored events for future software.
 A filter language can be used pre-process events.
+
 By {\em efficient}, the infrastructure should not introduce too much
 overhead on the monitored software.
 An observer is part of the system and changes the system, similarly,
