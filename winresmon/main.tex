@@ -173,11 +173,11 @@ Query and user-log API provide the interface to the trace database.
 
 \subsubsection{The Logger}
 
-The logger consists of a system call (syscall) interceptor and a trace
-generator module.  The syscall interceptor is an in-kernel driver which
+The logger consists of a system call interceptor and a trace
+generator module.  The system call interceptor is an in-kernel driver which
 monitors system calls made by each process and sends the monitored event
 information to the trace generator.  The trace generator is a user-space
-service (daemon) which collects event information sent from the syscall
+service (daemon) which collects event information sent from the system call
 interceptor and generates resource access traces.  Ideally, the logger is
 meant to run {\em all the time} so as to record the entire life cycle of how
 resources are used by software.\footnote{ One might only run the
@@ -568,8 +568,8 @@ The information flow is as follows:
 \item A sample program {\small\tt iexplore.exe} calls
 {\small\tt CreateFile("\path{C:\WINDOWS\system32\Macromed\Flash\Flash8.ocx}", READ, ...)}.
 \item This is intercepted by our system call interceptor
-which passes the parameters to the original syscall handling routine.
-\item The syscall handling routine returns the file handle.
+which passes the parameters to the original system call handling routine.
+\item The system call handling routine returns the file handle.
 \item The handle, together with the system call parameters are then sent to
 the trace generator.
 \item As the call is successful, the trace generator updates 
@@ -600,8 +600,8 @@ could be discrepancies and mismatches between API use at the Win32 level and
 native level.  To ensure accuracy, WinResMon intercepts system calls at the
 native API level.
 
-WinResMon implements the syscall interceptor by means of a kernel mode driver.
-The driver captures syscall requests made by a process by ``hooking'' the
+WinResMon implements the system call interceptor by means of a kernel mode driver.
+The driver captures system call requests made by a process by ``hooking'' the
 native system calls as described in \cite{ddj-nthooking}.  Appendix 1 lists the
 system calls intercepted by WinResMon.  We found these to be the most common
 system calls arising from file, registry, IPC, synchronization, and process
