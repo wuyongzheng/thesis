@@ -1,3 +1,79 @@
 \chapter{Summary}
 
-summary
+Operating system monitoring is an essential method of obtaining
+information on running operating systems.
+The information can be used to understand programs or
+the operating system kernel.
+It can be used to verify correctness of the execution or
+discover problems such as performance bottlenecks and security flaws.
+This thesis presents our monitoring infrastructures and uses them to solve
+various problems on software comprehension, software diagnostics and
+system security.
+
+We first present two monitoring infrastructures, LBox and WinResMon.
+LBox is a monitoring infrastructure on UNIX variants such as Linux.
+It features novel user-level monitoring and recursive monitoring, which
+make LBox safe to be used by unprivileged users in a multi-user environment.
+It is light-weight as it can be implemented with very little kernel patching;
+while its performance is comparable to state of the art monitoring systems
+such as Solaris DTrace.
+WinResMon is a resource usage monitoring infrastructure for Windows.
+The closed source nature makes Windows internals obscure.
+Traditional system call based monitoring would not make sense
+because the semantics of system call names and parameters are not available.
+Resource-based monitoring, in contrast,
+monitors software behaviour from its resource usages such as
+file/registry, network and process/thread operations.
+As an infrastructure, WinResMon can be used to build tools for
+custom queries by system administrators.
+Our benchmarking shows that WinResMon is reliable and
+is comparable to other popular tools.
+
+Our two infrastructures are host-based, i.e.
+the monitoring system and the monitored software run in the same host.
+If the kernel of the host is compromised,
+which is the case in Rootkit montoring,
+the information from the monitor cannot be trusted.
+We propose external monitoring which obtains information from entities,
+such as network routers and environment sensors, that are outside the host.
+We use the sensors to monitor human user presence and correlate
+this information with network traffic to detect malware in the host.
+More over, we mitigate the impact of malware by limiting its resource usage,
+which is done by adapting WinResMon from resource usage monitoring to
+resource usage control.
+
+With the large amount of information obtained by our system monitor,
+we have developed techniques to visualize it.
+We use system traces together with function call trace to visualize
+software module dependencies.
+As the number of modules can be very large,
+we developed a number of ``zooming in'' techniques including
+grouping of modules; filtering by causality;
+and the ``diff'' of two dependencies.
+Our second visualization, named \code{lviz}, discovers patterns and anomalies.
+It is highly configurable to suit different purposes.
+As shown in our case studies,
+it can be used for software failure diagnostics,
+analysing performance issues and other strange behaviours.
+
+Many of the system security problems such as malware stem from the fact that
+untrusted binaries are executed.
+Since our WinResMon monitors file system related information flow,
+we can tackle the binary trustworthiness from the information
+flow point of view, similar to the Biba Integrity Model.
+In short, low integrity process should not modify high integrity binary and
+high integrity process should not load low integrity binary.
+We achieve this goal in two steps.
+We first implement a secure and efficient {\em binary authentication} system
+which only allows binaries in a white-list to be loaded.
+We then apply it on our {\em binary integrity} security model.
+The security model prevents binary related attacks such as DLL planting,
+drive-by downloading and phishing attacks;
+while it is usable under typical usage scenarios including
+software running, installation, updating and development.
+
+Many parts of the thesis is implemented in Windows because of the great
+varity of software and number of users which also attract many attacks.
+The closed source nature also makes the monitoring challenging and
+demanding.
+However, the idea can be applied on other operating systems.
