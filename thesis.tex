@@ -24,6 +24,25 @@
   \medskip
 }
 \newtheorem{definition}{Definition}
+\newenvironment{tightitemize}{
+% \vspace{-2mm}
+\begin{itemize}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{
+% \vspace{-0.5mm}
+\end{itemize}}
+\newenvironment{tightenumerate}{
+% \vspace{-2mm}
+\begin{enumerate}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{
+% \vspace{-0.5mm}
+\end{enumerate}}
+
 
 %\setcounter{secnumdepth}{3}
 

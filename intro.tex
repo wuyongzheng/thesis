@@ -1,7 +1,7 @@
 \chapter{Introduction}
 
-Software is increasingly complex with many interactions with other software
-and the operating system.
+Software is increasingly complex with many interactions among
+different pieces of software and the operating system.
 The complex interactions make the software ecosystem hard to understand.
 Without proper understanding,
 it is difficult to configure/maintain software and to fix problems.
@@ -9,17 +9,52 @@ The complexity also increases the attack surface, which measures the
 bugs or features exploitable by malicious attacks.
 Operating system monitoring is an effective way to understand these
 interactions.
-Monitoring can also verify correctly running software or discover
-unexpected behaviours such as performance problems or malicious attacks.
+Monitoring is used in many different areas:
+
+\begin{tightitemize}
+\item Monitoring can help software comprehension such as studying the control
+flow and module dependency.
+\item We can observe the expected behaviour in order to
+verify the correctness of the execution.
+\item Similarly we can look for unexpected behaviour in order to discover problems.
+\item In the other direction, if we have a specific problem such as software failure,
+incorrect output or performance problems, we can diagnosis the problem by
+studying the behaviour and locate the root cause.
+\item Some intrusion detection systems works by monitoring malicious
+behaviours in the operating system.
+\end{tightitemize}
+
 However, there are challenges with system monitoring.
+
+\begin{tightitemize}
+\item
 The interactions may not be well defined or understandable,
-especially when the source code or proper documentation is not available.
+especially when the source code or proper documentation is not available
+in operating systems such as Windows.
+However, we can still discover behaviours such as repeated patterns.
+Even when the source code is available, it can be difficult to understand
+because of its large size and dependency with other software.
+\item
+In quantum physics, the observer changes the system it observers.
+Software monitoring also have the same problem.
 The monitoring system itself can inevitably affect the monitored system
 in an undesirable way.
+\item
 The monitoring system cannot be trusted if the host on which it
 runs is compromised.
-Lastly, the huge amount of information produced is hard to maintain and
+Reliable monitoring is always based some assumptions.
+Most existing monitoring systems relies on the integrity of
+the operating system kernel.
+These systems cannot be used to detect kernel malware such as Rootkit.
+\item
+Depending on the level of detail, the system call level trace can be
+several megabytes per second and the instruction level trace can be
+several gigabytes per second.
+Moreover, problems such as tracking origin of files require keeping the trace
+over sufficiently long period.
+The huge amount of information is hard to maintain and
 analyze.
+\end{tightitemize}
 
 This introductory chapter is organized as follows.
 Section~\ref{sec:motivation} motivates the research on operating system monitoring.

@@ -17,28 +17,29 @@ make LBox safe to be used by unprivileged users in a multi-user environment.
 It is light-weight as it can be implemented with very little kernel patching;
 while its performance is comparable to state of the art monitoring systems
 such as Solaris DTrace.
-WinResMon is a resource usage monitoring infrastructure for Windows.
+Our second infrastructure, WinResMon, monitors resource usage in Windows.
 The closed source nature makes Windows internals obscure.
 Traditional system call based monitoring would not make sense
-because the semantics of system call names and parameters are not available.
+because the semantics of system call names and parameters are not
+generally understandable.
 Resource-based monitoring, in contrast,
-monitors software behaviour from its resource usages such as
+monitors software behaviour on its resource usages such as
 file/registry, network and process/thread operations.
-As an infrastructure, WinResMon can be used to build tools for
-custom queries by system administrators.
+As an infrastructure, WinResMon supports APIs which
+can be used to build tools for system administrators.
 Our benchmarking shows that WinResMon is reliable and
 is comparable to other popular tools.
 
 Our two infrastructures are host-based, i.e.
 the monitoring system and the monitored software run in the same host.
 If the kernel of the host is compromised,
-which is the case in Rootkit montoring,
+which is the case for Rootkit,
 the information from the monitor cannot be trusted.
 We propose external monitoring which obtains information from entities,
 such as network routers and environment sensors, that are outside the host.
 We use the sensors to monitor human user presence and correlate
 this information with network traffic to detect malware in the host.
-More over, we mitigate the impact of malware by limiting its resource usage,
+Moreover, we mitigate the impact of malware by limiting its resource usage,
 which is done by adapting WinResMon from resource usage monitoring to
 resource usage control.
 
