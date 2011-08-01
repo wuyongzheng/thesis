@@ -1,4 +1,27 @@
 \chapter{Conclusions}
 \label{sec:concl}
 
-Conclusions
+This chapter concludes this thesis.
+We summarize the contributions of this thesis in Section~\ref{sec:concl-summary},
+and discuss some future directions in Section~\ref{sec:future}.
+
+\section{Summary of the Thesis}
+\label{sec:concl-summary}
+
+In this thesis, we propose our monitoring frameworks: LBox and WinResMon.
+The information collected by them can be used to solve many problems including
+software comprehension, fault diagnosis and system security.
+Based on the frameworks, we developed two visualizations: module dependency
+visualization and \code{lviz}.
+As the frameworks are resource-based, we can easily adapt them to control
+the access of resources in system and apply them on system security.
+Our binary integrity system prevents loading of untrusted binary by monitoring
+file access in the operating system.
+To detect malware when the operating system kernel is possibly compromised,
+we correlate information gathered from external sensors and network routers.
+
+\paragraph{LBox}
+We show our user-level logging framework LBox.
+
+\section{Future Work}
+\label{sec:future}
