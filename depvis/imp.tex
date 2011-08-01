@@ -41,8 +41,7 @@ kernel callbacks and multithreading.
 For example, a naive implementation which matches counts of call and
 return instructions will fail when a {\tt longjmp()} is used
 since that means that some function does not return.
-We make use of stack and return address matching to do this
-tracking, which is not described in detail for lack of space.
+We make use of stack and return address matching to do this tracking.
 
 In Windows, execution can be interrupted to switch to a new context.
 When execution in the new context completes, execution of the original

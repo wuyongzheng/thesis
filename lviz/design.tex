@@ -19,8 +19,7 @@ is not specific to Windows.
 
 Our objective is to visualize detailed system traces.
 In the rest of the section, we will shorten system trace to simply trace.
-Our traces are obtained with an enhanced version of
-WinResMon~\cite{ramnath2006winresmon} which
+Our traces are obtained with WinResMon (Sec.~\ref{sec:winresmon}) which
 captures all operations performed by the Windows kernel
 from all processes.
 % Our aim is to capture the relevant operations which can be attributed
@@ -34,11 +33,11 @@ from all processes.
 % only the Win32 API is documented and not the microkernel API.
 % We use WinResMon~\cite{ramnath2006winresmon} to capture system trace.
 
-A WinResMon Windows trace consists of four classes of events
+A WinResMon trace consists of four classes of events
 due to operations on processes, files, network and the registry.
 An event contains the following properties: (the example events
-in Fig. \ref{fig:logex} use the ordering below)
-\begin{itemize}
+in Figure \ref{fig:logex} use the ordering below)
+\begin{tightitemize}
 \item {\bf PID/TID} is the ID of the process/thread which
 performs the operation.
 %Since it is reusable, it is not unique over time.
@@ -79,7 +78,7 @@ excluding functions in libraries,
 but one could also use the full stack trace.
 This information is useful to associate a program point in the
 application code with the event.
-\end{itemize}
+\end{tightitemize}
 
 % There are 46 operation types in total, 6 related to file,
 % 7 related to registry, 5 related to process, and 28 related to network.

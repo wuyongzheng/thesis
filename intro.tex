@@ -87,7 +87,8 @@ in Windows are Dynamic Link Libraries (DLL).
 
 With a monitoring system that keeps track of module creation and usage,
 we can heuristically answer the question whether a module can be removed.
-When software stop working because of a missing or incompatible module,
+In addition,
+when software stops working because of a missing or incompatible module,
 we can look at the module updating history to identify which software
 uninstall or update causes it.
 
@@ -95,11 +96,13 @@ uninstall or update causes it.
 
 We often encounter situations where a program suddenly stops working after
 configuration changes, software updates or some unknown operations.
-Another situation is that the program works in one computer but not in
+A similar situation is that the program works in one computer but not in
 another computer.
-For example, a program may execute very slowly in one of the computers.
+For example, a program may execute very slowly in one of the computers,
+but not in others.
 One way to diagnose this problem it to compare the log or execution trace
 of the program.
+The root cause is probably located at the point where the two trace deviates.
 
 \item {\em Which files are infected by virus?}
 
@@ -122,7 +125,7 @@ This brings the challenge of maintaining the growing log.
 Secondly, the infected files are not only the files directly modified by
 the main virus executable.
 The virus may create additional executables or use shared libraries to
-hijack other software.
+hijack other software, which in turn hijacks more software.
 This brings us the idea of information flow tracking in the system.
 \end{enumerate}
 
@@ -386,7 +389,7 @@ demanding.
 However, the idea can be applied on other operating systems.
 
 The following are published works in chronological order
-by the author during the author's doctoral candidature.
+by the author during his doctoral candidature.
 Entries preceded by $\bigcirc$ are not related to this thesis.
 
 \begin{tightenumerate}

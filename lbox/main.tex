@@ -124,8 +124,7 @@ those processes.
 In what follows, we describe the design of our monitoring framework and
 portions of the API. The API is actually a user library which provides
 a convenient interface to the kernel monitoring interface.
-Due to lack of space, we will cannot give all the underlying
-details but rather illustrate by example.
+Instead of documenting the underlying details, we illustrate by examples.
 
 \subsubsection{The Monitor Process Specification}
 
@@ -213,7 +212,7 @@ Our events are specified on system resources or objects together with their
 associated operations. 
 We feel this is more declarative than a system call approach
 and makes it easier to specify the events of interest.
-Due to lack of space, we will focus on file objects and briefly mention
+We will focus on file objects and briefly mention
 other important system objects.
 Common information which can be specified
 for all types of events are:
@@ -240,7 +239,7 @@ An event can also specify that reliable monitoring is not needed ---
 this means that the kernel can choose to drop the event if the 
 event buffer is currently full.
 This would mean that the monitored processes do not have to be suspended
-and thus higher thruput at the cost of losing some events.
+and thus higher throughput at the cost of losing some events.
 
 % for not so important events where we want to allow
 % the monitored processes to continue execution.
@@ -251,9 +250,9 @@ and thus higher thruput at the cost of losing some events.
 % of interesting events, namely those on
 % files, sockets and processes.
 
-\noindent
-{\bf File Objects:} \\
+\paragraph{File Objects:}
 A file event specification consists of:
+
 \begin{enumerate}
 
 \item {\em file pathname}:
@@ -278,10 +277,10 @@ This is useful because sometimes we want to audit file access
 For example, we are interested in the file access {\em outside}
 \code{/var/www} by the web server process.
 We can combine two file event specifications to achieve this.
-\begin{enumerate}
+\begin{tightenumerate}
 \item \code{(/, SELF|SUBDIRECTORIES, R|W|X)}
 \item \code{(/var/www, IGNORE, R|W|X)}
-\end{enumerate}
+\end{tightenumerate}
 
 The way multiple file specifications are treated is that when
 more than one file event specifications matches the file access,
@@ -343,105 +342,95 @@ not containing symbolic links with
 the same semantics as \code{realpath(3)}.
 \end{enumerate}
 
-\noindent
-{\bf Other Objects}: \\
-Other than file objects, we can monitor events on other important system
-objects such as sockets and processes. Due to lack of space, we can
-only briefly summarize them. Socket specifications allow
-the monitoring of interprocess communication and networking.
-Process objects allow monitoring of process operations
-such as process creation, signals, setuid operations.
+\paragraph{Socket Objects:}
+Socket specifications allow the monitoring of network operations and
+interprocess communication. An address specification of IP address and
+port applies for TCP and UDP sockets with ranges and masks.
+Special operations specific
+to sockets apply such as listen, accept, etc.
+The return information includes also the file descriptor and address.
 
-% Socket specifications allow the monitoring of network operations and
-% interprocess communication. An address specification of IP address and
-% port applies for TCP and UDP sockets with ranges and masks.
-% Special operations specific
-% to sockets apply such as listen, accept, etc.
-% The return information includes also the file descriptor and address.
+The socket event specification specifies whether the process
+can use interprocess communication.
+It can take the following parameters.
+\begin{enumerate}
+\item {\em network family}:
+This can be tcp and udp.
+Note that Unix socket is not included here
+because the address space of Unix socket is quite different from IP address.
 
-% The socket event specification specifies whether the process
-% can use interprocess communication.
-% It can take the following parameters.
-% \begin{enumerate}
-% \item {\em network family}:
-% This can be tcp and udp.
-% Note that Unix socket is not included here
-% because the address space of Unix socket is quite different from IP address.
-% 
-% \item {\em operation type}:
+\item {\em operation type}:
+This can be create, connect, listen, accept, send and recv.
+\begin{tightenumerate}
+\item {\tt create}: Socket creation event.
+\item {\tt connect}: Client socket connection event.
+\item {\tt listen}: Server socket listen event.
+Note that local address range can be specified,
+thus this operation type monitors both {\tt bind(2)} and {\tt listen(2)}
+system calls.
+\item {\tt accept}: Server socket {\tt accept(2)} event.
+Remote address can be retrieved in the event.
+\item {\tt send} and {\tt recv}: Can be used for monitoring network traffic.
+\end{tightenumerate}
+
+% \item Operation type.
 % This can be create, connect, listen, accept, send and recv.
-% \begin{enumerate}
-% \item {\tt create}: Socket creation event.
-% \item {\tt connect}: Client socket connection event.
-% \item {\tt listen}: Server socket listen event.
-% Note that local address range can be specified,
-% thus this operation type monitors both {\tt bind(2)} and {\tt listen(2)}
-% system calls.
-% \item {\tt accept}: Server socket {\tt accept(2)} event.
-% Remote address can be retrieved in the event.
-% \item {\tt send} and {\tt recv}: Can be used for monitoring network traffic.
-% \end{enumerate}
-% 
-% % \item Operation type.
-% % This can be create, connect, listen, accept, send and recv.
-% % Note that "bind" is included in "listen".
-% 
-% \item {\em address range}:
-% This can be an address range of ipv4 ip address + port number.
-% This only applies to tcp and udp socket and the connect, listen, and accept operation.
-% \end{enumerate}
-% 
-% In return, besides the common information,
-% the following information can be included.
-% Note that most of them are specific to operations.
-% 
-% \begin{enumerate}
-% \item {\em file descriptor} can be used by the monitor to identify sockets.
-% \item {\em address} is specific to {\tt connect()}, {\tt bind()} and
-% {\tt accept}.
-% \end{enumerate}
+% Note that "bind" is included in "listen".
 
-% \noindent
-% {\bf Processes Objects}: \\
-% The process event specification defines what kinds of operations on processes
-% by the monitored processes should be audited. This includes process
-% creation, signals, setuid operations, prctl. The return information
-% includes the target process id and signal number for signal operations.
+\item {\em address range}:
+This can be an address range of ipv4 ip address + port number.
+This only applies to tcp and udp socket and the connect, listen, and accept operation.
+\end{enumerate}
 
-% This type of event specifies whether a process may signal other processes
-% or affect process.
-% Operations include System V IPCs, prctl, ptrace, setuid and fork.
-% The process policy can take the following parameters.
-% \begin{enumerate}
-% \item {\em operation type}:
-% E.g. fork, signal or prctl.
-% 
-% \item {\em target process}:
-% It applies to signal, prctl and ptrace,
-% because these operations have a target process.
-% However, the fork and setuid operations do not have a target process.
-% This parameter is essentially a signed integer.
-% 
-% \begin{enumerate}
-% \item zero means all processes.
-% \item positive number $n$ means a specific process with $pid = n$
-% \item negative number $-n$ means all child processes of a process with $pid = n$
-% \end{enumerate}
-% \end{enumerate}
-% 
-% In return, besides the common information,
-% the following information can be included.
-% Note that most of them are specific to operations.
-% 
-% \begin{enumerate}
-% \item {\em target pid}:
-% Note that, for {\tt fork()}, this is the pid of newly created process.
-% 
-% \item {\em signal}:
-% It is specific to {\tt kill()}.
-% 
-% \end{enumerate}
-%% \end{enumerate}
+In return, besides the common information,
+the following information can be included.
+Note that most of them are specific to operations.
+
+\begin{enumerate}
+\item {\em file descriptor} can be used by the monitor to identify sockets.
+\item {\em address} is specific to {\tt connect()}, {\tt bind()} and
+{\tt accept}.
+\end{enumerate}
+
+\paragraph{Process Objects:}
+The process event specification defines what kinds of operations on processes
+by the monitored processes should be audited. This includes process
+creation, signals, setuid operations, prctl. The return information
+includes the target process id and signal number for signal operations.
+
+This type of event specifies whether a process may signal other processes
+or affect process.
+Operations include System V IPCs, prctl, ptrace, setuid and fork.
+The process policy can take the following parameters.
+\begin{enumerate}
+\item {\em operation type}:
+E.g. fork, signal or prctl.
+
+\item {\em target process}:
+It applies to signal, prctl and ptrace,
+because these operations have a target process.
+However, the fork and setuid operations do not have a target process.
+This parameter is essentially a signed integer.
+
+\begin{tightenumerate}
+\item zero means all processes.
+\item positive number $n$ means a specific process with $pid = n$
+\item negative number $-n$ means all child processes of a process with $pid = n$
+\end{tightenumerate}
+\end{enumerate}
+
+In return, besides the common information,
+the following information can be included.
+Note that most of them are specific to operations.
+
+\begin{enumerate}
+\item {\em target pid}:
+Note that, for {\tt fork()}, this is the pid of newly created process.
+
+\item {\em signal}:
+It is specific to {\tt kill()}.
+
+\end{enumerate}
 
 \subsubsection{The Monitor Operational Model}
 
@@ -1011,12 +1000,12 @@ Our prototype Linux implementation makes use of LSM \cite{wright2002linux} and
 version 2.6.10 of the kernel,
 and thus is convenient to install
 as it consists of loadable kernel modules.
-The interface to the kernel is done through \code{ioctl} to a pseudo filesystem
+The interface to the kernel is done through \code{ioctl} to a pseudo file system
 in \code{/proc/lbox}.
-The lbox API library in Section \ref{sec:lbox-framework} 
+The lbox API library in Section~\ref{sec:lbox-framework} 
 gives a more convenient interface that using \code{ioctl} system calls.
-Due to lack of space, we do not go into further details
-of the kernel implementation.
+% Due to lack of space, we do not go into further details
+% of the kernel implementation.
 The PC used here is a Pentium IV 3.0GHz PC with 1G memory.
 
 We want to demonstrate that the framework and prototype system leads
@@ -1079,13 +1068,11 @@ The comparison is with \code{strace} which uses the traditional
 \end{enumerate}
 
 \begin{table}
-\small
-%\begin{center}
 \centering
 \begin{tabular}{ | l || c | c | c | }
 \hline
 scenario & real & user & sys \\
-\hline \hline
+\hline
 clean kernel & \begin{math} 1.99\pm0.01 \end{math} & \begin{math} 0.21\pm0.01 \end{math} & \begin{math} 1.77\pm0.02 \end{math} \\
 proc miss & \begin{math} 2.04\pm0.02 \end{math} & \begin{math} 0.21\pm0.01 \end{math} & \begin{math} 1.82\pm0.03 \end{math} \\
 file miss 1 & \begin{math} 2.17\pm0.01 \end{math} & \begin{math} 0.22\pm0.01 \end{math} & \begin{math} 1.95\pm0.02 \end{math} \\
@@ -1097,8 +1084,7 @@ no buff & \begin{math} 8.70\pm0.04 \end{math} & \begin{math} 0.99\pm0.08 \end{ma
 ptrace & \begin{math} 59.04\pm0.15 \end{math} & \begin{math} 12.90\pm0.32 \end{math} & \begin{math} 46.11\pm0.39 \end{math} \\
 \hline
 \end{tabular}
-%\end{center}
-\caption{Open micro-benchmark}
+\caption{\code{open(2)} micro-benchmark on Linux}
 \label{tab:lbox-open}
 \end{table}
 
@@ -1156,26 +1142,21 @@ over the original {\tt open()} system call.
 This is because of the filename normalization done in user-space which
 is significantly more expensive.
 
-\begin{table}
-\small
+\begin{table}[ht]
 \centering
 \begin{tabular}{|l||c|c|c|}
 \hline
 scenario & real & user & sys \\
-\hline \hline
+\hline
 direct run & \begin{math} 3.84\pm0.01 \end{math} & \begin{math} 1.04\pm0.01 \end{math} & \begin{math} 2.80\pm0.01 \end{math} \\
-\hline
 truss & \begin{math} 100.32\pm0.85 \end{math} & \begin{math} 10.12\pm0.05 \end{math} & \begin{math} 56.71\pm0.80 \end{math} \\
-\hline
-DTrace\footnotemark & \begin{math} 8.41\pm0.02 \end{math} & \begin{math} 1.08\pm0.01 \end{math} & \begin{math} 7.33\pm0.01 \end{math} \\
+DTrace & \begin{math} 8.41\pm0.02 \end{math} & \begin{math} 1.08\pm0.01 \end{math} & \begin{math} 7.33\pm0.01 \end{math} \\
 \hline
 \end{tabular}
-\caption{Open micro-benchmark on Solaris 10}
+\caption{\code{open(2)} micro-benchmark on Solaris 10}
 % (SunOS 5.10 i386)}
 \label{tab:lbox-sol}
 \end{table}
-
-\footnotetext[2]{The D program is ``syscall::open:entry \{ @[execname]=count(); \}''}
 
 Table \ref{tab:lbox-sol} shows the
 test on Solaris for the same hardware with the same benchmark program. 
@@ -1188,7 +1169,9 @@ The use of \code{proc} allows only the \code{open()} system call to
 be traced rather than all system calls. Even so, we see that the overhead
 is considerably higher than in Linux where \code{ptrace} traces every
 system call.
-In the DTrace test, we have allowed DTrace more advantage 
+In the DTrace test\footnote{
+The D program is ``syscall::open:entry \{ @[execname]=count(); \}''},
+we have allowed DTrace more advantage 
 as the D program does not return any information to user space, 
 whereas in our system, all
 the relevant {\tt open()}'s are being
@@ -1203,32 +1186,30 @@ which is more expensive but portable.
 We suspect it is partly a case of the Linux kernel having less overhead
 than Solaris.
 
-% Since the open micro-benchmark reuses the same file over and over again,
-% the open itself becomes quite fast in Linux. 
-% We use another micro-benchmark on socket
-% operations to show the effect of a more expensive system call.
-% The benchmark creates a TCP socket and connects to a local port.
-% This is repeated for 4000 times and the results are in Table \ref{tab:lbox-connect}.
-% We can see that in an expensive system call, the overhead is not noticeable.
+\begin{table}[ht]
+\centering
+\begin{tabular}{ | l || c | c | c | }
+\hline
+setting & real & user & sys \\
+\hline
+clean kernel & \begin{math} 0.27\pm0.01 \end{math} & \begin{math} 0.01\pm0.01 \end{math} & \begin{math} 0.20\pm0.01 \end{math} \\
+monitored & \begin{math} 0.28\pm0.01 \end{math} & \begin{math} 0.01\pm0.01 \end{math} & \begin{math} 0.20\pm0.01 \end{math} \\
+\hline
+\end{tabular}
+\caption{\code{connect(2)} micro-benchmark}
+\label{tab:lbox-connect}
+\end{table}
 
-% \begin{table}
-% %\begin{center}
-% \centering
-% \begin{tabular}{ | l || c | c | c | }
-% \hline
-% environment & real & user & sys \\
-% \hline\hline
-% clean kernel & \begin{math} 0.27\pm0.01 \end{math} & \begin{math} 0.01\pm0.01 \end{math} & \begin{math} 0.20\pm0.01 \end{math} \\
-% \hline
-% monitored & \begin{math} 0.28\pm0.01 \end{math} & \begin{math} 0.01\pm0.01 \end{math} & \begin{math} 0.20\pm0.01 \end{math} \\
-% \hline
-% \end{tabular}
-% %\end{center}
-% \caption{Connect micro-benchmark}
-% \label{tab:lbox-connect}
-% \end{table}
+Since the open micro-benchmark reuses the same file over and over again,
+the open itself becomes quite fast in Linux. 
+We use another micro-benchmark on socket
+operations to show the effect of a more expensive system call.
+The benchmark creates a TCP socket and connects to a local port.
+This is repeated for 4000 times and the results are in Table \ref{tab:lbox-connect}.
+We can see that in an expensive system call, the overhead is not noticeable.
 
 \begin{table*}[ht]
+\small
 \centering
 \noindent\makebox[\textwidth]{%
 \begin{tabular}{|l|c|c|c|}
