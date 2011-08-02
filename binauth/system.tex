@@ -498,6 +498,17 @@ More precisely, the MAC of the binary is always calculated upon loading.
 Same applies to removable media such as floppy in which we can not
 keep track of modification of files.
 
+\item {\bf Memory Mapped Files:}
+The modification of memory mapped files cannot be monitored by
+system calls because system calls are not used.
+However, to map a file in memory for writing, a process has to firstly open
+the file for writing.
+BinAuth clears the {\it Authenticated\_bit} upon this operation,
+thus after the modification is finished, its MAC will be recalculated
+upon loading.
+During the binary is memory mapped, it cannot be loaded because
+Windows requires modification lock upon loading.
+
 \item {\bf TOCTTOU:}
 TOCTTOU stands for Time-Of-Check-To-Time-Of-Use.
 It refers to a race condition bug of an access control system

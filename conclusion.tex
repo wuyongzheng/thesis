@@ -1,4 +1,4 @@
-\chapter{Conclusions}
+\chapter{Conclusion}
 \label{sec:concl}
 
 This chapter concludes this thesis.
@@ -21,7 +21,121 @@ To detect malware when the operating system kernel is possibly compromised,
 we correlate information gathered from external sensors and network routers.
 
 \paragraph{LBox}
-We show our user-level logging framework LBox.
+We show our user-level monitoring framework LBox.
+User-level monitoring differs from traditional super user operated monitoring
+in that user-level monitoring can be safely used by all users without
+worrying about confidentiality and denial-of-service problems.
+LBox also allows cascading of monitors.
+Comparing state of the art monitoring frameworks such as Solaris DTrace
+and SystemTap, LBox does not allow user supplied script to run in kernel
+space.
+This reduces the complexity and more importantly reduces the chances
+of introducing security bugs of compromising the kernel.
+To compensate the flexibility of in-kernel script, LBox provides
+a fine-grained event filtering API.
+Our experiments are very encouraging
+showing that the overhead is comparable to in-kernel
+mechanisms such as DTrace.
+
+\paragraph{WinResMon}
+\TODO{it's same as winresmon's conclusion.}
+We presented the motivation, design, implementation and usage of
+WinResMon.  Its main use is to inspect resource access and software dependency
+issues in Microsoft Windows environments.  As WinResMon is extensible, system
+administrators can also build tools using WinResMon for custom queries and
+system analysis.  Benchmarking shows that WinResMon is reliable and is
+comparable to other popular tools.
+
+\paragraph{External Monitoring}
+When the operating system kernel is compromised, information collected
+from the host cannot be trusted.
+We propose a framework that incorporates external information from sensors in
+securing host computers.
+Since the sensors are external, they are difficult to be
+accessed and tampered by a compromised host.
+The framework can be applied to detect malware and also mitigate the
+impact of a compromised host.
+Our experiments show that our framework can successfully detect
+three types of malware: email spammer, DDoS zombie and password cracking
+zombie.
+The framework also takes advantage of the growing popularity of
+pervasive computing and sensor networks which make it
+feasible for cost-effective deployment in the near future.
+
+\paragraph{Module Dependency Visualization}
+\TODO{same as the section's conclusion.}
+We have demonstrated that software dependencies in Windows are quite
+complex even when looking at the coarse grain level of software components
+packaged into binaries and executables.
+Our module dependency visualization gives an effective way of extracting and
+visualizing the software dependencies and interactions between binaries.
+We show that even with the complexity of actual Windows software,
+it is possible to analyse whole system interaction,
+understand how modules are used and shared,
+and also discover potential unexpected or unusual interactions/modules.
+Such an understanding is also useful for software developers,
+system administrators and also users, to manage the
+software ecosystem on Windows and to deal with the problems which arise
+from module updates and potential ``DLL hell'' repercussions.
+
+\paragraph{LViz}
+We present a DotPlot-based visualization for studying execution traces.
+We use examples to show that LViz is flexible to look at a wide range
+of problems.
+As the traces can be very large, LViz is implemented to be efficient
+and responsive for interactive use.
+We have developed the VDP tool for Windows because such visualizations
+are more beneficial given the closed source nature and system complexity
+of Windows.
+However, VDP is not reliant on a particular monitoring
+infrastructure and the same visualization ideas can be applied
+to other systems with a rich source of execution traces, e.g. Unix.
+
+\paragraph{BinAuth}
+We performed a study on the feasibility of mandatory
+software component authentication. Our approach uses a lightweight
+authentication technique using message authentication code.
+According to our benchmarks, we
+found that using a cache reduces the overhead as it reduces
+the number of repeated authentication requests.
+Based on these benchmarks,
+we can conclude that our mandatory authentication can be added to Windows
+without significant overhead.
+We have also introduced the concept of ``software naming''. The
+idea behind this is to uniquely identify a file. We have mentioned a few
+applications for this idea.
+Given the security benefits of binary authentication and software naming,
+and only small overhead incurred even on complex OS like Windows,
+we envisage that the presented results can better convince
+the OS and user community alike to start deploying them more universally
+in realizing secure software distribution and execution.
+
+\paragraph{BinInt}
+Based on BinAuth, we propose BinInt, a security model which caters to the
+dynamic use of binaries within the software life cycle
+while protecting against attacks in default mode
+and giving isolation between software domains in install mode.
+Our prototype is efficient and usable while
+protecting a broad range of binary loading/execution mechanisms in Windows.
+We found our system to be mostly transparent in usage on typical
+Windows software throughout its software lifecycle.
+Thus, BinInt is a practical solution
+which gives a good tradeoff between usability and security
+to protect binaries on Windows.
+Our model can also be combined with other security mechanisms.
 
 \section{Future Work}
 \label{sec:future}
+
+In future work of monitoring infrastructures include functional
+extensibility and performance optimization.
+More types of events such as internal state changes and low level
+hardware operations (hard drive, keyboard and mouse) can be included.
+As multi-core CPUs becoming more common, we can optimize the
+implementation to make use if them.
+We can apply our framework in the cluster or cloud computing setting,
+and have query API to aggregate information from multiple hosts.
+Log compression can benefit from the high redundancy of the logs.
+We can port our infrastructures to other operating systems,
+however, it would better to have an operating system independent
+abstraction which make it easier to port for future operating systems.
