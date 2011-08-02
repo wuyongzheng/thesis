@@ -1,0 +1,188 @@
+\subsection{Security Analysis}
+\label{sec:binint-secanal}
+
+We analyse and test the Windows BinInt prototype.
+We assume the operating system kernel together with our BinAuth
+kernel driver is trusted.
+% The users who have BinAuth administrate privilege are trusted.
+% If the system uses BSA, the BSA is trusted.
+
+\subsubsection{Design Analysis}
+
+We first analyse the security provided by the abstraction
+provided by the BinInt model.
+\medskip
+
+\noindent
+Security of {\bf d-mode}: \\
+Most processes run in d-mode, thus its security is very
+important.
+The primary properties in d-mode are: 
+b-invalid binaries cannot be loaded; b-valid binary
+cannot be modified; and binaries created are b-invalid.
+The consequence is that a d-mode process cannot introduce new
+binaries to d-mode processes including itself.
+This prevents download-and-run or download-and-load attacks.
+It is also not possible to delete d-valid binaries.
+\medskip
+
+\noindent
+Security of {\bf i-mode}: \\
+A privilege escalation is required to transition from d-mode to i-mode
+using {\tt modetrans}. Thus, malware cannot directly do this, i.e.
+our implementation requires user authentication.
+However, users might make mistakes or social engineering attacks can
+be used.
+
+There are two cases to consider.
+If the malware is installed in a new software domain,
+the malware cannot modify existing b-valid binary,
+thus their integrity is assured.
+However, the malware can install new binaries which may be loaded
+into existing software as in the attacks described in Sec.~\ref{sec:dllhj}.
+The partial order extension can prevent this if the trust level
+of the malware is lower than the existing software.
+Similarly, the signing extension can also prevent this since the 
+malware may not be able to sign the files or it might be denied by
+revocation or whitelist.
+We remark that as the binary signature database and logs describe
+binary usage and loading relationships, malicious behavior can
+be detected and also be removed more easily.
+% for privilege escalation, we can
+% The possibility depends on the existing programs.
+% For example, a program may load all DLLs in a specific
+% directory as plugin.
+% The user is able to discover this using the loading relationship in the binary database.
+% In the example case, the user will notice that DLL of the
+% newly installed software is loaded by an existing software.
+% This can be benign or malicious behaviors.
+% Once the user decided that the software to be a malware,
+% he can easily remove the binaries of that domain.
+
+If the malware is installed in an existing domain,
+the same arguments apply. However, unlike the UAC privilege escalation
+mechanism in Windows, the binary database can be used to explain 
+whether an executable is connected to the software in the existing domain.
+% 
+% the malware can modify binaries of the domain.
+% The damage that can be caused by the malware depends on the domain.
+% For critical domain such as ``microsoft'',
+% the malware can affect all programs in the system,
+% because all program uses Windows build-in DLLs, which are
+% in the ``microsoft'' domain.
+% To prevent this from happening, one approach is to use a separate
+% password for critical domains so that only system administrator is able to
+% {\tt modetrans} to the critical domains.
+% In any case, the log of our system can be used to
+% identify which binaries are modified by the malware so that
+% this can be corrected.
+\medskip
+
+\noindent
+Security of {\bf t-mode}: \\
+Similar to i-mode, t-mode is requires authentication for the 
+privilege escalation.
+In terms of side effects, it behaves like d-mode, a t-mode process 
+cannot modify b-valid binaries,
+thus a malicious t-mode process cannot introduce new binaries to d-mode
+processes.
+However, t-mode processes can load b-invalid binary.
+This enables them to introduce new binaries to themselves.
+However, if they want to persist in the system (survive after reboot),
+they have to lure the user to authenticate and run them in t-mode or i-mode,
+as they would not be able to execute in d-mode.
+
+
+\subsubsection{Implementation Testing}
+
+We test our prototype on various binary execution mechanisms in Windows
+mentioned in Sec. \ref{sec:codeexec} in d-mode which is the primary mode
+for preventing execution and loading of binaries.
+
+% \noindent
+% {\bf Loading b-invalid Binaries}: \\
+% Processes running in d-mode cannot load b-invalid binaries.
+% We test the prevention mechanism in the prototype:
+
+\begin{itemize}
+\item{\bf b-invalid binaries in the {\tt cmd} and Explorer shells} \\
+Running a b-invalid binary in the
+{\tt cmd} and {\tt Explorer} shells in d-mode fails with an
+error 
+``{\tt Application} is not a b-valid Win32 application''.
+This would also cover cases such as the social engineering file extension
+attack.
+
+\item{\bf b-invalid driver loading} \\
+It is not possible to load b-invalid drivers.
+Using the {\tt net start} command to load a b-invalid driver
+fails with the error ``The specified driver is b-invalid''.
+
+\item{\bf b-invalid service loading} \\
+B-invalid services cannot be started.
+Using the {\tt Services} tab in the Microsoft management console
+to start a b-invalid service
+fails with the error ``The dependency service or group failed to start''.
+
+\item {\bf b-invalid shell extensions} \\
+% In Windows, shell extensions are DLLs that enhance the features of 
+% the explorer shell. 
+%Common examples are file previews and right click context menus. 
+We tested the {\tt Tortoise\-SVN}, {\tt AudioShell} and {\tt FLV} extensions.
+{\tt TortoiseSVN} enhances {\tt Explorer} to
+interface to the Subversion revision control system with 
+a context menu usable by right clicking any 
+directory or file in Explorer. 
+{\tt AudioShell} is a MP3 tag previewer that is activated by mouse-over
+on audio files in Explorer.
+{\tt FLV} is a codec which displays Flash video.
+
+If the DLLs for the shell extensions are b-invalid, they do not load.
+Thus, the {\tt TortoiseSVN} context menu was missing and
+the {\tt AudioShell} mouse-over is no longer shown. 
+We tested the use of {\tt Explorer} to open a folder containing
+{\tt FLV} (Flash video) files. If the FLV codec, {\tt flvsplitter.ax},
+is b-valid, {\tt Explorer} scans the directory, displaying a thumbnail
+for each FLV file. When the codec is b-invalid,
+{\tt Explorer} does not display any thumbnails and displays the same
+icon as files with unrecognized extensions.
+We remark that in many cases, users are not
+aware that shell extensions are running and may think that the features
+are part of {\tt Explorer}.
+% E.g. opening a folder containing audio and video files will cause
+% {\tt Explorer} to thumbnail all the media files, i.e.
+% {\tt Explorer} loads the codec's DLL to extract the thumbnail for video files. 
+% An attack which succeeds in installing a malware codec can be
+% automatically run by {\tt Explorer}.
+
+\item {\bf b-invalid Browser Helper Objects (BHO)} \\
+%BHO's are plugins written to enhance the browser's features and also to provide the
+%ability to view certain pages. Common examples of plugins are Flash player, Java runtime,
+%Windows Update etc. BHO's are written as DLLs or ActiveX files({\tt ocx}). 
+As web browsers are one of the main targets of malware,
+it is important to control what binaries are loaded in the browser.
+We tested the Flash player control, {\tt Flash10a.ocx}, for Internet Explorer. 
+If the control is b-invalid, webpages with flash content do not work as
+IE is blocked from loading the Flash control.
+However, the rest of the page content is displayed.
+
+\item {\bf PATH manipulation} \\
+An attacker may change the {\tt PATH} environment variable or DLL
+search order to substitute system executable or DLL with a malicious one.
+This is prevented no matter what the search order is, as long as
+the malicious executable or DLL is b-invalid.
+
+\end{itemize}
+
+
+% {\bf Social Engineering} \\
+% Some social engineering attacks lure the user into executing malicious
+% programs by making use of the flaw of user interfaces.
+% For example, Windows Explorer by default hides known file extension.
+% User may think the file named {\tt postcard.jpg.exe}
+% (which comes from email attachment) to
+% be a picture and double click it to view.
+% The malicious program may in turn display an image so that the
+% user thinks the file is indeed an image.
+% This is prevented no matter what file name is, as long as
+% the malicious executable is b-invalid.

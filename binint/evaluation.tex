@@ -1,26 +1,120 @@
-\subsection{Implementation and Evaluation}
-\label{sec:binint-imp}
+\subsection{Evaluation}
+\label{sec:binint-eval}
 
-We implemented a prototype of BinInt in Windows XP.
-It is implemented with a kernel driver that intercepts binary loading,
-file modification, process creation and some other operations.
-We evaluate the performance of BinInt against
-a baseline system with a vanilla unmodified Windows XP SP3.
-The benchmarks are run in a VMWare virtual machine 
-on a Intel Core 2 Duo 2.33GHz CPU (with one core allocated to VMWare) 
-and 512MB memory.
-We use the following benchmarks:
+% In the previous section,
+% we presented security analysis of the system.
+We now evaluate the system based on its usability in the software
+usage life cycle and its performance overhead.
+
+\subsubsection{Usability Evaluation}
+
+%\TODO{what about autorun}
+
+We tested our system on the main elements of
+the software usage life cycle -- installation,
+running and uninstallation
+of the following software: Internet Explorer 8, Winamp (music player),
+Yahoo Messenger (instant messaging client),
+Firefox, Google Chrome, Adobe Acrobat Reader and
+Java Development Kit.
+We describe the observations from the binary database and logs for the
+software tested.
+
+Internet Explorer 8 (IE8) tests Microsoft software installation.
+We choose the ``Microsoft'' software domain to install IE8 to on a Windows XP
+SP2 machine.
+No problem was observed during installing and running IE8.
+The Windows auto-updater handles the update of all Windows related software
+including IE8.
+We defined the updater, {\tt wuauclt.exe}, in the execution mode policy to run
+in i-mode. Thus, it updates transparently.
+
+The Winamp installer uses its own Nullsoft installer.
+% It tries to open two windows build-in DLLs,
+% {\tt wmp.dll} and {\tt wmvcore.dll} in write mode, but
+% does not modify them.
+No problem was observed during running and uninstalling Winamp.
+Yahoo Messenger uses a network-based install where the installer is a small
+initial installer which downloads a much larger installer.
+The installer tries to upgrade the Flash ActiveX plugin
+{\tt flash.ocx} if it is not the latest version.
+This action is blocked because the software groups do not match.
+However, this is not really a problem as the Flash
+plugin can be updated separately.
+We noticed that a {\tt YahooAUService.exe} service is created
+for auto-update.
+In order for the auto-update to work, we should add {\tt YahooAUService.exe}
+to the execution mode policy to run in i-mode with the
+``Yahoo'' s-domain.
+
+No problem was observed during Firefox installation.
+An {\tt updater.exe} in Firefox handles updates and also needs to be
+added to the execution mode policy.
+No problem was observed for Google Chrome.
+Adobe Acrobat Reader and Java Development Kit use the MSI engine
+which is handled transparently without any user interaction.
+
+We have chosen software which cover a range of mechanisms for installation,
+uninstall, and update.
+% Although software tests can never be complete, the software we chose to test
+% covers a wide range both in terms of software functionality and installation
+% mechanism.
+We found that all the software life cycle aspects are usable
+with little effort needed and in some cases, completely transparently.
+% any additional effort except the initial {\tt modetrans} to run the installer
+% in i-mode.
+Auto-updates such as Yahoo Messenger and Firefox have to be listed in
+the execution mode policy for them to work.
+This can be done manually immediately after installation if the user knows
+which program does the update.
+% or this could come from a trusted 
+It can also be done at the first time the updater performs the updates.
+In this case, the user will be notified about the attempt to modify binaries
+and the information from the binary database is sufficient for understanding
+how to set the execution mode policy.
+% whether to allow the update
+% and list the updater in the e-mode policy.
+
+\subsubsection{Performance Evaluation}
+
+The performance overhead of our system is caused by system call interception
+as described in Sec.~\ref{sec:imp}.
+The objective of the performance evaluation benchmark is to test
+the overhead of the modes with the base system,
+a vanilla unmodified Windows XP SP3.
+The machine is a VMWare virtual machine running Intel Core 2 Duo 2.33GHz
+CPU (with one core allocated to VMWare) and 512MB memory.
+We use the following test cases:
 software build (building {\tt putty}, a SSH client, with 86 C files) using
-the Visual Studio command line interface;
-WinRAR archive extraction (extracting the Linux kernel source code);
+Visual Studio command line interface,
+WinRAR archive extraction (extracting the Linux kernel source code),
 and the SunSpider JavaScript Benchmark in Firefox.
-The first two benchmarks are chosen to test
-process creation and file I/O in a realistic setting.
-The last benchmark is chosen to be representative of
-a more intensive CPU workload.
-Each benchmark is run 5 times to obtain
-the runtimes (mean and standard deviation) in the base system (without BinInt)
-and BinInt in all three modes.
+The three test cases are chosen to test process creation,
+I/O operations and a CPU workload respectively as these are the
+main sources of overheads in our prototype.
+Each test case is performed in the base system (without our system),
+d-mode, t-mode and in i-mode.
+Each test case in each environment is performed 5 times to calculate the
+mean and standard deviation.
+
+% \begin{table*}[tb]
+% \centering
+% \begin{tabular}{|l|c|c|c|}
+% \hline
+% & build & archive & javascript \\
+% \hline
+% base & $59.0\pm2.0$s & $41.4\pm1.4$s & $1257.7\pm21.1$ms \\
+% \hline
+% d-mode & $58.7\pm1.8$s ($-0.5\%$) & $40.0\pm2.2$s ($3.4\%$) & $1257.3\pm25.2$ms ($-0.0\%$) \\
+% \hline
+% t-mode & $59.8\pm1.3$s ($1.4\%$) & $42.2\pm0.8$s ($2.0\%$) & $1249.5\pm26.1$ms ($-0.7\%$) \\
+% \hline
+% i-mode & $60.3\pm1.9$s ($2.2\%$) & $46.1\pm1.1$s ($11.4\%$)& $1247.9\pm15.8$ms ($-0.8\%$) \\
+% \hline
+% \end{tabular}
+% \caption{Performance overhead}
+% \label{table:benchmark}
+% \end{table*}
 
 \begin{table}[tb]
 \centering
@@ -43,24 +137,26 @@ workload & environment & running time & overhead \\ \hline \hline
 & t-mode & $1249.5\pm26.1$ms & $-0.7\%$ \\ \cline{2-4}
 & i-mode & $1247.9\pm15.8$ms & $-0.8\%$ \\ \hline
 \end{tabular}
-\caption{BinInt overhead}
+\caption{Performance overhead}
 \label{table:binint-benchmark}
 \end{table}
 
-Table~\ref{table:binint-benchmark} shows the runtimes.
+Table~\ref{table:binint-benchmark} shows the result of the tests.
 Except for the archive extraction test in i-mode,
-the average overheads are small.
+all the average performance overheads are small.
 In most cases, the overhead is smaller than the standard deviation
 (caused by environmental factors such as caches, etc., and in some
 others it is even negative (slightly faster)).
-The results show that with the exception of the archive test, 
-the overhead of BinInt is negligible and within timing variation.
+While individual runs have some small differences, we conclude that
+with the exception of the archive test, the performance can be considered to
+be similar to the base system.
 
-The $11.4\%$ overhead in the i-mode archive benchmark
-shows the overheads of i-mode when the workload is mostly file creation
-and writing of many (small) files.
-Although the extracted files are not binaries, BinInt
+The $11.4\%$ overhead of the i-mode archive case
+shows the additional costs of i-mode when the workload is mostly file writing.
+% As we have mentioned earlier, the software domain of binaries created in
+% i-mode need to be set.
+Although the extracted files are not binaries, the system
 has to check whether or not they are binaries.
-As software installation should not be a frequent task,
+Since software installation usually happens infrequently,
 we are less concerned with efficiency of
 i-mode as long as it is still reasonable.

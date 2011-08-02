@@ -1,0 +1,125 @@
+\subsection{Implementation}
+\label{sec:binint-imp}
+
+We implemented BinInt in Windows XP.
+We have a kernel driver that intercepts binary loading,
+file modification and some other operations.
+
+In Sec~\ref{sec:binint-model}, we assume all file modifications are under
+the control of the operating system kernel.
+This assumption can be invalid in some cases.
+When the system mounts a network shared file system, (e.g. through SMB)
+an attacker can change the binaries outside the system.
+We call these unmonitorable binaries.
+An attacker can change local binaries when the system is offline,
+or change binaries in removable media when it is offline.
+To prevent these attacks, we use file signatures to detect modification.
+We keep signatures of all b-valid binaries in the
+{\em binary signature database}.
+Information in the database includes path, signature, software group,
+modification history and other meta data.
+We also generate logs of how binaries were used. Log maintenance is done
+outside the kernel.
+The database can be used to by tools to analyze binary dependencies,
+trace the origin of a binary, etc.
+
+For unmonitorable b-valid binaries, their signatures are updated
+immediately after they are updated and verified every time when
+their labels are accessed.
+For binaries that just come online, we verify the signatures
+once for each binary and cache the result.
+We adopt a lazy way of updating their signatures in order
+not to affect performance.
+
+The kernel driver also maintains the signatures of binaries and
+labels of processes and binaries.
+In the following description, we use Rule {\bf Rn} to refer to the $n$th
+row in Table~\ref{table:binauth1}.
+(Rule {\bf R8})
+When a binary $f$ is loaded by a process $p$ running in d-mode,
+$f$'s needs to be checked whether it is b-valid ($L_d(f) \neq \bot$).
+We intercept the native call {\tt NtCreateSection},
+which is a necessary step in binary loading.
+Checking whether $f$ is b-valid is achieved by calculating 
+the signature of the contents
+of $f$ and match against the signature database, if $f$ is loaded for the first
+time since boot or $f$ is in an unmonitorable media.
+Otherwise, $L_d(f)$ can be looked up using its path.
+Paths are normalized into
+the internal kernel path to disambiguate 8.3 filename, long file name
+and symbolic links.
+For NTFS, we use object ID to disambiguate hard links.
+If binary $f$ is b-invalid,
+the loading will be denied, thus {\tt NtCreateSection} fails.
+The same checking applies to Rule {\bf R11} as well.
+% As we implement a binary loading mechanism very close to \cite{binauth},
+% the reader is directed there for details on
+% the security of binary loading
+% and managing the caching optimizations.
+
+The rest of the implementation deals with the rules for the other modes
+and maintaining integrity of binaries.
+(Rules {\bf R9--10})
+If the process is in i-mode or t-mode, the checking
+will be bypassed and the loading will always be allowed.
+
+(Rules {\bf R5--7})
+When a process $p$ tries to open a b-valid binary
+$f$ with write permission, (i.e. try to modify)
+the open operation is only allowed if $p$ is in i-mode
+and the software domain of $p$ and $f$ are the same.
+As there is no distinguishing feature of a binary, other than its format,
+we need to immediately test whether or not the file is a binary
+by reading the file header which  makes i-mode more costly
+than other modes.
+We also modify the semantics of Windows slightly so that files opened
+for writing in i-mode are in exclusive mode to simplify signature creation.
+We do not expect this to be a major restriction as the installer is likely
+to be creating files sequentially.
+When $p$ closes the file handle of $f$, the file contents is now complete
+and $f$'s signature will be re-computed and the signature database will 
+be updated accordingly.
+The signature re-computation is done immediately if $f$ is in 
+un-monitorable media.
+Otherwise, it is lazily performed at any time before system shutdown since
+its only needed on next boot.
+Note that, to remove or rename a file in Windows, a process has to open the file
+with write permission first.
+
+(Rules {\bf R1--3})
+We do not prevent creation of new binaries,
+but new binaries created by processes in d-mode or t-mode will not
+be b-valid and thus cannot be loaded in d-mode.
+
+(Rules {\bf R11-13}) Process creation is intercepted using
+the kernel API {\tt PsSetCreateProcessNotifyRoutine} to inherit e-mode and
+s-domain to child processes.
+(Rule {\bf R14})The systemcall-like {\tt modetrans} operation
+is implemented as a IOCTL (I/O control).
+
+As shown in Sec~\ref{sec:winamp}, a software installer may launch
+several helper programs from the main one.
+This is why child processes inherit their parent process' mode
+and domain.
+However, there are exceptions where installer processes
+are not child (or descendant) processes of the first installer process.
+MSI (Windows Installer) is a generic installation engine
+for installing and updating software on Windows.
+It is commonly used for Microsoft and non-Microsoft software.
+MSI makes use of a service (daemon) process to perform installation.
+The service process is always running and is not part of the
+process hierarchy of the original installer.
+We handle this by monitoring the communication channel, 
+a named pipe \url{\\Pipe\\Net\\NtControlPipeX}, between the
+installation process and the MSI service.
+When an i-mode process triggers the service to start installation,
+the service is switched to i-mode with the same domain as the triggering
+process.
+When the installation terminates, the service is switched back to d-mode.
+The MSI service is used exclusively so that there is no interference between
+concurrent requests.
+
+We include additional security mechanisms to prevent attacks such as
+hijacking other processes by directly modifying their memory and
+modifying files by raw disk operation.
+Details can be found in App.~\ref{sec:additional}.
