@@ -2,7 +2,10 @@
 \label{sec:binint-secanal}
 
 We analyse and test the Windows BinInt prototype.
-We assume the operating system kernel together with our BinAuth
+We assume\footnote{
+The external monitoring shown in Chapter~\ref{sec:sensor}
+can be used to detect some attacks when the assumption is false.}
+the operating system kernel together with our BinAuth
 kernel driver is trusted.
 % The users who have BinAuth administrate privilege are trusted.
 % If the system uses BSA, the BSA is trusted.
@@ -39,7 +42,8 @@ If the malware is installed in a new software domain,
 the malware cannot modify existing b-valid binary,
 thus their integrity is assured.
 However, the malware can install new binaries which may be loaded
-into existing software as in the attacks described in Sec.~\ref{sec:dllhj}.
+into existing software as in the DLL hijacking attacks described
+in Section~\ref{sec:binint-usageattack}.
 The partial order extension can prevent this if the trust level
 of the malware is lower than the existing software.
 Similarly, the signing extension can also prevent this since the 
@@ -95,8 +99,9 @@ as they would not be able to execute in d-mode.
 
 \subsubsection{Implementation Testing}
 
+\TODO{Should I move this to the BinAuth section?}
 We test our prototype on various binary execution mechanisms in Windows
-mentioned in Sec. \ref{sec:codeexec} in d-mode which is the primary mode
+in d-mode which is the primary mode
 for preventing execution and loading of binaries.
 
 % \noindent

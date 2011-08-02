@@ -33,37 +33,30 @@ not to affect performance.
 
 The kernel driver also maintains the signatures of binaries and
 labels of processes and binaries.
-In the following description, we use Rule {\bf Rn} to refer to the $n$th
-row in Table~\ref{table:binauth1}.
-(Rule {\bf R8})
 When a binary $f$ is loaded by a process $p$ running in d-mode,
-$f$'s needs to be checked whether it is b-valid ($L_d(f) \neq \bot$).
+$f$'s needs to be checked whether it is b-valid.
 We intercept the native call {\tt NtCreateSection},
 which is a necessary step in binary loading.
 Checking whether $f$ is b-valid is achieved by calculating 
 the signature of the contents
 of $f$ and match against the signature database, if $f$ is loaded for the first
 time since boot or $f$ is in an unmonitorable media.
-Otherwise, $L_d(f)$ can be looked up using its path.
+Otherwise, the software domain of $f$ can be looked up using its path.
 Paths are normalized into
 the internal kernel path to disambiguate 8.3 filename, long file name
 and symbolic links.
 For NTFS, we use object ID to disambiguate hard links.
 If binary $f$ is b-invalid,
 the loading will be denied, thus {\tt NtCreateSection} fails.
-The same checking applies to Rule {\bf R11} as well.
 % As we implement a binary loading mechanism very close to \cite{binauth},
 % the reader is directed there for details on
 % the security of binary loading
 % and managing the caching optimizations.
 
-The rest of the implementation deals with the rules for the other modes
+The rest of the implementation deals other modes
 and maintaining integrity of binaries.
-(Rules {\bf R9--10})
 If the process is in i-mode or t-mode, the checking
 will be bypassed and the loading will always be allowed.
-
-(Rules {\bf R5--7})
 When a process $p$ tries to open a b-valid binary
 $f$ with write permission, (i.e. try to modify)
 the open operation is only allowed if $p$ is in i-mode
@@ -86,18 +79,17 @@ its only needed on next boot.
 Note that, to remove or rename a file in Windows, a process has to open the file
 with write permission first.
 
-(Rules {\bf R1--3})
 We do not prevent creation of new binaries,
 but new binaries created by processes in d-mode or t-mode will not
 be b-valid and thus cannot be loaded in d-mode.
 
-(Rules {\bf R11-13}) Process creation is intercepted using
+Process creation is intercepted using
 the kernel API {\tt PsSetCreateProcessNotifyRoutine} to inherit e-mode and
 s-domain to child processes.
-(Rule {\bf R14})The systemcall-like {\tt modetrans} operation
+The systemcall-like {\tt modetrans} operation
 is implemented as a IOCTL (I/O control).
 
-As shown in Sec~\ref{sec:winamp}, a software installer may launch
+A software installer may launch
 several helper programs from the main one.
 This is why child processes inherit their parent process' mode
 and domain.
@@ -119,7 +111,8 @@ When the installation terminates, the service is switched back to d-mode.
 The MSI service is used exclusively so that there is no interference between
 concurrent requests.
 
+\TODO{
 We include additional security mechanisms to prevent attacks such as
 hijacking other processes by directly modifying their memory and
-modifying files by raw disk operation.
-Details can be found in App.~\ref{sec:additional}.
+modifying files by raw disk operation.}
+%Details can be found in App.~\ref{sec:additional}.
