@@ -224,7 +224,7 @@ the number of matches.
 
 \begin{algorithm}[htb]
 \KwIn{$D_X[d]$ and $D_Y[d]$ from Algorithm~\ref{alg:lviz-algpre}}
-\KwOut{$S[0\ldots W-1,0\ldots H-1]$:integer as pixel intensity}
+\KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
 \BlankLine
 zero fill $S$\;
 \ForEach{digist $d$}{
@@ -261,11 +261,11 @@ as shown in Algorithm~\ref{alg:lviz-alg2}.
 
 \begin{algorithm}[htb]
 \KwIn{$D_X[d]$ and $D_Y[d]$ from Algorithm~\ref{alg:lviz-algpre}}
-\KwOut{$S[0\ldots W-1,0\ldots H-1]$:integer as pixel intensity}
+\KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
 \BlankLine
 zero fill $S$\;
 \ForEach{digist $d$}{
-  \uIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W+H$}{
+  \nlset{$\alpha$} \uIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W\times H$}{
     \ForEach{$x$ in $D_X[d]$}{
       \ForEach{$y$ in $D_Y[d]$}{
         $S[xW/N,yH/N] ++$
@@ -287,14 +287,15 @@ zero fill $S$\;
     }
   }
 }
-\caption{Combined algorithm}
+\caption{Combined algorithm.
+(Line $\alpha$ can be further tuned with some constant factors)}
 \label{alg:lviz-alg3}
 \end{algorithm}
 
 Both algorithms can be combined together to
 get the best of both worlds, which gives
 a DP rendering time complexity of $\sum_{i=1}^{G} min(S_i^2, S_i + W H)$,
-as shown in Algorithm~\ref{alg:lviz-alg3}
+as shown in Algorithm~\ref{alg:lviz-alg3}.
 That is, for each digest group $S_i$ that satisfies $S_i^2 < S_i+W H$, 
 the $O(S_i^2)$ algorithm is used;
 otherwise, the $O(S_i + W H)$ algorithm is used to obtain a sub-image.
