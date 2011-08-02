@@ -140,14 +140,67 @@ to compile all the rules (the string patterns) into a single automaton.
 This allows us to identify the color in a single pass
 rather than multiple passes for each rule.
 
+\begin{algorithm}[htb]
+\KwIn{$L_X[0\ldots N-1]$ as log X; and $L_Y[0\ldots N-1]$ as log Y}
+\KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
+\BlankLine
+zero fill $S$\;
+\For{$x\leftarrow 0$ \KwTo $N-1$}{
+  \For{$y\leftarrow 0$ \KwTo $N-1$}{
+    \If{$LX[x]=XY[y]$}{
+      $S[xW/N,yH/N] ++$
+    }
+  }
+}
+\caption{Naive $O(N^2)$ Algorithm}
+\label{alg:lviz-naive}
+\end{algorithm}
+
 The two pre-processing steps above are performed once and
 cached in memory for later use when rendering the VDP.
 The VDP rendering has to be fast as it is
 used interactively for real-time browsing 
 which entails zooming in on a region within the DP.
 As the number of events in a trace, $N$, grows in order of hundreds of thousands,
-a naive DP rendering algorithm which takes $O(N^2)$ becomes infeasible.
+the naive DP Algorithm~\ref{alg:lviz-naive}
+takes $O(N^2)$ becomes infeasible.
+To simplify our illustration, we assume both logs have the same number
+of events.
 We developed a new DP rendering algorithm which scales well to large traces.
+
+\begin{algorithm}[htb]
+\KwIn{$L_X[0\ldots N-1]$ as log X; and $L_Y[0\ldots N-1]$ as log Y}
+\KwOut{Associative array $D_X[d]$ whose key $d$ is the digest of an event
+and value is a set of integers representing indexes of events in $L_X$ whose
+digests are $d$. Similarly for $D_Y[d]$.}
+\BlankLine
+\For{$x\leftarrow 0$ \KwTo $N-1$}{
+  $d\leftarrow digest(L_X[x])$\;
+  insert x to the set $D_X[d]$
+}
+\For{$y\leftarrow 0$ \KwTo $N-1$}{
+  $d\leftarrow digest(L_Y[y])$\;
+  insert y to the set $D_Y[d]$
+}
+\caption{Preprocessing step to get digest group}
+\label{alg:lviz-algpre}
+\end{algorithm}
+
+\begin{algorithm}[htb]
+\KwIn{$D_X[d]$ and $D_Y[d]$ from Algorithm~\ref{alg:lviz-algpre}}
+\KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
+\BlankLine
+zero fill $S$\;
+\ForEach{digist $d$}{
+  \ForEach{$x$ in $D_X[d]$}{
+    \ForEach{$y$ in $D_Y[d]$}{
+      $S[xW/N,yH/N] ++$
+    }
+  }
+}
+\caption{New Algorithm A}
+\label{alg:lviz-alg1}
+\end{algorithm}
 
 The core of new DP rendering algorithm is based on two observations.
 The first observation is that for each matching event,
@@ -163,22 +216,85 @@ end result.
 This significantly reduces the number of matching comparisons needed
 from $O(N^2)$ down to $\sum_{i=1}^{G} S_i^2$
 where $G$ is the number of digest groups in the trace.
+Algorithm~\ref{alg:lviz-algpre} pre-process the two logs $L_X$ and $L_Y$
+into digest groups stored in associative arrays $D_X$ and $D_Y$.
+This preprocessing step takes $O(N)$ time and is executed only once.
+Algorithm~\ref{alg:lviz-alg1} iterates each digest group and accumulates
+the number of matches.
+
+\begin{algorithm}[htb]
+\KwIn{$D_X[d]$ and $D_Y[d]$ from Algorithm~\ref{alg:lviz-algpre}}
+\KwOut{$S[0\ldots W-1,0\ldots H-1]$:integer as pixel intensity}
+\BlankLine
+zero fill $S$\;
+\ForEach{digist $d$}{
+  declare temporary integer array $S_X[0\ldots W-1]$ and $S_Y[0\ldots H-1]$\;
+  zero fill $S_X$ and $S_Y$\;
+  \lForEach{$x$ in $D_X[d]$}{
+    $S_X[xW/N] ++$
+  }\;
+  \lForEach{$y$ in $D_Y[d]$}{
+    $S_Y[yH/N] ++$
+  }\;
+  \For{$x\leftarrow 0$ \KwTo $W-1$}{
+    \For{$y\leftarrow 0$ \KwTo $H-1$}{
+      $S[x,y]\leftarrow S[x,y]+S_X[x]\times S_Y[y]$
+    }
+  }
+}
+\caption{New Algorithm B}
+\label{alg:lviz-alg2}
+\end{algorithm}
 
 However, in the worst case, a digest group $S_i$ can be as large as $N$.
 This drawback leads us to the second observation which
 gives an optimization for the case when the digest group size is large.
-It exploits the fact that $N > W H$ and often also $N \gg WH$.
+It exploits the fact that $N > W\times H$ and often also $N \gg W\times H$.
 Consider a digest group with $S_i$ events.
 The intensity (color) for each event in that group can be recorded as
 its projection on the X and Y axis of the window.
 This is easily done by keeping track of the color intensities in
 two arrays with size $W$ and $H$ respectively in $O(S_i)$ time.
 Therefore, the resulting DP on a window of size $W \times H$
-can be drawn based on the projected intensities in $O(S_i + W H)$ time.
+can be drawn based on the projected intensities in $O(S_i + W\times H)$ time,
+as shown in Algorithm~\ref{alg:lviz-alg2}.
+
+\begin{algorithm}[htb]
+\KwIn{$D_X[d]$ and $D_Y[d]$ from Algorithm~\ref{alg:lviz-algpre}}
+\KwOut{$S[0\ldots W-1,0\ldots H-1]$:integer as pixel intensity}
+\BlankLine
+zero fill $S$\;
+\ForEach{digist $d$}{
+  \uIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W+H$}{
+    \ForEach{$x$ in $D_X[d]$}{
+      \ForEach{$y$ in $D_Y[d]$}{
+        $S[xW/N,yH/N] ++$
+      }
+    }
+  } \Else{
+    declare temporary integer array $S_X[0\ldots W-1]$ and $S_Y[0\ldots H-1]$\;
+    zero fill $S_X$ and $S_Y$\;
+    \lForEach{$x$ in $D_X[d]$}{
+      $S_X[xW/N] ++$
+    }\;
+    \lForEach{$y$ in $D_Y[d]$}{
+      $S_Y[yH/N] ++$
+    }\;
+    \For{$x\leftarrow 0$ \KwTo $W-1$}{
+      \For{$y\leftarrow 0$ \KwTo $H-1$}{
+        $S[x,y]\leftarrow S[x,y]+S_X[x]\times S_Y[y]$
+      }
+    }
+  }
+}
+\caption{Combined algorithm}
+\label{alg:lviz-alg3}
+\end{algorithm}
 
 Both algorithms can be combined together to
 get the best of both worlds, which gives
-a DP rendering time complexity of $\sum_{i=1}^{G} min(S_i^2, S_i + W H)$.
+a DP rendering time complexity of $\sum_{i=1}^{G} min(S_i^2, S_i + W H)$,
+as shown in Algorithm~\ref{alg:lviz-alg3}
 That is, for each digest group $S_i$ that satisfies $S_i^2 < S_i+W H$, 
 the $O(S_i^2)$ algorithm is used;
 otherwise, the $O(S_i + W H)$ algorithm is used to obtain a sub-image.
