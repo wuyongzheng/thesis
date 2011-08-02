@@ -1,6 +1,7 @@
 \subsection{Visualizing Software Dependencies}
 
-On Windows, there are many kinds of binary files.
+As discussed in Section~\ref{sec:wi-binary},
+there are many kinds of binary files in Windows.
 We use the term program to denote the executable, which
 is usually an EXE file in Windows.
 Unlike Unix, Windows has many kinds of binary files containing
@@ -84,7 +85,7 @@ Furthermore, as we will see in the visualization,
 there is only one node for every program and there can be cycles.
 
 We are mostly concerned with dependencies between different executables,
-hence, we omit self loops if there is an EXE-EXE dependency between $x$ and
+hence, we omit self-loops if there is an EXE-EXE dependency between $x$ and
 itself.
 We remark that in Windows, process creation is achieved in the WIN32 library
 with the {\tt CreateProcess()} API (there
@@ -275,6 +276,7 @@ option to keep DLLs which are not in the projection but are used
 (this makes sense under grouping) and we label the node as {\it \#y\#}
 
 \begin{figure}
+\centering
 \begin{minipage}[t]{3.5cm}
 \begin{verbatim}
 void main (void) {
@@ -285,7 +287,7 @@ void C (void) {}
 void D (void) {}
 \end{verbatim}
 \end{minipage}
-\hspace{1.0cm}
+\hspace{2.0cm}
 \begin{minipage}[t]{3.0cm}
 \begin{verbatim}
 void A (void) {
@@ -297,7 +299,7 @@ void B (int i) {
 }
 \end{verbatim}
 \end{minipage}
-\caption{Each function is its own DLL}
+\caption{Each function is in its own DLL}
 \label{fig:indcalls}
 \end{figure}
 

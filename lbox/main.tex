@@ -59,7 +59,7 @@ cannot circumvent monitoring, we call this {\em mandatory monitoring};
 (ii) none of the operations/events of interest from the set of monitored
 processes are missed, we call this {\em reliable monitoring};
 and 
-(iii) the monitor cannot escalate its privileges, only precisely
+(iii) the monitor cannot escalate its privileges, only exactly
 the operations/events of processes at the same privilege level can
 be monitored.
 The mandatory and reliable properties are necessary to ensure that a monitor
@@ -239,7 +239,7 @@ An event can also specify that reliable monitoring is not needed ---
 this means that the kernel can choose to drop the event if the 
 event buffer is currently full.
 This would mean that the monitored processes do not have to be suspended
-and thus higher throughput at the cost of losing some events.
+and thus higher throughput is obtained at the cost of losing some events.
 
 % for not so important events where we want to allow
 % the monitored processes to continue execution.
@@ -703,7 +703,7 @@ shows the monitor DAG induced by the monitoring relationship.
 The following sequence describes the creation of the snapshot given
 in Figure \ref{fig:lbox-mon-tree}:
 
-\begin{enumerate}
+\begin{tightenumerate}
 \item The master web server process $4010$ is created.
 \item Process $4010$ creates 3 worker processes:
 $4011$, $4012$, $4013$.
@@ -714,7 +714,7 @@ file access on \code{/etc/passwd} for all processes (except $14940$).
 \item Alice logs in and a shell $15343$ is created.
 \item Alice creates a monitor $15349$ to audit her \code{vim}($15350$) editor
 because she want to know which files are accessed by \code{vim}($15350$).
-\end{enumerate}
+\end{tightenumerate}
 
 Here, two monitors $15349$ and $15340$ are monitoring the
 \code{vim}($15350$) process. 
@@ -951,7 +951,7 @@ tasks ran as scheduled.
 \label{sec:lbox-dtrace}
 
 There are some similarities with Solaris DTrace (Sec.~\ref{sec:dtrace}),
-which is published at about the same time as this work.
+which was published at about the same time as this work.
 Both systems aim to bring minimal side effects to the monitored program
 in order to be used on production systems.
 Both systems have a flexible in-kernel event filter mechanism.
@@ -969,7 +969,7 @@ by another user.
 
 Secondly, the DTrace implementation requires extensive changes to Solaris,
 in the words of the developers,
-``it was a hell of a lot of work -- Bryan Cantrill, Solaris
+``{\it it was a hell of a lot of work} -- Bryan Cantrill, Solaris
 Kernel Development''.
 While it is difficult to have portable kernel enhancements, we feel our
 approach should be less of a massive change to the kernel type solution and in
@@ -1288,7 +1288,7 @@ of write I/O adds a further $20\%$. Our overheads are much smaller ($< 4\%$)
 but we don't do isolation.
 
 It is a little surprising that our user-level auditing framework
-can out perform DTrace which is an in-kernel tracing mechanism.
+can outperform DTrace which is an in-kernel tracing mechanism.
 This is very encouraging and furthermore, 
 we believe we can still optimize our prototype.
 

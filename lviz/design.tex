@@ -12,7 +12,11 @@ traces.
 % visualization.
 % }
 We emphasize that the visualization proposed
-is not specific to Windows.
+is not specific to Windows as traces from other operating systems
+can be used as well.
+\code{lviz} can be easily adapted to read traces in other format,
+which make it friendly to other monitoring systems such as DTrace
+and SystemTap.
 
 \subsubsection{System Traces}
 \label{sec:systrace}
@@ -106,7 +110,7 @@ event. (see Sec. \ref{sec:wbbench} which uses network packet data)
 
 \begin{figure}
 \fbox{\parbox{0.95\columnwidth}{
-\tt\tiny
+\tt\small
 1268 1732
 "C:\BS WINDOWS\BS System32\BS svchost.exe" "NT AUTHORITY\BS SYSTEM"
 1098307213586 1098307319878
@@ -409,7 +413,7 @@ Bar3 color : & black $\rightarrow$ registry operation
 Fig.~\ref{fig:cp-xcopy} illustrates the event-ordered VDP
 of a trace of running
 {\tt xcopy} to copy two directories with files of different sizes.
-The VDP uses self comparison of the {\tt xcopy} trace with
+The VDP uses self-comparison of the {\tt xcopy} trace with
 the DP matching rule on operation and parameter (resource pathname).
 The VDP configuration consisting of a DP ordering, DP matching rule,
 DP coloring rules and barcode coloring rules

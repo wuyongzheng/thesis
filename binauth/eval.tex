@@ -42,7 +42,7 @@ we also compare the performances of our scheme against
 the Microsoft official Authenticode utility called {\tt Sign Tool} \cite{signtool},
 and another Sysinternals (now acquired by Microsoft) Authenticode utility
 {\tt Sigcheck} \cite{sigcheck}.
-Note that two tools are user-mode programs.
+Note that the two tools are user-mode programs.
 They are there to illustrate the difference between non-mandatory strategies
 used with Authenticode with our in-kernel mandatory authentication.
 % However, the slowdown factor can already be seen clearly from the results shown later.
@@ -70,7 +70,7 @@ and waits for the child process' termination using the {\tt WaitForSingleObject(
 We use different binary sizes (40KB, 400KB, 4MB and 40MB, only the 40K and 40MB
 results are displayed)
 for noop.exe to see how executable size impacts performance.
-\item {\bf Loading DLL:}
+\item {\bf DLL Loading:}
 The second scenario executes the {\tt load-dll.exe} program for 100 times.
 This scenario is used to find out how the number of loaded DLLs impacts the performance.
 Program {\tt load-dll.exe} loads 278 standard Microsoft

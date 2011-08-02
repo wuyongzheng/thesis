@@ -22,7 +22,10 @@ to ours here but we need to handle the problems of Windows.
 It appears that DigSig provides binary integrity authentication
 but not binary location authentication.\footnote{Mechanisms based solely on
 signatures embedded in the binaries do not have sufficient information
-for binary location authentication.}
+for binary location authentication.
+For example, one could replace \code{ls} with \code{rm}, where both
+binaries are signed.
+}
 In this section, we examine the implementation issues and tradeoffs
 for Windows which is more complex and difficult than in Unix.
 
@@ -57,7 +60,7 @@ Only the EXE binary is examined by Authenticode, but DLLs are ignored.
 One possible attack is then to put malware into a DLL and then
 execute it, e.g. with {\tt rundll32.exe}.
 Furthermore, Authenticode relies heavily on digital certificates.
-Checking Certificate Revocation Lists (CRL) may add extra delay 
+Checking revocation such as Certificate Revocation Lists (CRL) may add extra delay 
 including timeouts due to the need to contact CA.
 In some cases, this causes significant slowdown.
 
@@ -83,7 +86,7 @@ the Emu system in by Schmid et al. \cite{schmid2001preventing}.
 They intercept process creation by intercepting the NtCreateProcess system
 call. It is unclear whether they are able authenticate all binary code
 since trapping at NtCreateProcess is not sufficient to deal with DLLs.
-No performance benchmarks are given, so it is unclear how 
+No implementation or performance benchmarks are given, so it is unclear how 
 if their system is efficient.
 
 % Since it is important to find out whether the performance penalty due to the 

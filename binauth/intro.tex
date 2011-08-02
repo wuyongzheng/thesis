@@ -63,13 +63,13 @@ Nowadays, the number of discovered vulnerabilities grows rapidly
 This means that binaries on a system (even if they are authenticated) may
 be vulnerable. This leads to a vulnerability management and patching problems.
 We propose a simple software ID system leveraging on the binary
-authentication infrastructure and existing infrastructures such as DNS and certificae authorities
+authentication infrastructure and existing infrastructures such as DNS and certificate authorities
 to handle this problem.
 
 Windows has the Authenticode mechanism \cite{authenticode}.
 In Windows XP version and earlier, 
 it alerts the users of the results of signature verification under
-a few situations. However, it is not mandatory, and can be bypassed.
+a few situations. However, it is not mandatory, and can be easily bypassed.
 The Windows Vista UAC mechanism makes use of signed binaries but it only
 deals with EXE binaries. It is also limited to privilege escalation situations.
 One common drawback of existing Windows mechanisms is that they do not 

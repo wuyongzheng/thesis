@@ -55,14 +55,14 @@ major software upgrade.  System administrators may delay upgrading
 for fear of breaking existing software; yet such a choice has its own risks.
 
 Our work focuses on the problem of software
-maintenance in Microsoft Windows NT-based operating systems (Microsoft Windows
+maintenance in Microsoft Windows NT-based operating systems (e.g. Microsoft Windows
 XP, Microsoft Windows 2000, Microsoft Windows 2003).\footnote{ While an
 appropriate version of a tool similar to WinResMon could also be of use in UNIX,
 its value is much greater in a Microsoft Windows environment.  } We present {\em WinResMon},
 a discovery and system debugging tool for
 determining a program's resource usage as well as the resource usage
 interactions between multiple programs.
-
+It is different from LBox as it provides whole system monitoring.
 
 \subsection{Motivation and Applications}
 
@@ -216,7 +216,9 @@ uninstallation portions of the log.
 A record entry contains common information and specific information
 relevant to that record type.
 The common information consists of: {\em record-type}, 
-{\em start-time}, {\em end-time}, {\em process-id}, {\em thread-id}
+{\em start-time}, {\em end-time}\footnote{
+The timing is measured in CPU cycles, thus it is very accurate},
+{\em process-id}, {\em thread-id}
 {\em user-id} and the {\em error-code} 
 (in the case of failure).  
 We can optionally record the user space stack trace, which is a list
@@ -595,8 +597,10 @@ step 4.}
 \subsubsection{System call interception}
 
 The overview of the logger in Figure~\ref{logger} shows that resource usage is
-captured by intercepting system calls.  In practice, this is actually more
-complex.  Rather than defining and using the actual system calls, the
+captured by intercepting system calls.
+\TODO{de-repetation}
+As discussed in Section~\ref{sec:bg-win}, this is actually more complex.
+Rather than defining and using the actual system calls, the
 Microsoft Windows API is described at a level higher than the operating system
 using the Win32 API.  Although most programs use Win32, they can use the
 native API \cite{nebbett2000windows} directly.  The native system call interface API
@@ -634,7 +638,7 @@ sends the contents of the buffer to the user space and switches to another
 buffer to continue logging in the kernel space.  This strategy tries to ensure
 that most, if not all, events are captured and reduces the system overhead due
 to context switching.  Again, due to the undocumented nature of the kernel, we
-can not claim to capture all events.
+cannot claim to capture all events.
 
 In the prototype implementation, the kernel and user space communicate through
 an ioctl mechanism. Ioctls are used to define a protocol 
@@ -800,10 +804,11 @@ Our micro-benchmarks comprise of: seven benchmarks on file access, five on regis
 two on process creation.  All of these micro-benchmarks run on a
 Pentium 4 2.4GHz machine with 512MB running Microsoft Windows XP with SP2.
 The benchmarking procedure consists of first running the benchmarks on a 
-clean Microsoft Windows XP (with SP2) to get the baseline performance. The 
-next battery runs with WinResMon loaded. The last battery is run with 
-FileMon~\cite{filemon} loaded for file access benchmarks and RegMon~\cite{regmon} 
-loaded for registry access benchmarks. Each micro-benchmark repeats an operation $n$ times. 
+clean Microsoft Windows XP (with SP2) to get the baseline performance.
+We then run with WinResMon loaded.
+Finally, we run with FileMon~\cite{filemon} loaded for file access
+benchmarks and RegMon~\cite{regmon} loaded for registry access benchmarks.
+Each micro-benchmark repeats an operation $n$ times.
 We performed each benchmark four times to get the average execution time.
 Table \ref{tab:winresmon-perf-fr} and \ref{perf-proc} show the average and standard 
 deviation of the execution time in seconds.

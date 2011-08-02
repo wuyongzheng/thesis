@@ -4,7 +4,7 @@
 We now present our binary authentication system, BinAuth.
 We want a lightweight binary authentication scheme which can work
 under many settings without too much reliance on other infrastructure.
-Furthermore, it should help in the management of binaries, and incurs low overhead.
+Furthermore, it should help in the management of binaries, and incur low overhead.
 Management of binaries includes determining which binaries should be
 authentic, dealing with issues arising from disclosed vulnerabilities,
 and software patching.
@@ -132,12 +132,12 @@ In what follows, we mostly write MAC which already covers the choice of HMAC.
 One way of storing the generated MAC is by embedding it into the binary.
 However, doing so may interfere with file format of the signed binaries
 and may also have other complications. 
-We instead use an authentication repository file
+We instead use an authentication repository
 which stores all the MAC values of authenticated binaries
 with their pathnames.
 During the boot-up process, the kernel creates its own in-memory data structures
-for binary authentication from this file. 
-We ensure that the repository file is protected from further modification
+for binary authentication from it.
+We ensure that the repository is protected from further modification
 except under the control of the authentication system to 
 add/remove binaries.\footnote{
 Further security can be achieved by integrating binary authentication
@@ -260,7 +260,9 @@ The {\it device\_name} is a Windows internal name to identify a
 disk or partition volume.
 For instance, the device name {\tt HarddiskVolume1} usually refers to {\tt C:$\backslash$}.
 The {\it NTFS\_object\_ID} is a 128-bit length number uniquely identifying
-a file in the file system volume (this is not the same as Unix inode numbers)
+a file in the file system volume.
+This is not the same as UNIX inode number because it is optional.
+It by default do not exist and is created on demand.
 % \cite{objid}.
 The Verifier uses the {\it FileID} 
 % \cite{hardlink}.
@@ -366,7 +368,7 @@ neither are hard and soft links.
 Since {\it FileID} is optional and can be removed,
 we monitor {\it FileID} removal ({\tt NtFsControlFile(FSCTL\_DELETE\_OBJECT\_ID)})
 and deny the removal if the {\it FileID} is in the table.
-Dut to the semantics of NTFS, our use of {\it FileID} can
+Due to the semantics of NTFS, our use of {\it FileID} can
 coexist with other applications using it.
 
 If additional hardware and infrastructure is available to support
@@ -416,7 +418,9 @@ procedure UponModification (FilePath)
 end procedure
 \end{verbatim}
 \end{center}
-\caption{Pseudo code of file modification monitor}
+\caption{Pseudo code of file modification monitor
+\TODO{use latex algorithm}
+}
 \label{fileopen}
 \end{figure}
 \subsubsection{Security Analysis}
@@ -495,7 +499,7 @@ This is implemented by monitoring the file system control event {\tt FSCTL\_DELE
 Since we cannot keep track of modification on a network shared file system,
 we do not cache the authentication.
 More precisely, the MAC of the binary is always calculated upon loading.
-Same applies to removable media such as floppy in which we can not
+Same applies to removable media such as floppy in which we cannot
 keep track of modification of files.
 
 \item {\bf Memory Mapped Files:}
@@ -511,9 +515,9 @@ Windows requires modification lock upon loading.
 
 \item {\bf TOCTTOU:}
 TOCTTOU stands for Time-Of-Check-To-Time-Of-Use.
-It refers to a race condition bug of an access control system
-where the resource is changed during the time
-of checking the resource to the time of using the resource.
+It refers to race condition bugs in access control systems
+where the resource is changed between the time
+of checking the resource and the time of using the resource.
 In the BinAuth context, the binary may be modified
 after the time it is authenticated and before the time it is executed.
 However, we observed that all binaries are exclusive-write-locked
@@ -538,7 +542,7 @@ This means all drivers are authenticated thus driver attacks such as
 kernel rootkits and malware drivers can be prevented.
 
 \item {\bf Offline Attack:}
-Offline attack means modification of the file system when Windows is
+An offline attack means modification of the file system when Windows is
 not in control.
 For example, boot another operating system or remove the disk drive for
 modification elsewhere. Such an attack will require physical access

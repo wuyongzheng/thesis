@@ -8,9 +8,14 @@ than in other operating systems such as Unix.
 Windows NT (Server 2000, XP, Server 2003, Vista) is a microkernel-like
 operating system. 
 Programs are usually written for the Win32 API but these are
-decomposed into microkernel operations. 
+decomposed into microkernel-like operations. 
 However, Windows is closed source --- only the Win32 API is documented
-and not the microkernel API.
+and not the microkernel-link API.
+\TODO{choose a better example.}
+For example, one should call the officially documented API \code{CreateFile()}.
+\code{CreateFile()} calls \code{CreateFileA()} which calls
+the system call \code{ZwCreateFile()}.
+Neither \code{CreateFileA()} nor \code{ZwCreateFile()} are documented.
 Our prototype makes use of both the documented and undocumented
 kernel infrastructure. However, it is not possible to make any guarantees
 on the completeness of the security mechanisms
