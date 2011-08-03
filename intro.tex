@@ -5,7 +5,7 @@ different pieces of software and the operating system.
 The complex interactions make the software ecosystem hard to understand.
 Without proper understanding,
 it is difficult to configure/maintain software and to fix problems.
-The complexity also increases the attack surface, which measures the
+The complexity also increases the attack surface\cite{manadhata2006attack}, which measures the
 bugs or features exploitable by malicious attacks.
 Monitoring is an effective way to understand these interactions.
 Software monitoring is the process of obtaining information
@@ -220,7 +220,7 @@ so as to hijack benign DLLs with malicious ones.
 It is surprising that Microsoft consistently releases fixes and similar attacks
 consistently reappears \cite{binary-planting}.
 
-Windows lacks a consistent software management system, which manages
+Windows lacks a consistent software management system to manage
 the installation, update and removal of software.
 Most software products have their own installers, which perform installation in
 different ways.
@@ -350,7 +350,7 @@ across a large spectrum.
 
 Many of the system security problems such as malware stem from the fact that
 untrusted binaries are executed.
-Since our WinResMon monitors file system related information flow,
+Since the WinResMon monitoring infrastructure monitors file system related information flow,
 we can tackle the binary trustworthiness from the information
 flow point of view, similar to the Biba Integrity Model.
 In short, low integrity process should not modify high integrity binary and
@@ -386,7 +386,7 @@ Many parts of the thesis is implemented in Windows because of the great
 variety of software and number of users who attract many attacks.
 The closed source nature also makes the monitoring challenging and
 demanding.
-However, the idea can be applied on other operating systems.
+However, the ideas can be applied on other operating systems.
 
 The following are published works in chronological order
 by the author during his doctoral candidature.

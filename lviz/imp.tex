@@ -147,7 +147,7 @@ rather than multiple passes for each rule.
 zero fill $S$\;
 \For{$x\leftarrow 0$ \KwTo $N-1$}{
   \For{$y\leftarrow 0$ \KwTo $N-1$}{
-    \If{$LX[x]=XY[y]$}{
+    \If(\tcp*[f]{based on DP matching rule}){$L_X[x]$ matches $L_Y[y]$}{
       $S[xW/N,yH/N] ++$
     }
   }
@@ -175,7 +175,7 @@ and value is a set of integers representing indexes of events in $L_X$ whose
 digests are $d$. Similarly for $D_Y[d]$.}
 \BlankLine
 \For{$x\leftarrow 0$ \KwTo $N-1$}{
-  $d\leftarrow digest(L_X[x])$\;
+  $d\leftarrow digest(L_X[x])$ \tcc*[l]{digest() calculates the digest based on the DP matching rule}
   insert x to the set $D_X[d]$
 }
 \For{$y\leftarrow 0$ \KwTo $N-1$}{
@@ -191,7 +191,7 @@ digests are $d$. Similarly for $D_Y[d]$.}
 \KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
 \BlankLine
 zero fill $S$\;
-\ForEach{digist $d$}{
+\ForEach{digest $d$}{
   \ForEach{$x$ in $D_X[d]$}{
     \ForEach{$y$ in $D_Y[d]$}{
       $S[xW/N,yH/N] ++$
@@ -227,7 +227,7 @@ the number of matches.
 \KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
 \BlankLine
 zero fill $S$\;
-\ForEach{digist $d$}{
+\ForEach{digest $d$}{
   declare temporary integer array $S_X[0\ldots W-1]$ and $S_Y[0\ldots H-1]$\;
   zero fill $S_X$ and $S_Y$\;
   \lForEach{$x$ in $D_X[d]$}{
@@ -264,8 +264,8 @@ as shown in Algorithm~\ref{alg:lviz-alg2}.
 \KwOut{2D array $S[0\ldots W-1,0\ldots H-1]$ as pixel intensity}
 \BlankLine
 zero fill $S$\;
-\ForEach{digist $d$}{
-  \nlset{$\alpha$} \eIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W\times H$}{
+\ForEach{digest $d$}{
+  \nlset{$\alpha$} \eIf{$|D_X[d]|\times |D_Y[d]|<|D_X[d]|+|D_Y[d]|+W\times H$}{
     \ForEach{$x$ in $D_X[d]$}{
       \ForEach{$y$ in $D_Y[d]$}{
         $S[xW/N,yH/N] ++$

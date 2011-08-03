@@ -182,9 +182,9 @@ One could write a simple C program as in %Figure~\ref{fig:ptrace-bug}
 to escape from \code{ptrace}.
 After several iterations, some
 child processes will not be traced by the tracing program.}
-As well as \code{ptrace}, \code{/proc}
-brings a side-effect to the traced process.
-In both systems, when a traced process calls \code{setuid(2)},
+% As well as \code{ptrace}, \code{/proc}
+% brings a side-effect to the traced process.
+In both \code{ptrace} and \code{/proc}, when a traced process calls \code{setuid(2)},
 the call will fail because the tracing process would have insufficient
 privileges to the \code{setuid} process.
 Because of their subtleties and intrinsic difficulties,
