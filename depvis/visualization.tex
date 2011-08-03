@@ -21,7 +21,7 @@ a directed edge from a node representing binary $A$ to another
 node representing binary $B$ indicates that there is
 a dependency, namely that code in $A$ makes use of code in $B$.
 (We see later why there is the phrasing ``node representing a binary'' in
-Sec. \ref{sec:exe-dep-graph}).
+Section~\ref{sec:exe-dep-graph}).
 Given this classification of binaries, there are three possible
 types of dependencies:
 \begin{itemize}
@@ -102,8 +102,8 @@ on a number of other programs to do its work.
 
 The EXE dependency graph has two kinds of nodes,
 files which are EXEs, are denoted by ellipses, while
-files which are DLLs, are denoted by rectangles.
-(See Fig. \ref{fig:grouping}).
+files which are DLLs, are denoted by rectangles
+(Fig.~\ref{fig:grouping}).
 EXE-EXE and EXE-DLL dependencies are represented by
 blue and black directed edges respectively.
 In general, the EXE dependency graph forms a general graph rather than a
@@ -123,7 +123,7 @@ A and B with other DLLs D1 to D5}
 In a direct visualization of EXE-EXE and EXE-DLL dependencies,
 a directed edge between node $x$ and $y$ denotes that there is
 the dependency between file $x$ and file $y$,
-e.g. see the left graph in Fig. \ref{fig:grouping}.
+e.g. see the left graph in Figure~\ref{fig:grouping}.
 This straightforward direct visualization is usually too complex
 to be manageable as it often has too many nodes and edges simply
 because there are many dependencies in Windows.
@@ -141,13 +141,13 @@ i.e. incoming edges to the binary file.
 More specifically, Let the set of all EXEs with a dependency on DLL $x$
 be the program set of $x$.
 We group all binaries whose program sets are the same.
-Fig.~\ref{fig:grouping} shows the dependency graph without grouping (left) and
+Figure~\ref{fig:grouping} shows the dependency graph without grouping (left) and
 with grouping (right).
 
 Since files often come from particular directories which are either system
 directories or program directories and there are different binary types,
 we further group files so that the files with the same directory and
-same file type are in one node, e.g. label 4 in Fig. \ref{fig:browsers}
+same file type are in one node, e.g. label 4 in Figure~\ref{fig:browsers}
 which shows the dependencies from DLLs which match with the
 pathname {\tt /windows/system32/*.dll} (note that we have used
 the forward `{\tt /}' for pathnames).
@@ -305,7 +305,7 @@ void B (int i) {
 
 The following example illustrates why the difference between
 projection and connected components in the graph.
-The program in Fig.~\ref{fig:indcalls} has
+The program in Figure~\ref{fig:indcalls} has
 five functions which are in DLL modules of the same name.
 Suppose we project on {\tt A.dll}.
 Only {\tt main.exe} uses {\tt A.dll} directly.

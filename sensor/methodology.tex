@@ -71,7 +71,7 @@ In addition, the detection threshold is prone to tampering if it is adaptive.
 \paragraph{Moving Average Detection}
 
 The moving average of $x_i$ is defined by the formula below
-\begin{equation}\label{movAvg}
+\begin{equation} %\label{equ:sensor-movavg}
     \overline{x_i} = \left\{ \begin{array}{lr}
         (\sum_{j=1}^{i}{x_j})/i, & 1 \leq i < n \\
         (\sum_{j=i-n+1}^{i}{x_j})/n, & i \geq n
@@ -89,7 +89,8 @@ be detected in a similar time to the rate based detection. However, if normal
 behavior is observed initially for some time, the alert of abnormal behavior is
 delayed due to the averaging behavior.
 
-\paragraph{Changepoint Detection}\label{subsec:changepoint}
+\paragraph{Changepoint Detection}
+\label{sec:sensor-changepoint}
 
 \begin{table*}[tb]
   \centering
@@ -176,13 +177,13 @@ Thus, it will still be effective even when the malware uses the
 similar information to the sensor.
 
 The specific changepoint detection rules for each of the three applications
-are summarized in Table \ref{tbl:detect-malware}. 
+are summarized in Table~\ref{tbl:detect-malware}. 
 
 \paragraph{The Difference between Changepoint Detection and 
 Rate Based Detection}
 
 We use spam detection to show the difference between rate based
-detection and changepoint detection. Fig.~\ref{fig:detect-by-rate}
+detection and changepoint detection. Figure~\ref{fig:detect-by-rate}
 illustrates situations where rate based detection causes false
 positives and false negatives. Occasionally, the user email rate
 exceeds the spam detection threshold, causing false alarms, even

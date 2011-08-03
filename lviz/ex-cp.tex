@@ -26,7 +26,7 @@
 \begin{center}
 \includegraphics[width=0.10\columnwidth]{lviz/cp-zoom.png}
 \caption{The alternate zoomed-in view of a blue region in
-Fig.~\ref{fig:cp-xcopy} showing reading (magenta) and writing (cyan) operations.
+Figure~\ref{fig:cp-xcopy} showing reading (magenta) and writing (cyan) operations.
 }
 \label{fig:cp-zoom}
 \end{center}
@@ -35,7 +35,7 @@ Fig.~\ref{fig:cp-xcopy} showing reading (magenta) and writing (cyan) operations.
 We use an example of a simple program and operation,
 namely, file copying using {\tt xcopy}, to explain various
 aspects of the VDP visualization.
-Fig.~\ref{fig:cp-xcopy} shows a self-comparison event-ordered VDP of
+Figure~\ref{fig:cp-xcopy} shows a self-comparison event-ordered VDP of
 {\tt xcopy} copying 8 files with sizes
 1MB, 10KB, 10MB, 100KB, 1MB, 10KB, 10MB and 100KB and in that given order.
 A self-comparison VDP has a 45$^\circ$ diagonal line from top-left to 
@@ -61,26 +61,26 @@ be surprising for a file copying task.
 % registry operations.
 The histogram spike at Region 1 shows that some events at the end of the
 trace take a long time.
-Fig.~\ref{fig:cp-zoom} is a zoomed-in view to one of the blue squares in
-Fig.~\ref{fig:cp-xcopy}.
+Figure~\ref{fig:cp-zoom} is a zoomed-in view to one of the blue squares in
+Figure~\ref{fig:cp-xcopy}.
 The checkerboard-like pattern shows alternating read (magenta) and write
 (cyan) operations which is what we expect for file copy.
 Since $cyan+magenta=blue$,
-this explains that the blue squares in Fig.~\ref{fig:cp-xcopy} represents
+this explains that the blue squares in Figure~\ref{fig:cp-xcopy} represents
 reading from source files and writing to destination files.
 We see also that visualizations at different scales can be used for
 different purposes.
-The extreme magnification in Fig.~\ref{fig:cp-zoom}
+The extreme magnification in Figure~\ref{fig:cp-zoom}
 shows the actual operations but may be too detailed a view for
 the overall picture which emerges at the other extreme in 
-Fig.~\ref{fig:cp-xcopy}.
+Figure~\ref{fig:cp-xcopy}.
 
 \begin{figure}[tbh]
 \begin{center}
 \includegraphics[width=1.0\columnwidth]{lviz/cp-xvc.png}
 \caption{Event-ordered VDP comparing {\tt cp} (x-axis) and {\tt xcopy} (y-axis) copying
 the same files. 
-The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
+The configurations are the same as in Figure~\ref{fig:cp-xcopy}.
 }
 \label{fig:cp-xvc}
 \end{center}
@@ -91,7 +91,7 @@ The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 \includegraphics[width=0.5\columnwidth]{lviz/cp-64k.png}
 \caption{Time-ordered VDP comparing {\tt cp-64k} (x-axis)
 and {\tt xcopy} (y-axis).
-The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
+The configurations are the same as in Figure~\ref{fig:cp-xcopy}.
 }
 \label{fig:cp-64k}
 \end{center}
@@ -99,11 +99,11 @@ The configurations are the same as in Fig.~\ref{fig:cp-xcopy}.
 
 In general, a VDP is used with two traces rather than a single
 trace as in a self-VDP.
-% Fig. \ref{fig:cp-xcopy} shows a VDP which compares of a {\tt xcopy}
+% Figure~\ref{fig:cp-xcopy} shows a VDP which compares of a {\tt xcopy}
 % trace against itself, i.e. a self-similarity comparison.
 % Two different traces can also be compared with one trace on the X axis
 % and the other trace on the y-axis.
-Fig.~\ref{fig:cp-xvc} compares {\tt cp} (x-axis: a Windows version
+Figure~\ref{fig:cp-xvc} compares {\tt cp} (x-axis: a Windows version
 of GNU {\tt cp}) and {\tt xcopy} (y-axis) copying the same 8 files.
 % {\tt cp} is the Windows version of the file copying program included
 % in GNU coreutils.
@@ -138,13 +138,13 @@ Changing the visualization to a time-ordered one (not shown)
 shows that {\tt cp} runs slower than {\tt xcopy} though less than 16x.
 We then modified {\tt cp} to obtain another version
 {\tt cp-64k} which uses 64K buffers.
-Fig.~\ref{fig:cp-64k} shows the time-ordered VDP comparing
+Figure~\ref{fig:cp-64k} shows the time-ordered VDP comparing
 {\tt cp-64k} (x-axis) and {\tt xcopy} (y-axis).
 From Region {\em 2}, we can see that copying of the largest file
 is performed in about the same time in both programs.
 However, {\tt xcopy} has a slow initialization 
-(as shown in Fig.~\ref{fig:cp-64k} Region {\em 1} which includes the registry
-operations in Fig.~\ref{fig:cp-xcopy} Region {\em 2}),
+(as shown in Figure~\ref{fig:cp-64k} Region {\em 1} which includes the registry
+operations in Figure~\ref{fig:cp-xcopy} Region {\em 2}),
 which causes {\tt xcopy} to be slower in total than {\tt cp-64k}.
 
 % \TODO{discuss flexible configuration and exploration process also shown

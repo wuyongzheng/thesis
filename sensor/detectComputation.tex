@@ -27,22 +27,24 @@ while. As CPU load is internal to the host,
 we rely on CPU temperature as an indirect measurement which can
 be obtained by an external sensor.
 
-Fig.~\ref{fig:temp-cpuload} shows the correlation between CPU load
+Figure~\ref{fig:temp-cpuload} shows the correlation between CPU load
 and temperature.
 The correlation is good but we can see that there is
 noise and other fluctuations in the measurement.
 Thus, this is an example of a sensor measurement which is imperfect and
 has noise.
-Fig. \ref{fig:temp-norm} shows the temperature when a user
+Figure~\ref{fig:temp-norm} shows the temperature when a user
 is present and absent. Note when the user is absent, the temperature
 is around 37$^\circ$C, with less variability.  We measured the
 temperature during automated software update and found the
 temperature increase of 2-3$^\circ$C.
 
-When we employ CuSum to detect the increase in CPU temperature, we can determine the thresholds $a$, $N$ and $t$ from CPU temperatures in normal usage. Fig.
-\ref{fig:temp-norm} shows normal temperature variations during user
-presence and absence. From the observation of Fig.
-\ref{fig:temp-norm}, we set the upper bound of system idle
+When we employ CuSum to detect the increase in CPU temperature,
+we can determine the thresholds $a$,
+$N$ and $t$ from CPU temperatures in normal usage.
+Figure~\ref{fig:temp-norm} shows normal temperature variations during user
+presence and absence. From the observation of Figure~\ref{fig:temp-norm},
+we set the upper bound of system idle
 temperature to be $a=38.5^\circ$C. We set the threshold for
 the accumulated increase in temperature as $N=2400$ in 30 minutes.
 This threshold $N$ is chosen to allow software update that increases
@@ -81,8 +83,13 @@ and the detection threshold $N=2400$ in $t=30$ mins).}
 \label{tbl:detect-CPU}
 \end{table}
 
-Fig. \ref{fig:temp-activities} shows the temperature during various
-computation tasks. Table \ref{tbl:detect-CPU} shows the detection time of computation intensive activities, using different detection methods. Rate based detection detects the computation activities in seconds; moving average takes 7 to 11 minutes; while changepoint detection has a detection time that is in between. 
+Figure~\ref{fig:temp-activities} shows the temperature during various
+computation tasks.
+Table~\ref{tbl:detect-CPU} shows the detection time of computation
+intensive activities, using different detection methods.
+Rate based detection detects the computation activities in seconds;
+moving average takes 7 to 11 minutes;
+while changepoint detection has a detection time that is in between.
 The changepoints in temperature for playing games
 and running Matlab are detected 10.4 minutes and 5.2
 minutes respectively after they start. Since the user is present or
@@ -127,10 +134,10 @@ CPU usage. This investigates if the CPU usage can be detected when
 the malware throttles its computation at a lower rate. CPU usage is
 controlled as follows: for each one-second interval, the bot
 computes at full speed for $x$ seconds and then sleep for $1-x$
-seconds, where $x<1$. We denote the CPU usage to be $100x$\% in Fig.
-\ref{fig:pwd-vary}. We carry out the attack for 600 seconds (starts
-at 180 seconds and ends at 780 seconds). Fig. 9 shows the
-temperature under intensity variation. Note that after the attacks
+seconds, where $x<1$. We denote the CPU usage to be $100x$\% in
+Figure~\ref{fig:pwd-vary}. We carry out the attack for 600 seconds (starts
+at 180 seconds and ends at 780 seconds).
+Note that after the attacks
 stop, the temperature gradually returns to normal.  For the password
 computation running at 100\% usage, we detect the change after about
 4.5 minutes.  For the computation at 20\% usage, we can also detect

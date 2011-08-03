@@ -9,9 +9,9 @@
 
 We illustrate the two dependency graphs on a small example, namely, the
 {\tt wget} program downloading an {\tt https} page.
-Fig.~\ref{fig:wget-exe-split} shows the EXE dependency graph for {\tt wget}.
-\TODO{fix space limitation.}
-{\tt Wget} loads 34 DLLs but due to space limitations, we only show 4 of them.
+Figure~\ref{fig:wget-exe-split} shows the EXE dependency graph for {\tt wget}.
+{\tt wget} loads 34 DLLs but due to space limitations,
+but the figure only shows 4 of them for simplicity.
 The EXE dependency graph is meant for comparing multiple EXE's to show
 grouped dependencies.
 When there is only a single EXE in the graph, it reduces to a single level
@@ -32,10 +32,10 @@ when there are multiple EXEs.
 \label{fig:wget-function}
 \end{figure*}
 
-Fig.~\ref{fig:wget-nogroup} shows the DLL
+Figure~\ref{fig:wget-nogroup} shows the DLL
 dependency graph for wget without grouping; while
-Fig.~\ref{fig:wget-function} shows it grouped by functionality.
-As we can see, Fig.~\ref{fig:wget-function} is much more compact
+Figure~\ref{fig:wget-function} shows it grouped by functionality.
+As we can see, Figure~\ref{fig:wget-function} is much more compact
 because the nodes have been grouped according to the function of the modules.
 
 We manage the assignment of files to groups with a data\-base which is
@@ -62,12 +62,12 @@ The grouping process as a whole is relatively static and can mostly be
 done once so while some manual effort is needed to create an initial
 database, the database may only need to be updated infrequently.
 
-Fig.~\ref{fig:wget-nogroup} shows the interactions
+Figure~\ref{fig:wget-nogroup} shows the interactions
 between the various DLLs used by {\tt wget}.
 It illustrates that a small program already
 gives a complex dependency graph.
 As such, it may be more useful to check some specific details.
-Fig.~\ref{fig:wget-function} gives
+Figure~\ref{fig:wget-function} gives
 a ``big picture'' of the dependencies
 in {\tt wget} in terms of how the various functional
 components interact.

@@ -170,7 +170,7 @@ which are not yet created.
 \end{enumerate}
 
 % An example of the use of process and event specification
-% is the simple monitor given in Figure \ref{fig:lbox-eg-prog} from Section \ref{sec:lbox-eg}.
+% is the simple monitor given in Figure~\ref{fig:lbox-eg-prog} from Section~\ref{sec:lbox-eg}.
 % By using boolean expression, process specification can be very flexible.
 \noindent
 An example of the API (see also Section~\ref{sec:lbox-eg}) is to monitor
@@ -485,7 +485,7 @@ i.e. even a D-like scripting language.
 \subsubsection{An Extended Example}
 \label{sec:lbox-eg}
 
-Figure \ref{fig:lbox-eg-prog} illustrates how a monitor is written in our system.
+Figure~\ref{fig:lbox-eg-prog} illustrates how a monitor is written in our system.
 For simplicity, we have used C-like pseudo code to
 hide some details and have not given the complete program.
 Error handling also has been omitted for the most part.
@@ -701,7 +701,7 @@ The left part of Figure~\ref{fig:lbox-mon-tree} shows the process tree induced
 by the parent-child relationship while the right
 shows the monitor DAG induced by the monitoring relationship.
 The following sequence describes the creation of the snapshot given
-in Figure \ref{fig:lbox-mon-tree}:
+in Figure~\ref{fig:lbox-mon-tree}:
 
 \begin{tightenumerate}
 \item The master web server process $4010$ is created.
@@ -1088,7 +1088,7 @@ ptrace & \begin{math} 59.04\pm0.15 \end{math} & \begin{math} 12.90\pm0.32 \end{m
 \label{tab:lbox-open}
 \end{table}
 
-The open micro-benchmark results are given in Table \ref{tab:lbox-open}
+The open micro-benchmark results are given in Table~\ref{tab:lbox-open}
 with all times in seconds. The average and standard deviation
 is given over 10 runs.
 As the timings are only measured with the Unix user/system and real-time
@@ -1158,7 +1158,7 @@ DTrace & \begin{math} 8.41\pm0.02 \end{math} & \begin{math} 1.08\pm0.01 \end{mat
 \label{tab:lbox-sol}
 \end{table}
 
-Table \ref{tab:lbox-sol} shows the
+Table~\ref{tab:lbox-sol} shows the
 test on Solaris for the same hardware with the same benchmark program. 
 While the baseline for Solaris is slower than Linux, it is reasonable
 to make relative comparisons.
@@ -1205,7 +1205,7 @@ the open itself becomes quite fast in Linux.
 We use another micro-benchmark on socket
 operations to show the effect of a more expensive system call.
 The benchmark creates a TCP socket and connects to a local port.
-This is repeated for 4000 times and the results are in Table \ref{tab:lbox-connect}.
+This is repeated for 4000 times and the results are in Table~\ref{tab:lbox-connect}.
 We can see that in an expensive system call, the overhead is not noticeable.
 
 \begin{table*}[ht]
@@ -1268,7 +1268,7 @@ The last two benchmarks, bash and Mozilla,
 have also been chosen because these applications
 have been used in Alcatraz \cite{liang2009alcatraz}.
 For I/O monitoring, we have monitored all the I/O from the application.
-The results given in Table \ref{tab:lbox-macro}. 
+The results given in Table~\ref{tab:lbox-macro}. 
 The results for \code{strace} and \code{truss} are only meant to illustrate
 the additional overhead of I/O since both programs do reprocess the data
 and thus do have additional overhead but 

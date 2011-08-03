@@ -27,7 +27,7 @@ would not make sense for DLLs which do significant work in the initialization.
 \label{fig:boot}
 \end{figure*}
 
-Fig.~\ref{fig:boot} shows the EXE dependency graph for a boot to shutdown cycle
+Figure~\ref{fig:boot} shows the EXE dependency graph for a boot to shutdown cycle
 for a fresh Windows XP install.
 The machine was booted and automatically logged in,
 then logged off, and shutdown. One might expect that the processes
@@ -57,7 +57,7 @@ the database query interface, is used by {\tt explorer}.
 \label{fig:gimp-function}
 \end{sidewaysfigure}
 
-Fig.~\ref{fig:browsers} shows the EXE dependency graph for three
+Figure~\ref{fig:browsers} shows the EXE dependency graph for three
 brow\-sers: Internet Explorer, Firefox and Opera.
 Each browser displayed a YouTube page to play a
 video till completion. The scenario is intended to show the dependencies
@@ -118,27 +118,27 @@ software, it uses libraries from various sources. In this experiment, we
 executed GIMP without opening any files. We want to see how GIMP uses various
 libraries and the interactions between them.
 
-Fig.~\ref{fig:gimp-function} shows GIMP grouped by functionality while
-Fig.~\ref{fig:gimp-vendor} shows
+Figure~\ref{fig:gimp-function} shows GIMP grouped by functionality while
+Figure~\ref{fig:gimp-vendor} shows
 GIMP grouped by software vendor.
 GIMP is large but quite modular. The bulk of
 the DLLs used are from the GEGL, GTK and GLIB frameworks. It also uses the
 Windows GUI APIs (e.g., gdi32, comctl32) extensively.
 
-Fig.~\ref{fig:gimp-function} is a larger graph than Fig.~\ref{fig:gimp-vendor}
+Figure~\ref{fig:gimp-function} is a larger graph than Figure~\ref{fig:gimp-vendor}
 but is still understandable using the functional grouping,
 e.g. {\tt gimp} uses the {\tt [gegl]}
 image processing modules, which in turn uses the {\tt [gtk]} windowing
 module.  The remaining DLLs are not used very much.
 
-Fig.~\ref{fig:gimp-vendor} is interesting because it shows that
+Figure~\ref{fig:gimp-vendor} is interesting because it shows that
 many different software vendors/providers are used in GIMP.
 Microsoft is also prominent but is
 expected since GIMP is running on Windows and uses the Win32 API.
 The presence of so many different software vendors could also make
 troubleshooting difficult since it might be difficult to determine
 which vendor is responsible if GIMP behaves in unexpected ways.
-Fig.~\ref{fig:gimp-vendor} also shows
+Figure~\ref{fig:gimp-vendor} also shows
 one of the advantages of open source software, namely, reuse. The
 binaries belonging to GIMP only turn out to be quite small and
 GIMP prefers to rely on
@@ -154,7 +154,7 @@ existing frameworks like {\tt gtk} (GUI) and GEGL (image processing).
 \end{figure}
 
 Firefox allows extensions through its own plug-in architecture.
-Fig.~\ref{fig:firefox} shows the DLL dependency graph
+Figure~\ref{fig:firefox} shows the DLL dependency graph
 of Firefox as grouped by vendor. We find a node for Adobe.
 This is because {\tt npswf32} is the Flash plugin for firefox.
 
@@ -190,7 +190,7 @@ The strategy used here is to compare two DLL dependency graphs,
 Internet Explorer opening a website with flash content and
 Internet Explorer showing the {\tt about:blank} page since
 {\tt about:blank} page is the most minimal webpage for Internet Explorer,
-Fig.~\ref{fig:ie-diff} shows the difference (diff) between these two
+Figure~\ref{fig:ie-diff} shows the difference (diff) between these two
 graphs.
 The DLLs marked with {\bf +x+} are the {\em extra} DLLs loaded
 when Flash is played.
@@ -207,7 +207,7 @@ network, multimedia, DirectX and Flash categories.
 To further investigate the interactions resulting from the Flash module,
 we project the visualization on {\tt flash10c.ocx} which is
 the Flash ActiveX control.
-Fig.~\ref{fig:ie-proj} shows the projected graph.
+Figure~\ref{fig:ie-proj} shows the projected graph.
 We can see that Flash is interacting with the browser and multimedia modules.
 The DLLs marked with {\bf \#x\#} neither use {\tt flash10c.ocx}
 nor are they used by {\tt flash10c.ocx}.

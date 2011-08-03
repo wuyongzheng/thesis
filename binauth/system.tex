@@ -126,7 +126,7 @@ only the generated HMAC needs to be checked.
 % \footnote{
 % There are subtle trust issues 
 % in the event of certificate expiration/revocation, 
-% see Sec. ~\ref{sec:binauth-analysis}.}
+% see Section~\ref{sec:binauth-analysis}.}
 In what follows, we mostly write MAC which already covers the choice of HMAC.
 
 One way of storing the generated MAC is by embedding it into the binary.
@@ -167,7 +167,7 @@ decides whether an execution is to be allowed.
 \paragraph{SignatureToMac}
 
 Once software is installed on the system,
-Fig. \ref{fig:hashing} shows how SignatureToMac processes the binaries:
+Figure~\ref{fig:hashing} shows how SignatureToMac processes the binaries:
 \begin{enumerate}
 \item Checks the validity of the binary's digital signature.
 If the signature is invalid, then report failure.
@@ -284,7 +284,7 @@ It is initially set to false, and set to true after successful authentication.
 \end{itemize}
 
 \noindent
-Fig. ~\ref{fig:verifier} shows the authentication process 
+Figure~\ref{fig:verifier} shows the authentication process
 when a binary executes/loads:
 \begin{enumerate}
 \item It checks if the binary's {\it Kernel\_pathname} exists in the table.
@@ -309,7 +309,7 @@ To control binary execution, we intercept the section creation action
 \begin{itemize}
 \item Intercepting file opening ({\tt NtCreateFile()} and {\tt NtOpenFile()}).
 This would need to authenticate any file opened with with execute access mode.
-As discussed in Sec.~\ref{sec:binauth-windows}, however, this introduces
+As discussed in Section~\ref{sec:binauth-windows}, however, this introduces
 unnecessary overheads and can cause some correct programs to fail if the files
 do not pass authentication.
 There are also technical difficulties to distinguish between

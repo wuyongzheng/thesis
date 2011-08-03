@@ -52,7 +52,7 @@ When Windows is idle (i.e. no user interaction),
 system services and system processes still run.
 We want to visualize whether such services and programs have 
 (some expected) periodic behavior.
-Fig.~\ref{fig:idle-dp}a (left) shows a time-ordered VDP from two 
+Figure~\ref{fig:idle-dp}a (left) shows a time-ordered VDP from two
 different idle machines for an hour at different times.
 The size of the x and y-axis traces are 
 851528 and 652713 events respectively.
@@ -69,9 +69,9 @@ enforces security;
 and {\tt wuauclt.exe} is windows auto-update service.
 Bar3, Bar4 and Bar5 show the operation types.
 
-Fig.~\ref{fig:idle-dp} shows periodic structure which appears
+Figure~\ref{fig:idle-dp} shows periodic structure which appears
 fractal-like.
-Bar1 and Bar2 in Fig.~\ref{fig:idle-dp}a
+Bar1 and Bar2 in Figure~\ref{fig:idle-dp}a
 show that events from {\tt lsass.exe}, {\tt svchost.exe} and {\tt explorer.exe}
 occur continuously in the traces but {\tt wuauclt.exe} only occurs
 during a short period of time.
@@ -82,12 +82,12 @@ ticks in the histogram and there are 20 ticks in total.)
 During this short period, we can see that a lot of events occur,
 because the histogram at Region {\em a1} and {\em a4} have peaks.
 We select two obvious regions to study the structure:
-Region {\em a2} which is zoomed in Fig.~\ref{fig:idle-dp}b and 
-Region {\em a3} zoomed in Fig.~\ref{fig:idle-dp}c.
+Region {\em a2} which is zoomed in Figure~\ref{fig:idle-dp}b and
+Region {\em a3} zoomed in Figure~\ref{fig:idle-dp}c.
 
-We turn to the zoom in Fig.~\ref{fig:idle-dp}b.
+We turn to the zoom in Figure~\ref{fig:idle-dp}b.
 Bar1 and Bar2 in
-Fig.~\ref{fig:idle-dp}b show more clearly that
+Figure~\ref{fig:idle-dp}b show more clearly that
 {\tt explorer.exe} (Region {\em b5} and {\em b6}) runs
 more frequently than {\tt lsass.exe} (Region {\em b4} and {\em b3}).
 Thus, we see two kinds of periodic events. The numerous dots such
@@ -103,9 +103,9 @@ are no other events in these portions of the idle trace.
 % This means the load of {\tt explorer.exe} is spread out while
 % the load of {\tt lsass.exe} is concentrated.
 
-We have covered the periodic events in Fig.~\ref{fig:idle-dp}a except
+We have covered the periodic events in Figure~\ref{fig:idle-dp}a except
 for Region {\em a3}.
-To explain Region {\em a3} and its zoom in Fig.~\ref{fig:idle-dp}c, 
+To explain Region {\em a3} and its zoom in Figure~\ref{fig:idle-dp}c,
 we notice the cyan in Bar5 (network events) shows more activity.
 Selecting those network events we find the
 program is {\tt wuauclt.exe} (Windows update) --

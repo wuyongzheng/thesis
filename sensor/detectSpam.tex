@@ -39,7 +39,7 @@ stealthy spam program sends out only a single email at night,
 this could slip out unnoticed by normal email rate based spam detection
 while we would detect it.
 
-Fig. \ref{fig:email} shows the typical email activity of a
+Figure~\ref{fig:email} shows the typical email activity of a
 user in a day. About 10 to 20 emails are sent daily.
 It shows that our hypothesis that all emails are sent with the
 user present is reasonable.
@@ -81,7 +81,7 @@ modified Agobot.
 We tested the detection of spam at rates corresponding to Srizbi,
 Rustock and Storm worms.
 We assume the spam emails are sent out at uniform rate.
-Table \ref{tbl:detect-spam} shows the
+Table~\ref{tbl:detect-spam} shows the
 detection time when the user is present and absent.
 Note that threshold $N$ is set on the parameter of the accumulated
 email amount. It is easy to see the detection time is inversely
@@ -113,9 +113,18 @@ instantly, because the detection threshold $N=1$ at user absence.
 
 To detect spam using rate based or moving average detection algorithms
 is straightforward. 
-Table \ref{tbl:detect-spam2} compares the detection time using rate, moving average and changepoint detection. The detection threshold equals to 1 during user absence for all three algorithms. When user is present, the acceptable normal email rate is $a=5$ emails per minute, and the detection threshold for changepoint detection is $N=120$ emails in $t=6$ hours, the threshold $T_r=a+N/t\approx6$ email per minute for rate based detection, and the threshold for moving average detection is $T_m = 1920$ email per 6 hours or $16/3$ email per minute on average.
+Table~\ref{tbl:detect-spam2} compares the detection time using rate,
+moving average and changepoint detection.
+The detection threshold equals to 1 during user absence for all three algorithms.
+When user is present, the acceptable normal email rate is
+$a=5$ emails per minute,
+and the detection threshold for changepoint detection is $N=120$
+emails in $t=6$ hours,
+the threshold $T_r=a+N/t\approx6$ email per minute for rate based detection,
+and the threshold for moving average detection is $T_m = 1920$ email
+per 6 hours or $16/3$ email per minute on average.
 
-Table \ref{tbl:detect-spam2} shows that using the user presence information, spam detection is significantly reduced for all three detection algorithms in the user absence case. 
+Table~\ref{tbl:detect-spam2} shows that using the user presence information, spam detection is significantly reduced for all three detection algorithms in the user absence case. 
 In general, the more aggressive the spam worm, the easier it 
 becomes to detect it. 
 Srizbi is detected in much more quickly than Rustock or Storm. Comparing the detection time using the three detection algorithms, we can see that rate based detection is the quickest. 
@@ -164,12 +173,12 @@ SquirrelMail & A particular HTTP request immediately after an email is sent. \\ 
 We detect the sending of outgoing email is done by matching packets 
 at the router with a list of signatures. 
 We experiment with SMTP and various webmail protocols.
-% Table \ref{tbl:detect-email} shows the
+% Table~\ref{tbl:detect-email} shows the
 % signatures of email sent using SMTP and 
 Email sent using SMTP protocol is relatively easy to detect, since
 an SMTP command {\tt MAIL} indicates the user is submitting email.
 Webmail interfaces are more complex.
-Table \ref{tbl:detect-email} summarises
+Table~\ref{tbl:detect-email} summarises
 the signatures we used to identify emails sent using the following
 four webmail protocols: Hotmail, Gmail, NetEase, and SquirrelMail.
 

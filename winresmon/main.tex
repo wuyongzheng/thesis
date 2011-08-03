@@ -164,7 +164,7 @@ with applications.  For example, {\small\tt .DOC} is registered to Microsoft Wor
 
 \subsection{System Design}
 
-The WinResMon system infrastructure shown in Figure~\ref{usp} consists of the
+The WinResMon system infrastructure shown in Figure~\ref{fig:winresmon-sys} consists of the
 following components: logger, archiver, query API, and user-log API.  
 The logger generates
 resource-access traces which are later used by the analyzer.  The archiver
@@ -175,7 +175,7 @@ Query and user-log API provide the interface to the trace database.
 \centering
 \includegraphics[scale=0.6]{winresmon/usp}
 \caption{WinResMon overall system architecture}
-\label{usp}
+\label{fig:winresmon-sys}
 \end{figure*}
 
 
@@ -497,7 +497,7 @@ length})}.  It signals the trace generator to record the {\small\tt {\it logdata
 to the log database in binary form.  The ownership information of a user log
 entry (i.e. the program pathname and process) is always recorded.
 
-Figure~\ref{custlog-prog} shows a simple wrapper for an installer program which
+Figure~\ref{fig:winresmon-logprog} shows a simple wrapper for an installer program which
 generates custom installation events.  In this example, the {\small\tt {\it
 logdata}} consists of the name of the software and path of the installer
 program.  Invoking the wrapper as ``{\small\tt C:$\backslash$ins-wrapper.exe
@@ -536,7 +536,7 @@ int main (int argc, char **argv)
 \hrule
 \medskip
 \caption{A sample installer wrapper}
-\label{custlog-prog}
+\label{fig:winresmon-logprog}
 \end{figure}
 
 
@@ -568,10 +568,10 @@ int main (int argc, char **argv)
 \put(76,80){6. return}
 \end{picture}
 \caption{Overview of how the logger works}
-\label{logger}
+\label{fig:winresmon-logger}
 \end{figure}
 
-Figure~\ref{logger} gives an overview of how the logger works.
+Figure~\ref{fig:winresmon-logger} gives an overview of how the logger works.
 The information flow is as follows:
 
 \begin{enumerate}
@@ -596,7 +596,7 @@ step 4.}
 
 \subsubsection{System call interception}
 
-The overview of the logger in Figure~\ref{logger} shows that resource usage is
+The overview of the logger in Figure~\ref{fig:winresmon-logger} shows that resource usage is
 captured by intercepting system calls.
 \TODO{de-repetation}
 As discussed in Section~\ref{sec:bg-win}, this is actually more complex.
@@ -691,7 +691,7 @@ trace\_select("proc.childname =\~{} \\
 	\>BACKWARD);
 \end{tabbing}}
 
-\item Figure~\ref{analyzer-prog} shows a code fragment from a simple analyzer
+\item Figure~\ref{fig:winresmon-analyzer} shows a code fragment from a simple analyzer
 which searches for all the registry keys opened by Internet Explorer.
 
 \begin{figure}[htb]
@@ -718,7 +718,7 @@ trace_close(trace_handle);
 \end{verbatim}
 \hrule
 \caption{A sample analyzer}
-\label{analyzer-prog}
+\label{fig:winresmon-analyzer}
 \end{figure}
 
 \noindent
@@ -810,7 +810,7 @@ Finally, we run with FileMon~\cite{filemon} loaded for file access
 benchmarks and RegMon~\cite{regmon} loaded for registry access benchmarks.
 Each micro-benchmark repeats an operation $n$ times.
 We performed each benchmark four times to get the average execution time.
-Table \ref{tab:winresmon-perf-fr} and \ref{perf-proc} show the average and standard 
+Table~\ref{tab:winresmon-perf-fr} and \ref{tab:winresmon-perf-proc} show the average and standard 
 deviation of the execution time in seconds.
 
 The file access benchmarks consist of:
@@ -912,7 +912,7 @@ Process Operation & $n$ & Clean & WinResMon \\
 \hline
 \end{tabular}
 \caption{Performance of process creation (in seconds)}
-\label{perf-proc}
+\label{tab:winresmon-perf-proc}
 \end{table*}
 
 \begin{table*}
@@ -929,10 +929,10 @@ Lame     & $45.631 \pm 0.538$  & $45.662 \pm 0.534$ ($0.6\%$) \\
 \hline
 \end{tabular}
 \caption{Performance of macro-benchmarks (in seconds)}
-\label{perf-macro}
+\label{tab:winresmon-perf-macro}
 \end{table*}
 
-Table~\ref{perf-proc} shows the results of the process creation benchmark. The
+Table~\ref{tab:winresmon-perf-proc} shows the results of the process creation benchmark. The
 console process in the benchmark creates a dummy child process using the
 {\small\tt CreateProcess()} function and waits for its termination using the
 {\small\tt WaitForSingleObject()} function.  The difference between a console
@@ -947,7 +947,7 @@ micro-benchmarks because the micro-benchmarks are very system call intensive.
 Normal programs, such as our macro-benchmarks, typically make significantly
 fewer system calls, spending more time in the application rather than the
 kernel.
-Table~\ref{perf-macro} gives some macro-benchmark results which show the
+Table~\ref{tab:winresmon-perf-macro} gives some macro-benchmark results which show the
 impact of WinResMon on the following normal programs: {\small\tt WinRAR}, {\small\tt gcc}, \LaTeX{} and {\small\tt Lame}.
 The benchmarks perform the following:
 \begin{itemize}

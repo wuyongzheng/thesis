@@ -40,7 +40,7 @@ from all processes.
 A WinResMon trace consists of four classes of events
 due to operations on processes, files, network and the registry.
 An event contains the following properties: (the example events
-in Figure \ref{fig:logex} use the ordering below)
+in Figure~\ref{fig:logex} use the ordering below)
 \begin{tightitemize}
 \item {\bf PID/TID} is the ID of the process/thread which
 performs the operation.
@@ -99,9 +99,9 @@ the opened or created file, access flags, file attributes, creation disposition
 (create new, open existing,
 % truncate existing, or append to existing files),
 etc.) and other Windows operating system specific information.
-Fig.~\ref{fig:logex} shows two examples of events.
+Figure~\ref{fig:logex} shows two examples of events.
 WinResMon can optionally capture the data associated with an
-event. (see Sec. \ref{sec:wbbench} which uses network packet data)
+event. (see Sec.~\ref{sec:wbbench} which uses network packet data)
 % While file and registry resources are represented as paths,
 % network resources are represented as network address, i.e. IP address and port.
 % Only TCP and UDP protocols are recorded.
@@ -233,7 +233,7 @@ two different sequences.
 \includegraphics[width=0.4\textwidth]{lviz/elements.png}
 \caption{Elements of VDP: axis histograms (Region 1,2);
 barcodes (3,4); and extended DotPlot (5). This figure is same as
-Fig.~\ref{fig:cp-xcopy} with the added annotation.}
+Figure~\ref{fig:cp-xcopy} with the added annotation.}
 \label{fig:elements}
 \end{center}
 \end{figure}
@@ -245,18 +245,18 @@ consists of a number of sub-visualizations:
 an {\em extended DotPlot} (or simply, DP in the rest of the section), two
 Axis Histograms, and some barcodes.
 % We now describe the elements of VDP.
-Fig.~\ref{fig:elements} gives an overview of all the elements:
+Figure~\ref{fig:elements} gives an overview of all the elements:
 $(i)$ the DP (region 5);
 $(ii)$ the x-axis histogram (region 1) and
 y-axis histogram (region 2);
 and $(iii)$ the x-axis barcodes (region 3) and
 y-axis barcodes (region 4).
 A larger diagram of the same visualization highlighting various
-details is in Fig.~\ref{fig:cp-xcopy}.
+details is in Figure~\ref{fig:cp-xcopy}.
 
 An important aspect of the VDP is that it is intended to
 be extensively customizable. Thus, it gives rise to a family of visualizations.
-In Sec. \ref{sec:lviz-study}, we show how to apply and customize
+In Section~\ref{sec:lviz-study}, we show how to apply and customize
 the VDP for different purposes. The elements of a VDP as follows.
 
 {\bf DP}:
@@ -270,7 +270,7 @@ which are then colored using the DP coloring rules for customizing
 the appearance.
 Normalization or histogram equalization (see Sec.~\ref{sec:lviz-imp})
 is applied on the image so that the color intensity fits in a displayable range.
-Our extended DotPlots (see region 5 in the center of Fig.~\ref{fig:elements})
+Our extended DotPlots (see region 5 in the center of Figure~\ref{fig:elements})
 can be drawn with event-ordering, time-ordering or time-duration-ordering.
 In an {\em event-ordered} DP, the events are plotted in
 sequence as they occur in the trace.
@@ -343,18 +343,18 @@ Our examples mainly use the first method.
 {\bf Barcodes} and {\bf Barcode Coloring Rules}:
 The barcode sub-visualization
 acts as a one-dimensional ruler for the trace on the associated axis, hence its name.
-Region 3 and 4 in Fig.~\ref{fig:elements} show X and Y axis barcodes.
+Region 3 and 4 in Figure~\ref{fig:elements} show X and Y axis barcodes.
 The purpose of the barcodes is to visualize multiple aspects of
 the trace and allow that to be correlated to the associated event in the DP.
 
 Barcodes are colored using
 barcode coloring rules similar to DP coloring rules.
-For example Fig.~\ref{fig:cp-xcopy} (see Sec. \ref{sec:cp})
+For example Figure~\ref{fig:cp-xcopy} (see Sec. \ref{sec:cp})
 colors the barcode by resource type.
 Multiple barcode coloring rules can be specified.
 Since barcodes are useful to show properties of the events,
 there can be more than one barcode. Each barcode has its own
-set of coloring rules, see Fig. \ref{fig:cp-xcopy} which has 3 different
+set of coloring rules, see Figure~\ref{fig:cp-xcopy} which has 3 different
 barcodes stacked on the X and Y axis.
 In the thesis, we number the barcode from inside (top or left depending
 on the axis) to outside, i.e. barcode 1 means the inner most barcode.
@@ -362,7 +362,7 @@ on the axis) to outside, i.e. barcode 1 means the inner most barcode.
 {\bf Axis Histograms}:
 The axis histogram sub-visualization
 serves as another kind of ruler for each of the traces on the X and Y axis,
-see region 1 and 2 in Fig.~\ref{fig:elements}, providing
+see region 1 and 2 in Figure~\ref{fig:elements}, providing
 time-event correlation information to the traces.
 It consists of
 ticks (small blue square on the outer edge) representing unit time intervals
@@ -372,7 +372,7 @@ but can be irregularly distributed in an event-ordered VDP,
 since there may be many or few events within a unit time interval.
 Closely spaced ticks in an event-ordered VDP mean low event frequency.
 
-The histogram component (see region 1 in Fig.~\ref{fig:cp-xcopy})
+The histogram component (see region 1 in Figure~\ref{fig:cp-xcopy})
 is used to visualize the density of events or time
 of the trace.
 The histogram in a time-ordered or time-duration VDP
@@ -410,7 +410,7 @@ Bar3 color : & black $\rightarrow$ registry operation
 % discussion at this point.
 % }
 
-Fig.~\ref{fig:cp-xcopy} illustrates the event-ordered VDP
+Figure~\ref{fig:cp-xcopy} illustrates the event-ordered VDP
 of a trace of running
 {\tt xcopy} to copy two directories with files of different sizes.
 The VDP uses self-comparison of the {\tt xcopy} trace with
@@ -431,14 +431,14 @@ Registry operations are performed relatively
 quickly compared to file operations,
 because the blue ticks in the histogram above region 2 are spaced further apart
 than the blue ticks above region 4 and 6.
-Further discussion on this example is in Sec. \ref{sec:cp}.
+Further discussion on this example is in Section~\ref{sec:cp}.
 
 The DP user interface allows exploration of the trace by zooming in
 This allows us to see quite different detail from an aggregated view.
 We can see the effects of visualizations at different scales,
-Fig.~\ref{fig:cp-xcopy} shows the aggregate behavior which
+Figure~\ref{fig:cp-xcopy} shows the aggregate behavior which
 is a different picture from the magnified view in
-Fig.~\ref{fig:cp-zoom} which shows the individual file operations in {\tt xcopy}.
+Figure~\ref{fig:cp-zoom} which shows the individual file operations in {\tt xcopy}.
 Zooming creates a new window as one may want to see many different
 detail levels at the same time. Clicking inside the DP selects
 a pixel to give more details of the events aggregated in that pixel. When

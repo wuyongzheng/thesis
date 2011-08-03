@@ -28,7 +28,7 @@ packets that are not responded to, \[r=p_{net}/p_{out}.\] We have $0
 and $r=0$ if $p_{out} \leq p_{in}$. The excess of $p_{net}$ over $a$
 is accumulated only if $r \approx 1$.
 
-Fig. \ref{fig:flowrates} compares the maximum net
+Figure~\ref{fig:flowrates} compares the maximum net
 outgoing packet rate $p_{net}$ and the outgoing packet rate
 $p_{out}$ of TCP and UDP network flows when the user is present 
 and absent respectively.  A flow is identified by a tuple consisting
@@ -40,19 +40,28 @@ Each flow is monitored for 10 minutes.
 We found this 10 minute observation window to be sufficiently long, because short lived flows last on average only 2 to 3 minutes, 
 while flows that last for a long time are likely to
 have their traffic rate stabilized within this time.
-Fig. \ref{fig:tcpflow_presentrate} shows the distribution of $p_{net}$ and $p_{out}$ of 2,351 non-attack TCP flows active during user presence.
+Figure~\ref{fig:tcpflow_presentrate} shows the distribution of $p_{net}$
+and $p_{out}$ of 2,351 non-attack TCP flows active during user presence.
 Over 60\% of the flows have the maximum $p_{out}>10$ packets a
 minute; whereas less than 5\% of the flows have the maximum
 $p_{net}>10$. 
 For example, in a sample flow, the maximum $p_{out}$ is 2,443 packets per
-minute, but the maximum $p_{net}$ is as low as 10 packets. Fig. \ref{fig:tcpflow_absentrate}, Fig. \ref{fig:udpflow_presentrate} and Fig. \ref{fig:udpflow_absentrate} show the distribution of $p_{net}$ and $p_{out}$ of 980 TCP flows active during user absence, of 9484 UDP flows active during user presence and  1506 UCP flows active during user absence, respectively. They show that $p_{net}$ is more stable a quantity than $p_{out}$ among different flows, regardless of the transport protocol or user presence.
+minute, but the maximum $p_{net}$ is as low as 10 packets.
+Figure~\ref{fig:tcpflow_absentrate}, Figure~\ref{fig:udpflow_presentrate}
+and Figure~\ref{fig:udpflow_absentrate} show the distribution of
+$p_{net}$ and $p_{out}$ of 980 TCP flows active during user absence,
+of 9484 UDP flows active during user presence and 1506 UCP flows
+active during user absence, respectively.
+They show that $p_{net}$ is more stable a quantity than
+$p_{out}$ among different flows,
+regardless of the transport protocol or user presence.
 
-Fig. \ref{fig:ddos} shows the distribution of $p_{net}$ for 13,620 flows.
-Fig. \ref{fig:ddos}(a) shows the net outgoing packet rate is close
+Figure~\ref{fig:ddos} shows the distribution of $p_{net}$ for 13,620 flows.
+Figure~\ref{fig:ddos}(a) shows the net outgoing packet rate is close
 to 0 for most flows. When the user is present, 35\% of the flows
 have $p_{net}=0$; and 80\% flows have $p_{net}$ less than 10 packets
 a minute. When the user is absent, 90\% of the flows have
-$p_{net}=0$. Fig. \ref{fig:ddos}(b) shows that the difference in
+$p_{net}=0$. Figure~\ref{fig:ddos}(b) shows that the difference in
 $p_{net}$ when user is present and absent, it can be as large as 600
 for some flows, so different upper bounds of normal $p_{net}$ should
 be used for user presence and absence and for each flow.
@@ -88,7 +97,7 @@ observed for 10 minutes during user presence and absence}
 \label{fig:ddos}
 \end{figure*}
 
-From Fig. \ref{fig:ddos}(a), initializing the upper bound of normal
+From Figure~\ref{fig:ddos}(a), initializing the upper bound of normal
 $p_{net}$ to be $a=60$ packets per minute is sufficient for most
 flows. Parameter $a$ can be lowered by examining the online traffic. To
 accumulate the excess of $p_{net}$ over $a$, $r$ must be close to 1
@@ -119,7 +128,7 @@ $p_{net}=1278$ is high, but its $p_{out}=2,812$, making $r=0.45$, so
 there is 1 response in about 2 packets, the ratio is reasonable and
 hence the high net outgoing packet rate is also accepted.
 
-Fig. \ref{fig:ddos-atkflow} shows the net outgoing packet rate
+Figure~\ref{fig:ddos-atkflow} shows the net outgoing packet rate
 $p_{net}$ of the attack flow under 3 different attack scenarios. The
 upper bound $a$ of normal $p_{net}$ is 10 and 2 packets a minute for
 user present and absent respectively. These bounds are determined
@@ -130,7 +139,7 @@ The increasing rate attack increases its attack intensity very
 slowly to delay detection. This attack might not be detected if the
 detector adapts to the flow rate in near real time. Our approach
 detects the attack in less than 18 minutes, long before the attack
-reaches its peak rate. The fluctuating attack in Fig. \ref{fig:ddos-atkflow}
+reaches its peak rate. The fluctuating attack in Figure~\ref{fig:ddos-atkflow}
 constrains the attack intensity, and releases attack traffic in
 pulses. This is to avoid detection if average traffic rate or peak
 rate is used by the detector. Our approach detects the fluctuating
