@@ -328,6 +328,33 @@ It turns out that since all code from any kind of binary
 needs to have a memory section to execute,
 it suffices to intercept {\tt NTCreateSection()}.
 
+\begin{procedure}[htb]
+\KwIn{FilePath}
+\BlankLine
+\uIf{FilePath is in NTFS}{
+  FileID $:=$ GetFileID(FilePath) \tcc*[l]{FileID can be NULL}
+  \uIf{FilePath is in the table}{
+    Entry := LookupTableByPath(FilePath)\;
+    \uIf{FileID = NULL}{
+      \tcc{This can happen when the file is deleted and created again}
+      Entry.FileID := CreateFileID(FilePath) \tcc*[l]{generate a new FileID and update the table}
+    } \ElseIf{FileID != Entry.FileID}{
+      \tcc{This can happen when the drive is unmounted, then id changed off-line and re-mounted}
+      Entry.FileID := FileID
+    }
+    Entry.Authenticated := false
+  } \ElseIf{FileID != Entry.FileID}{
+    Entry := LookupTableByID(FileID)\;
+    Entry.Authenticated := false
+  }
+} \ElseIf{(FilePath is in FAT) and (FilePath is in table)}{
+  Entry := LookupTableByPath(FilePath)\;
+  Entry.Authenticated := false
+}
+\caption{UponModification(FilePath)}
+\label{alg:binauth-modi}
+\end{procedure}
+
 The cached MAC verifier needs to ensure that binaries which have
 been already authenticated are not modified.
 However, the uncached verifier will not need to perform file monitoring.
@@ -353,10 +380,9 @@ system call.
 We monitor drive mounting {\tt IRP\_MJ\_VOLUME\_MOUNT}.
 \end{itemize}
 
-\noindent
 Note that we do not need to monitor file deletion since we only care about
 executing correct files but not missing files.
-The details of file modification monitoring are given in Fig. \ref{fileopen}.
+The details of file modification monitoring are given in Procedure~\ref{alg:binauth-modi}.
 
 Upon modification of $P$, we reset the {\it Authenticated\_bit} of binary $P$, 
 and update the {\it FileID} in the table if it is changed.
@@ -388,41 +414,6 @@ The Hashing\_key can also be stored securely by the TPM.
 % to measure the effect of system overheads to provide cache mechanism in
 % real-world OS like Windows.
 
-\begin{figure}[tb]
-\scriptsize
-\begin{center}
-\begin{verbatim}
-procedure UponModification (FilePath)
-   if (FS is NTFS)
-      FileID := GetFileID(FilePath) # FileID can be NULL
-      if (FilePath is in the table)
-         Entry := LookupTableByPath(FilePath)
-         if (FileID == NULL)
-            # this can happen when the file is deleted and created again.
-            # generate a new FileID and update the table
-            Entry.FileID := CreateFileID(FilePath)
-         else if ( FileID != Entry.FileID in the table)
-            # this can happen when the drive is unmounted,
-            # id changed off-line and re-mounted
-            Entry.FileID := FileID
-         end if
-         Entry.Authenticated := false
-      else if ((FileID != NULL) AND (FileID is in the table))
-         Entry := LookupTableByID(FileID)
-         Entry.Authenticated := false
-      end if
-   else if ((FS is FAT) AND (FilePath is in table))
-      Entry := LookupTableByPath(FilePath)
-      Entry.Authenticated := false
-   end if
-end procedure
-\end{verbatim}
-\end{center}
-\caption{Pseudo code of file modification monitor
-\TODO{use latex algorithm}
-}
-\label{fileopen}
-\end{figure}
 \subsubsection{Security Analysis}
 \label{sec:binauth-analysis}
 

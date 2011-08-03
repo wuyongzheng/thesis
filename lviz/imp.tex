@@ -265,13 +265,13 @@ as shown in Algorithm~\ref{alg:lviz-alg2}.
 \BlankLine
 zero fill $S$\;
 \ForEach{digist $d$}{
-  \nlset{$\alpha$} \uIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W\times H$}{
+  \nlset{$\alpha$} \eIf{$D_X[d]\times D_Y[d]<D_X[d]+D_Y[d]+W\times H$}{
     \ForEach{$x$ in $D_X[d]$}{
       \ForEach{$y$ in $D_Y[d]$}{
         $S[xW/N,yH/N] ++$
       }
     }
-  } \Else{
+  }{
     declare temporary integer array $S_X[0\ldots W-1]$ and $S_Y[0\ldots H-1]$\;
     zero fill $S_X$ and $S_Y$\;
     \lForEach{$x$ in $D_X[d]$}{
