@@ -144,9 +144,9 @@ workload & environment & running time & overhead \\ \hline \hline
 Table~\ref{table:binint-benchmark} shows the result of the tests.
 Except for the archive extraction test in i-mode,
 all the average performance overheads are small.
-In most cases, the overhead is smaller than the standard deviation
-(caused by environmental factors such as caches, etc., and in some
-others it is even negative (slightly faster)).
+In most cases, the overhead is smaller than the standard deviation\footnote{
+This is caused by environmental factors such as caches, etc., and in some
+others it is even negative (slightly faster)}.
 While individual runs have some small differences, we conclude that
 with the exception of the archive test, the performance can be considered to
 be similar to the base system.
@@ -161,4 +161,8 @@ Since software installation usually happens infrequently,
 we are less concerned with efficiency of
 i-mode as long as it is still reasonable.
 
-\TODO{relate to binauth. binint is more expensive}
+The performance overhead of BinInt is in general higher than BinAuth,
+because BinInt pays additional cost of maintaining and updating the
+binary signature database, whereas BinAuth has a static database.
+In addition, BinInt needs to track the execution modes and software domains
+of processes and files.

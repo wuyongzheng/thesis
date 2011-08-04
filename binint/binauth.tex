@@ -72,7 +72,8 @@ A special software domain $\bot$ denotes binaries
 which do not have a valid software domain.
 Binaries whose software domain is not $\bot$ are called {\em b-valid}.
 
-Now we describe the rules. Rules 1--2 enforce loading of binaries;
+Now we describe the BinInt model using the following rules.
+Rules 1--2 enforce loading of binaries;
 rules 3--6 enforce creation, modification, and deletion of binaries;
 and rules 7--8 define the execution modes for processes.
 % We use {\em EXE} to denote the executable binary of a process.
@@ -88,8 +89,9 @@ Intuitively, this means that untrusted binaries cannot be loaded
 by normal processes.
 \item[R2]
 An i-mode or t-mode process can load all binaries.
-\hrule width 12cm
-\smallskip
+\medskip
+\hrule width \textwidth
+\medskip
 \item[R3]
 A d-mode or t-mode process cannot modify or delete b-valid binaries,
 i.e. can modify or delete only b-invalid binaries.
@@ -113,22 +115,25 @@ Instead of completely preventing normal process from creating binaries,
 we choose to label those binaries b-invalid. This is because it is
 not possible to determine during file operations 
 whether a file is a binary or not.
-\hrule width 12cm
-\smallskip
+\medskip
+\hrule width \textwidth
+\medskip
 \item[R7]
 When the system is booted, the initial process(es) run in d-mode.
-There is an {\em execution mode policy} (defined by a protected 
-configuration file)
+When a new process is created, the execution mode and software domain
+inherits from its parent process.
+There are two mechanisms to change the mode and domain.
+The first mechanism is {\em execution mode policy},
 which maps the path of an EXE to a corresponding execution mode and software domain.
 When a new process is created, the path of the EXE is checked against the
 execution mode policy to find the execution mode and software domain.
 We require that the EXE should be b-valid.
 If no such mapping is found in the execution mode policy, 
 it inherits the execution mode and software domain of its parent process.
-% \TODO{add b-valid to policy}
+The execution mode policy is defined by a protected configuration file.
 \item[R8]
-The execution mode and software domain can be changed through a special operation
-similar to a system call.
+The other mechanism changes the mode and domain of a running process by
+performing a special operation similar to a system call.
 In order to ensure that only the user with appropriate privileges
 can change the execution mode and software domain, the operation is authenticated with
 a password sent to the kernel.

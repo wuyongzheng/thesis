@@ -196,8 +196,12 @@ In this case, the edge between node $x$ and $y$ is bidirectional.
 In the visualization, we use a thick line without any arrow.
 
 A direct visualization of the DLL dependency graph is often too complex,
-because there can be too many binaries used during an execution,
-e.g. Fig \ref{fig:wget-nogroup} shows the graph for a small program {\tt wget}.
+because there can be too many binaries used during an execution.
+For example, Figure~\ref{fig:wget-nogroup} shows the graph for a
+small program {\tt wget}.
+The graph has too many nodes and edges to be read.
+Larger programs generate even more complex graphs, thus we need
+a way to reduce the size of the graph.
 We use a simple idea that the visualization can be abstracted in two ways
 by grouping.
 One way of grouping is to group binaries which have a related function
@@ -220,7 +224,7 @@ be loaded but not called.
 It is useful to be able to tell that a DLL $y$ is not actually called,
 although $y$ is loaded.
 Such a DLL $y$ is labeled with the notation {\it *y*} in the DLL dependency
-graph and are is not connected to any other nodes.
+graph and is not connected to any other nodes.
 
 To further simplify the visualization, DLLs can have initialization code.
 So control flow between EXE and DLLs due to initialization increases
@@ -235,8 +239,9 @@ to take it into account.
 
 \subsubsection{Other DLL Dependency Graphs}
 
-There are two DLL Dependency Graphs
-which are obtained through {\em diff} and {\em projection} operations.
+In addition to the basic DLL dependency graph,
+we developed two types of DLL dependency graphs obtained through
+{\em diff} and {\em projection} operations.
 
 Sometimes we want to compare two executions of the same executable or
 module.

@@ -15,7 +15,8 @@ An attacker can change local binaries when the system is offline,
 or change binaries in removable media when it is offline.
 To prevent these attacks, we use file signatures to detect modification.
 We keep signatures of all b-valid binaries in the
-{\em binary signature database}.
+{\em binary signature database},
+which is similar to BinAuth.
 Information in the database includes path, signature, software group,
 modification history and other meta data.
 We also generate logs of how binaries were used. Log maintenance is done
