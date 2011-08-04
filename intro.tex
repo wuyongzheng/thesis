@@ -104,6 +104,20 @@ One way to diagnose this problem it to compare the log or execution trace
 of the program.
 The root cause is probably located at the point where the two trace deviates.
 
+\item {\em How to tell if a host is compromized?}
+
+If a host (including the operating system kernel) is compromized,
+information from the host cannot give the answer because
+the information cannot be trusted.
+An analogy is asking a crazy person, ``are you crazy?''
+To solve this problem, we have to use information outside the
+host.
+This is where the idea of {\em external monitoring} comes in.
+We use the information from network routers and
+sensors which monitor CPU temperature, keyboard typing sound
+and human user presence, etc. in order to study the host behaviour
+as a black-box.
+
 \item {\em Which files are infected by virus?}
 
 After a user realized that his computer has virus, he wants to know
@@ -127,6 +141,27 @@ the main virus executable.
 The virus may create additional executables or use shared libraries to
 hijack other software, which in turn hijacks more software.
 This brings us the idea of information flow tracking in the system.
+
+\item {\em How to prevent untrusted program from running?}
+
+Perhaps we should first ask the question of how to tell if
+a program can be trusted.
+We can apply the solution of the previous question (i.e.
+based on the source of the program) and answer it recursively.
+If all code (machine code, not source code)
+used by the program comes from trusted programs,
+we consider the program trusted.
+There are other practical considerations with this simple definition.
+For example, how to get the initial trusted programs?
+Is code sufficient? How about data?
+Trusted programs can be exploited and behave maliciously.
+
+After identifying trusted and untrusted programs,
+we can use an access control system to prevent
+untrusted programs from running.
+The access control system can be implemented in a similar way to our
+monitoring system, except that the former prevents the
+access and the latter reports the access.
 \end{enumerate}
 
 Although system monitoring helps solving various of problems,
