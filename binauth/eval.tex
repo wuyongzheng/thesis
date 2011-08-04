@@ -1,25 +1,128 @@
-\subsection{Empirical Results}
-\label{sec:binauth-cost}
+\subsection{Testing}
+\label{sec:binauth-testing}
 
-Our authentication system can detect when a modified binary is loaded
-or run from the wrong pathname. In this section, we examine
-the three factors which impact on system performance:
+We test our implementation in terms of the protection it provides
+and the overhead it incurs.
+The following test is performed on a machine with Intel Core 2 Duo
+processor and 2GB of memory, running Windows XP SP2.
+
+\subsubsection{Protection}
+
+We test our prototype on various binary execution mechanisms in Windows.
+We try different mechanisms to load a binary not in the
+authentication repository.
+In the following text we use the term {\em invalid binary} to denote
+that.
+We remark that all the mechanisms succeed when the binary is valid (i.e.
+matches the authentication repository).
+
+% \noindent
+% {\bf Loading b-invalid Binaries}: \\
+% Processes running in d-mode cannot load b-invalid binaries.
+% We test the prevention mechanism in the prototype:
+
+\begin{itemize}
+\item{\bf {\tt cmd} and Explorer shells} \\
+Running an invalid binary in the
+{\tt cmd} and {\tt Explorer} shells fails with an
+error
+``{\tt Application} is not a valid Win32 application''.
+This would also cover cases such as the social engineering file extension
+attack.
+
+\item{\bf driver loading} \\
+It is not possible to load invalid drivers.
+Using the {\tt net start} command to load an invalid driver
+fails with the error ``The specified driver is invalid''.
+
+\item{\bf service loading} \\
+Invalid services cannot be started.
+Using the {\tt Services} tab in the Microsoft management console
+to start the service
+fails with the error ``The dependency service or group failed to start''.
+
+\item {\bf shell extensions} \\
+% In Windows, shell extensions are DLLs that enhance the features of
+% the explorer shell.
+%Common examples are file previews and right click context menus.
+We tested the {\tt Tortoise\-SVN}, {\tt AudioShell} and {\tt FLV} extensions.
+{\tt TortoiseSVN} enhances {\tt Explorer} to
+interface to the Subversion revision control system with
+a context menu usable by right clicking any
+directory or file in Explorer.
+{\tt AudioShell} is a MP3 tag previewer that is activated by mouse-over
+on audio files in Explorer.
+{\tt FLV} is a codec which displays Flash video.
+
+If the DLLs for the shell extensions are invalid, they do not load.
+Thus, the {\tt TortoiseSVN} context menu was missing and
+the {\tt AudioShell} mouse-over is no longer shown.
+We tested the use of {\tt Explorer} to open a folder containing
+{\tt FLV} (Flash video) files. If the FLV codec, {\tt flvsplitter.ax},
+is valid, {\tt Explorer} scans the directory, displaying a thumbnail
+for each FLV file. When the codec is invalid,
+{\tt Explorer} does not display any thumbnails and displays the same
+icon as files with unrecognized extensions.
+We remark that in many cases, users are not
+aware that shell extensions are running and may think that the features
+are part of {\tt Explorer}.
+% E.g. opening a folder containing audio and video files will cause
+% {\tt Explorer} to thumbnail all the media files, i.e.
+% {\tt Explorer} loads the codec's DLL to extract the thumbnail for video files.
+% An attack which succeeds in installing a malware codec can be
+% automatically run by {\tt Explorer}.
+
+\item {\bf Browser Helper Objects (BHO)} \\
+%BHO's are plugins written to enhance the browser's features and also to provide the
+%ability to view certain pages. Common examples of plugins are Flash player, Java runtime,
+%Windows Update etc. BHO's are written as DLLs or ActiveX files({\tt ocx}).
+As web browsers are one of the main targets of malware,
+it is important to control what binaries are loaded in the browser.
+We tested the Flash player control, {\tt Flash10a.ocx}, for Internet Explorer.
+If the control is invalid, webpages with flash content do not work as
+IE is blocked from loading the Flash control.
+However, the rest of the page content is displayed.
+
+\item {\bf PATH manipulation} \\
+An attacker may change the {\tt PATH} environment variable or DLL
+search order to substitute system executable or DLL with a malicious one.
+This is prevented no matter what the search order is, as long as
+the malicious executable or DLL is invalid.
+
+\end{itemize}
+
+
+% {\bf Social Engineering} \\
+% Some social engineering attacks lure the user into executing malicious
+% programs by making use of the flaw of user interfaces.
+% For example, Windows Explorer by default hides known file extension.
+% User may think the file named {\tt postcard.jpg.exe}
+% (which comes from email attachment) to
+% be a picture and double click it to view.
+% The malicious program may in turn display an image so that the
+% user thinks the file is indeed an image.
+% This is prevented no matter what file name is, as long as
+% the malicious executable is b-invalid.
+
+\subsubsection{Performance Overhead}
+
+We examine the three factors which impact on system performance:
 (i) Verifier checking upon binary loading (execution);
 (ii) file modification monitoring; and
 (iii) binary set-up during the SignatureToMac process.
-The first two above are the most important as they directly 
-affect user's waiting time for process execution and 
+The first two above are the most important as they directly
+affect user's waiting time for process execution and
 affect overall system operation.
 The tests here are meant to determine the worst case overhead as well
 as average overheads.
 
-The benchmarks are run on a Core 2 Duo with 2GB of ram
-running Windows XP with SP2.
+We use micro and macro benchmarks to test the upper bound and
+real-life performance overhead respectively.
 Each benchmark is run five times.
 As we want to investigate the effect of the cached Verifier,
 each benchmark is run with caching and without caching.
-% When caching is disabled, the binaries will be authenticated 
-% every time they are executed, and {\tt NtCreateFile()} and {\tt NtOpenFile()} 
+% When caching is disabled, the binaries will be authenticated
+% every time they are executed, and {\tt NtCreateFile()} and {\tt NtOpenFile()}
 % system calls are not intercepted.
 When caching is enabled, we ignore the result of the first run because
 the overhead of authentication overhead is already shown in the uncached case.
@@ -54,9 +157,9 @@ two scenarios:
 \begin{enumerate}
 \item {\bf Micro-benchmark:}
 The micro-benchmark aims to measure the worst case performance overhead
-incurred by the scheme. 
+incurred by the scheme.
 Note that this is primarily intended to measure the authentication cost
-but not other overhead, which is done by the last file modification 
+but not other overhead, which is done by the last file modification
 microbenchmark.
 Here, we have two micro-benchmark scenarios.
 \begin{enumerate}
@@ -76,7 +179,7 @@ This scenario is used to find out how the number of loaded DLLs impacts the perf
 Program {\tt load-dll.exe} loads 278 standard Microsoft
 DLLs with a total file size of $\sim$75MB.
 The size of the {\tt load-dll.exe} itself is 60KB.
-Note that in Windows, the bulk of code is often in DLLs which is why the 
+Note that in Windows, the bulk of code is often in DLLs which is why the
 {\tt EXE} file may be small, e.g. Open Office has over 300 DLLs.
 \end{enumerate}
 
@@ -90,15 +193,15 @@ many processes and uses many files.
 \end{enumerate}
 
 We benchmark {\tt Sign Tool} and {\tt Sigcheck} in the following fashion.
-We first sign {\tt noop.exe} and {\tt load-dll.exe} using 
+We first sign {\tt noop.exe} and {\tt load-dll.exe} using
 {\tt Sign Tool}'s signing operation.
-We then measure the execution time of 
+We then measure the execution time of
 authenticating and executing the two programs.
 For the macro-benchmark, we replace each development tool in the DDK
 (i.e. {\it build.exe}, {\it nmake.exe}, {\it cl.exe} and {\it link.exe})
-with a wrapper program which first authenticates the actual development 
+with a wrapper program which first authenticates the actual development
 tool and then invokes it.
-For the micro-benchmark, we consider two settings: 
+For the micro-benchmark, we consider two settings:
 (i) {\tt EXE} only; and (ii) all binaries ({\tt EXE} + {\tt DLL}).
 The macro-benchmark, however, only tests the EXE case.
 This is because, during the macro-benchmark, many programs are invoked,
@@ -155,7 +258,7 @@ We define $slowdown_x = (time_x - time_{clean}) / time_{clean}$.}
 \end{sidewaystable*}
 
 The results are given in Table~\ref{table:bigtable} but
-we have not shown ``noop 400K'' and ``noop 4M'' 
+we have not shown ``noop 400K'' and ``noop 4M''
 because they are bounded by the results of ``noop 40K'' and ``noop 40M''.
 Other results not shown are that the overhead is approximately
 linear with respect to the file size, e.g.
@@ -180,7 +283,7 @@ Note that as uncached overhead is quite small, the results are dominated
 by non-determinism in timing measurements.
 Moving to all DLLs ({\tt EXE} + {\tt DLL}), we can see the effect of Windows
 programs using many DLLs (more code in {\tt DLL} than {\tt EXE}).
-The overhead incurred by caching is still small while uncached can grow 
+The overhead incurred by caching is still small while uncached can grow
 to between 20-40\% depending on the hash algorithm.
 Note that the uncached overhead is applicable for files which cannot be cached.
 
@@ -206,7 +309,7 @@ and uncached verification.
 Caching means that MAC verification is amortized over executions
 but has added overhead from monitoring file modification,
 while uncached is the opposite.
-% has the cost of MAC every execution 
+% has the cost of MAC every execution
 % but no file modification cost.
 Our micro-benchmark opens a file for writing 100K times to
 measure the worst case overhead incurred by file modification monitoring.

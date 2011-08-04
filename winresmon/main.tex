@@ -54,15 +54,23 @@ shared libraries (DLL files).  There is also the question of when to perform a
 major software upgrade.  System administrators may delay upgrading
 for fear of breaking existing software; yet such a choice has its own risks.
 
-Our work focuses on the problem of software
-maintenance in Microsoft Windows NT-based operating systems (e.g. Microsoft Windows
-XP, Microsoft Windows 2000, Microsoft Windows 2003).\footnote{ While an
-appropriate version of a tool similar to WinResMon could also be of use in UNIX,
-its value is much greater in a Microsoft Windows environment.  } We present {\em WinResMon},
-a discovery and system debugging tool for
+We present {\em WinResMon}, a discovery and system debugging tool for
 determining a program's resource usage as well as the resource usage
 interactions between multiple programs.
-It is different from LBox as it provides whole system monitoring.
+Our work focuses on Microsoft Windows NT-based operating systems
+(e.g. Microsoft Windows
+XP, Microsoft Windows 2000, Microsoft Windows 2003).\footnote{While an
+appropriate version of a tool similar to WinResMon could also be of use in UNIX,
+its value is much greater in a Microsoft Windows environment.}
+
+WinResMon differs from LBox as it provides whole system monitoring,
+because the software maintenance problems usually require global view
+of the system,
+and some problems require always-on monitoring for a long period.
+LBox is designed to study a single process or a group of processes launched
+for a single task, thus
+the monitoring can be usually isolated to the related processes and
+the particular run.
 
 \subsection{Motivation and Applications}
 

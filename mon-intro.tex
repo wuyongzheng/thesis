@@ -73,8 +73,17 @@ Though it is possible to monitor native calls, the output would not be
 generally understandable.
 WinResMon addresses the problem from a resource usage point of view.
 It monitors resource usage of all processes in the system.
-Its main use is to inspect resource access and software dependency issues.
+Its main use is to inspect resource access, software dependency and
+maintaince issues.
 As an infrastructure, it can be used to build tools for custom queries
 for system administrators.
+WinResMon differs from LBox as it provides whole system monitoring,
+because the software maintenance problems usually require global view
+of the system,
+and some problems require always-on monitoring for a long period.
+LBox is designed to study a single process or a group of processes launched
+for a single task, thus
+the monitoring can be usually isolated to the related processes and
+the particular run.
 Our benchmarking shows that WinResMon is reliable and is
 comparable to other popular tools.

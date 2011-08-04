@@ -136,6 +136,17 @@ implementation to make use of them.
 We can apply our framework in the cluster or cloud computing setting,
 and have query API to aggregate information from multiple hosts.
 Log compression can benefit from the high redundancy of the logs.
-We can port our infrastructures to other operating systems,
-however, it would better to have an operating system independent
+We can have an operating system independent
 abstraction which make it easier to port for future operating systems.
+
+Our binary integrity model, BinInt, focuses on binaries only.
+However, securing only binaries may not be sufficient.
+For example, the attacker can modify Java class files to
+change the behaviour of java programs.
+The same applies to shell scripts and configuration files.
+We can generalize BinInt to protect the integrity of any kind of file.
+The difficulty is that data files are much more dynamic than binaries.
+Unlike binaries which are only changed during install, update and removal
+of the software, data files are usually changed much more frequently.
+This makes direct use of d-mode for data files unusable.
+More fine grained policies can be applied for data files.

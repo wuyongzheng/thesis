@@ -11,11 +11,18 @@ Programs are usually written for the Win32 API but these are
 decomposed into microkernel-like operations. 
 However, Windows is closed source --- only the Win32 API is documented
 and not the microkernel-link API.
-\TODO{choose a better example.}
-For example, one should call the officially documented API \code{CreateFile()}.
-\code{CreateFile()} calls \code{CreateFileA()} which calls
-the system call \code{ZwCreateFile()}.
-Neither \code{CreateFileA()} nor \code{ZwCreateFile()} are documented.
+The mapping from Win32 API to system calls can be complicated in some
+cases.
+For example, the \code{CreateProcess()} function in Win32 API creates
+a child-process given an executable file.
+This function calls four\footnote{
+It is based on our observation.
+There can be more system calls invoked in other conditions.
+} system calls.
+% For example, one should call the officially documented API \code{CreateFile()}.
+% \code{CreateFile()} calls \code{CreateFileA()} which calls
+% the system call \code{ZwCreateFile()}.
+% Neither \code{CreateFileA()} nor \code{ZwCreateFile()} are documented.
 Our prototype makes use of both the documented and undocumented
 kernel infrastructure. However, it is not possible to make any guarantees
 on the completeness of the security mechanisms

@@ -1,20 +1,6 @@
 \subsection{Conclusion}
 \label{sec:binint-conc}
 
-\TODO{this is paragraph discussion, not conclusion.}
-BinInt focuses on binaries.
-However, securing only binaries may not be sufficient.
-For example, the attacker can modify Java class files to
-change the behaviour of java programs.
-The same applies to shell scripts and configuration files.
-We can generalize BinInt to protect the integrity of any kind of file.
-The difficulty is that data files are much more dynamic than binaries.
-Unlike binaries which are only changed during install, update and removal
-of the software, data files are usually changed much more frequently.
-This makes direct use of d-mode for data files unusable.
-More fine grained policies can be applied for data files.
-This is currently work in progress.
-
 We have presented a binary security model which caters to the
 dynamic use of binaries within the software life cycle
 while protecting against attacks in default mode
@@ -26,5 +12,8 @@ Windows software throughout its software lifecycle.
 Thus, BinInt is a practical solution
 which gives a good tradeoff between usability and security
 to protect binaries on Windows.
-Our model can also be combined with other security mechanisms.
-
+Comparing to UAC, we believe that our model provides better protection
+especially for user-owned binaries, while having better user experience
+in terms of interference (security prompt).
+Our model can also be combined with other security mechanisms such
+as file system access control and user privilege separation.
