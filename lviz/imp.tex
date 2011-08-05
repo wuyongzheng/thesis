@@ -198,7 +198,7 @@ zero fill $S$\;
     }
   }
 }
-\caption{New Algorithm A}
+\caption{New algorithm for large screen size}
 \label{alg:lviz-alg1}
 \end{algorithm}
 
@@ -242,7 +242,7 @@ zero fill $S$\;
     }
   }
 }
-\caption{New Algorithm B}
+\caption{New algorithm for small screen size}
 \label{alg:lviz-alg2}
 \end{algorithm}
 
@@ -287,18 +287,18 @@ zero fill $S$\;
     }
   }
 }
-\caption{Combined algorithm.
+\caption{Combined algorithm from \ref{alg:lviz-alg1} and \ref{alg:lviz-alg2}.
 (Line $\alpha$ can be further tuned with some constant factors)}
 \label{alg:lviz-alg3}
 \end{algorithm}
 
 Both algorithms can be combined together to
 get the best of both worlds, which gives
-a DP rendering time complexity of $\sum_{i=1}^{G} min(S_i^2, S_i + W H)$,
+a DP rendering time complexity of $\sum_{i=1}^{G} min(S_i^2, S_i + W\times H)$,
 as shown in Algorithm~\ref{alg:lviz-alg3}.
-That is, for each digest group $S_i$ that satisfies $S_i^2 < S_i+W H$, 
+That is, for each digest group $S_i$ that satisfies $S_i^2 < S_i+W\times H$, 
 the $O(S_i^2)$ algorithm is used;
-otherwise, the $O(S_i + W H)$ algorithm is used to obtain a sub-image.
+otherwise, the $O(S_i + W\times H)$ algorithm is used to obtain a sub-image.
 Adding the intensities of all the sub-images of all digest groups gives the final image.
 
 We illustrate the complexity of the algorithm to process $N=10^6$ events.
@@ -307,14 +307,14 @@ and each digest group has size $10^3$.
 Suppose the window screen size is $1000\times 1000$.
 Then the first $O(S^2)$ algorithm is used giving $GS^2 = 10^9$ operations.
 If the window size is resized to $600\times 400$, then
-the second $O(S+W H)$ algorithm is used giving $G(S+WH)=2.41\times 10^8$ operations.
+the second $O(S+W\times H)$ algorithm is used giving $G(S+WH)=2.41\times 10^8$ operations.
 This is much faster than the naive algorithm which would take $O(10^{12})$
 operations.
 The best case is achieved when each digest group only contains one event.
 This means $G = 10^6$ and the number of operations
 is $G S^2=10^6$.
 Another good case is when there is only one digest group,
-so $S=10^6$ and the number of operations is $G(S + WH)=1.24\times10^6$.
+so $S=10^6$ and the number of operations is $G(S + W\times H)=1.24\times10^6$.
 
 \code{lviz} is multi-threaded to make use of multi-core processors.
 The pre-processing steps and rendering algorithms can be easily parallelized.
