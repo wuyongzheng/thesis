@@ -273,7 +273,7 @@ only binaries that are used by $S$ or binaries that use $S$ either directly
 or indirectly are shown.
 Note that this is not the same as finding connected components containing
 $S$ in the dependency graph.
-This is because the dependency graph loses some information.
+% This is because the dependency graph loses some information.
 Instead, the projection looks at the control flow chain during
 execution and selects all the DLLs which have $S$ in its path.
 Since projection removes edges from the original graph, we have the
@@ -308,9 +308,9 @@ void B (int i) {
 \label{fig:indcalls}
 \end{figure}
 
-The following example illustrates why the difference between
+The example in Figure~\ref{fig:indcalls} illustrates the difference between
 projection and connected components in the graph.
-The program in Figure~\ref{fig:indcalls} has
+The program has
 five functions which are in DLL modules of the same name.
 Suppose we project on {\tt A.dll}.
 Only {\tt main.exe} uses {\tt A.dll} directly.
@@ -319,4 +319,4 @@ Only {\tt main.exe} uses {\tt A.dll} directly.
 {\tt D.dll} is used by {\tt B.dll} but never by {\tt A.dll} at runtime.
 Thus, the projection on {\tt A.dll} does not contain {\tt D.dll} even though
 it is reachable from {\tt A.dll} in the DLL dependency graph.
-
+The resulting graph is ``main$\rightarrow$A$\rightarrow$B$\rightarrow$C''.

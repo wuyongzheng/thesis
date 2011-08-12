@@ -26,7 +26,7 @@ would not make sense for DLLs which do significant work in the initialization.
 \label{fig:boot}
 \end{figure*}
 
-Figure~\ref{fig:boot} shows the EXE dependency graph for a boot to shutdown cycle
+Figure~\ref{fig:boot} shows the EXE dependency graph for a boot-to-shutdown cycle
 for a fresh Windows XP install.
 The machine was booted and automatically logged in,
 then logged off, and shutdown. One might expect that the processes
@@ -58,7 +58,7 @@ the database query interface, is used by {\tt explorer}.
 
 Figure~\ref{fig:browsers} shows the EXE dependency graph for three
 brow\-sers: Internet Explorer, Firefox and Opera.
-Each browser displayed a YouTube page to play a
+Each browser displays a YouTube page to play a
 video till completion. The scenario is intended to show the dependencies
 of the binaries used by the three programs
 with similar function but different source code base.
@@ -79,7 +79,8 @@ labels, the numbered red arrows, discussed below:
 \begin{itemize}
 
 
-\item Labels 1, 2 and 3 show the DLLs used exclusively by Firefox, Opera
+\item Labels \textcircled{1}, \textcircled{2} and \textcircled{3}
+show the DLLs used exclusively by Firefox, Opera
 and Internet Explorer respectively. Opera does not have many  of its own DLLs.
 On the other hand, Firefox uses its own DLLs (in {\tt /program files/mozilla firefox}) for many features.
 In the case of Internet Explorer, the ownership of the DLLs are less clear
@@ -87,20 +88,72 @@ since most of the DLLs used come from the {\tt system32} directory.
 This may be due to the deeper integration of Internet Explorer with
 Windows.
 
-\item Label 4 shows the common binaries shared by all three browsers.
+\item Label \textcircled{4} shows the common binaries shared by all three browsers.
 It is not surprising that a large number of binaries are shared.
 This is because most of the major Win32 API calls
 are implemented in those binaries, e.g.
 \texttt{msacm32.drv} and \texttt{wdmaud.drv},
 are the audio drivers that all browsers use to play the video.
 
-
-\item Label 5 shows the different ways that each browser runs Flash.
+\item Label \textcircled{5} shows the different ways that each browser runs Flash.
 In Internet Explorer,
-Flash is installed as an ActiveX control (\texttt{flash10c.ocx}).
-Firefox and Opera both use (\texttt{npswf32.dll}), the Flash plugin
+Flash is installed as an ActiveX control \texttt{flash10c.ocx}.
+Firefox and Opera both use \texttt{npswf32.dll}, the Flash plugin
 for Netscape. We discover that the same DLL is duplicated in
 different directories.
+
+\end{itemize}
+
+\subsubsection{Word Processor}
+
+\begin{sidewaysfigure}
+\includegraphics[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/word-group-annot.pdf}
+\caption{Software dependency graph of Microsoft Word and OpenOffice Writer}
+\label{fig:depvis-word}
+\end{sidewaysfigure}
+
+Figure~\ref{fig:depvis-word} shows the software dependency graph for Microsoft Word
+(Office 2003) and OpenOffice Writer (OpenOffice 2.4).
+In this test, we opened a {\tt .DOC} file, i.e. a Microsoft Word document
+with both programs.
+% This example is also used to demonstrate program-program dependencies.
+% Earlier, Figure~\ref{fig:browsers} only showed program-binary dependencies.
+We describe some of the observations from Fig.~\ref{fig:depvis-word}:
+
+\begin{itemize}
+
+\item Label \textcircled{1} shows the main OpenOffice program
+\texttt{swriter.exe}.
+As OpenOffice Writer is composed of 4 individual programs it
+exhibits more complex dependencies than
+Word which is only a single program \texttt{winword.exe}.
+
+\item Label \textcircled{2} shows the common binaries between Word and Writer.
+As expected, most of the common binaries
+are in the \texttt{system32} directory as
+most of the Win32 APIs are implemented in those common binaries.
+We can observe that both Word and Writer use \texttt{version.dll}.
+This DLL contains the APIs for checking the version number of a binary.
+Possibly both programs use this DLL to check the operating system and
+binary versions and then decide to enable or disable certain features.
+
+\item Labels \textcircled{3} and \textcircled{4} show all the binaries
+used by Word and Writer respectively. It can be seen that Writer
+uses many of its own DLLs.
+
+\item Label \textcircled{5} shows that there are two
+versions of \texttt{comctl32.dll}
+(these are with different pathnames). This is possibly related
+with the use of \texttt{version.dll} mentioned above.
+Windows probably uses a different version of the
+same file depending on the information provided by \texttt{version.dll}.
+
+\item Label \textcircled{6} shows the Windows application
+compatibility DLLs being loaded.
+This is possibly because Windows is checking whether there are any special
+compatibility flags for Writer.
+Some examples of such flags are running a program under an older version of
+Windows and running with a lower display resolution.
 
 \end{itemize}
 
@@ -124,7 +177,7 @@ GIMP is large but quite modular. The bulk of
 the DLLs used are from the GEGL, GTK and GLIB frameworks. It also uses the
 Windows GUI APIs (e.g., gdi32, comctl32) extensively.
 
-Figure~\ref{fig:gimp-function} is a larger graph than Figure~\ref{fig:gimp-vendor}
+Figure~\ref{fig:gimp-function} is larger than Figure~\ref{fig:gimp-vendor}
 but is still understandable using the functional grouping,
 e.g. {\tt gimp} uses the {\tt [gegl]}
 image processing modules, which in turn uses the {\tt [gtk]} windowing
