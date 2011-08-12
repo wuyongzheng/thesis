@@ -13,7 +13,11 @@
 \usepackage[a4paper,includeheadfoot,hmargin=1.3in,vmargin=1.0in]{geometry}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{rotating}
+\usepackage[permil]{overpic}
 
+\newcounter{figp}[figure]
+\newcommand{\usefigp}[1]{\textcircled{\ref{#1}}}
+\newcommand{\deffigp}[1]{\refstepcounter{figp}\label{#1}\usefigp{#1}}
 \newcommand{\TODO}[1]{}
 %\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 \newcommand{\code}[1]{{\tt #1}}

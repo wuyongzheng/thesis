@@ -21,7 +21,9 @@ would not make sense for DLLs which do significant work in the initialization.
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
+%\includegraphics[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
+\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight,grid,tics=100]{depvis/boot-gdll.pdf}
+\end{overpic}
 \caption{EXE dependency graph of the whole system}
 \label{fig:boot}
 \end{figure*}
@@ -49,12 +51,6 @@ the database query interface, is used by {\tt explorer}.
 \caption{EXE dependency graph of three browsers: IE, Firefox, Opera}
 \label{fig:browsers}
 \end{figure}
-
-\begin{sidewaysfigure}
-\includegraphics[width=1.0\textwidth]{depvis/gimp-function-removed.pdf}
-\caption{DLL dependency graph of Gimp grouped by functionality}
-\label{fig:gimp-function}
-\end{sidewaysfigure}
 
 Figure~\ref{fig:browsers} shows the EXE dependency graph for three
 brow\-sers: Internet Explorer, Firefox and Opera.
@@ -160,6 +156,25 @@ Windows and running with a lower display resolution.
 \subsubsection{Gimp}
 
 \begin{sidewaysfigure}
+%\includegraphics[width=1.0\textwidth]{depvis/gimp-function-removed.pdf}
+\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-function-removed.pdf}
+\color{red}
+\put(125,30){\vector(-1,3){10}}
+\put(120,15){\deffigp{fp:gp-gimp}}
+\put(145,180){\vector(1,-3){15}}
+\put(135,187){\deffigp{fp:gp-gegl}}
+\put(220,205){\vector(1,-2){15}}
+\put(205,207){\deffigp{fp:gp-gtk}}
+\put(467,170){\vector(1,-1){25}}
+\put(450,172){\deffigp{fp:gp-net}}
+\put(640,15){\vector(1,0){50}}
+\put(620,10){\deffigp{fp:gp-zlib}}
+\end{overpic}
+\caption{DLL dependency graph of Gimp grouped by functionality}
+\label{fig:gimp-function}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
 \includegraphics[width=1.0\textwidth]{depvis/gimp-vendor.pdf}
 \caption{DLL dependency graph of Gimp grouped by software vendor}
 \label{fig:gimp-vendor}
@@ -179,9 +194,11 @@ Windows GUI APIs (e.g., gdi32, comctl32) extensively.
 
 Figure~\ref{fig:gimp-function} is larger than Figure~\ref{fig:gimp-vendor}
 but is still understandable using the functional grouping,
-e.g. {\tt gimp} uses the {\tt [gegl]}
-image processing modules, which in turn uses the {\tt [gtk]} windowing
-module.  The remaining DLLs are not used very much.
+e.g. {\tt gimp} (\usefigp{fp:gp-gimp}) uses
+the {\tt [gegl]} (\usefigp{fp:gp-gegl}) image processing modules,
+which in turn uses the {\tt [gtk]} (\usefigp{fp:gp-gtk}) windowing
+module.
+The remaining DLLs are not used very much.
 
 Figure~\ref{fig:gimp-vendor} is interesting because it shows that
 many different software vendors/providers are used in GIMP.
@@ -195,6 +212,12 @@ one of the advantages of open source software, namely, reuse. The
 binaries belonging to GIMP only turn out to be quite small and
 GIMP prefers to rely on
 existing frameworks like {\tt gtk} (GUI) and GEGL (image processing).
+ From Figure~\ref{fig:gimp-function}, we can see that the network module
+(\usefigp{fp:gp-net}) is only used by the {\tt [glib]} library directly
+and the compression module (\usefigp{fp:gp-zlib}) is only used by
+the image modules directly.
+This observation may simplify some software debugging and maintenance
+scenarios, i.e. reducing the set of modules to be examined.
 
 \subsubsection{Firefox: Plug-ins and a Surprise}
 
