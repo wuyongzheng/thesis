@@ -11,6 +11,9 @@ in the PDF to see more detail and we encourage readers to do so.
 In this section,
 the files in some nodes in the graphs are abbreviated to $(\ldots)$ to make
 it easier to fit the graphs in the thesis.
+We use red circled numbers with arrows to point to certain parts in the
+graphs so that we can refer and discuss them in the thesis.
+These annotations are not part of the visualization.
 All the DLL dependency graphs remove dependencies due to
 DLL initialization.
 One could choose also to see DLL initialization dependencies, as removal
@@ -21,8 +24,15 @@ would not make sense for DLLs which do significant work in the initialization.
 
 \begin{figure*}[htbp]
 \centering
-%\includegraphics[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
-\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight,grid,tics=100]{depvis/boot-gdll.pdf}
+\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
+%\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight,grid,tics=100]{depvis/boot-gdll.pdf}
+\color{red}
+\put(450,880){\vector(-1,-3){10}}
+\put(445,885){\deffigp{fp:bo-kernel32}}
+\put(110,260){\vector(3,-1){30}}
+\put(88,260){\deffigp{fp:bo-explorer}}
+\put(450,270){\vector(-1,-1){30}}
+\put(450,270){\deffigp{fp:bo-odbc}}
 \end{overpic}
 \caption{EXE dependency graph of the whole system}
 \label{fig:boot}
@@ -34,12 +44,15 @@ The machine was booted and automatically logged in,
 then logged off, and shutdown. One might expect that the processes
 form a process tree but that is not the case because some of the processes (e.g
 svchost, winlogon, services) start before our monitoring tool
-(WinResMon) does. Looking at the big picture of the startup and shutdown
-process, it can be seen that some DLLs are shared by many programs (e.g
-{\tt kernel32}, {\tt gdi32} and this is expected since system calls would use
-{\tt kernel32} while GUI programs would use {\tt gdi32}).
+(WinResMon) does.
+Looking at the big picture of the startup and shutdown process,
+it can be seen that some DLLs are shared by many programs.
+For example, {\tt kernel32} and {\tt gdi32} (highlighted by
+\usefigp{fp:bo-kernel32}) are used by almost all programs.
+This is expected since some system calls would use
+{\tt kernel32} while GUI programs would use {\tt gdi32}.
 On the other hand, some DLLs are used exclusively by one program (e.g.
-{\tt odbc32} is used only by {\tt explorer}).
+{\tt odbc32} \usefigp{fp:bo-odbc} is used only by {\tt explorer} \usefigp{fp:bo-explorer}).
 This is somewhat surprising leading to the question why {\tt odbc32},
 the database query interface, is used by {\tt explorer}.
 
@@ -47,7 +60,23 @@ the database query interface, is used by {\tt explorer}.
 
 \begin{figure}[bthp]
 \centering
-\includegraphics[width=1.0\textwidth]{depvis/browsers-group-annot.pdf}
+%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/browsers-group.pdf}
+\begin{overpic}[width=1.0\textwidth]{depvis/browsers-group.pdf}
+\color{red}
+\put(275,775){\vector(3,1){100}}
+\put(240,760){\deffigp{fp:bw-ff}}
+\put(750,95){\vector(-2,-1){50}}
+\put(755,95){\deffigp{fp:bw-opera}}
+\put(325,265){\deffigp{fp:bw-ie}}
+\put(890,610){\vector(-3,-1){100}}
+\put(895,610){\deffigp{fp:bw-common}}
+\put(835,715){\vector(-4,-1){90}}
+\put(840,715){\deffigp{fp:bw-flash}}
+\put(120,204){\vector(1,0){80}}
+\put(80,198){\usefigp{fp:bw-flash}}
+\put(820,68){\vector(-4,-1){100}}
+\put(825,68){\usefigp{fp:bw-flash}}
+\end{overpic}
 \caption{EXE dependency graph of three browsers: IE, Firefox, Opera}
 \label{fig:browsers}
 \end{figure}
@@ -65,17 +94,15 @@ the browser code base and
 which comes in through the use of browser extensions or plugins,
 e.g. Adobe Flash.
 
-This example shows the compressed EXE dependency gra\-ph
+This example shows the compressed EXE dependency graph
 with grouping.
 We see that grouping makes the graph easier to visualize.
 Firstly, the grouped version is much smaller in size.
 Secondly, it is easier to identify which binaries are shared by the same programs.
-We have highlighted particular nodes in the graph with
-labels, the numbered red arrows, discussed below:
+Some observations are discussed below:
 \begin{itemize}
 
-
-\item Labels \textcircled{1}, \textcircled{2} and \textcircled{3}
+\item \usefigp{fp:bw-ff}, \usefigp{fp:bw-opera} and \usefigp{fp:bw-ie}
 show the DLLs used exclusively by Firefox, Opera
 and Internet Explorer respectively. Opera does not have many  of its own DLLs.
 On the other hand, Firefox uses its own DLLs (in {\tt /program files/mozilla firefox}) for many features.
@@ -84,26 +111,43 @@ since most of the DLLs used come from the {\tt system32} directory.
 This may be due to the deeper integration of Internet Explorer with
 Windows.
 
-\item Label \textcircled{4} shows the common binaries shared by all three browsers.
+\item \usefigp{fp:bw-common} shows the common binaries shared by
+all three browsers.
 It is not surprising that a large number of binaries are shared.
 This is because most of the major Win32 API calls
 are implemented in those binaries, e.g.
 \texttt{msacm32.drv} and \texttt{wdmaud.drv},
 are the audio drivers that all browsers use to play the video.
 
-\item Label \textcircled{5} shows the different ways that each browser runs Flash.
+\item \usefigp{fp:bw-flash} shows the different ways that
+each browser runs Flash.
 In Internet Explorer,
 Flash is installed as an ActiveX control \texttt{flash10c.ocx}.
 Firefox and Opera both use \texttt{npswf32.dll}, the Flash plugin
 for Netscape. We discover that the same DLL is duplicated in
 different directories.
-
 \end{itemize}
 
 \subsubsection{Word Processor}
 
 \begin{sidewaysfigure}
-\includegraphics[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/word-group-annot.pdf}
+\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/word-group.pdf}
+\color{red}
+\put(40,330){\vector(-1,-4){20}}
+\put(35,340){\deffigp{fp:wd-swriter}}
+\put(720,300){\vector(-3,-1){100}}
+\put(725,305){\deffigp{fp:wd-sys32}}
+\put(655,175){\vector(1,0){50}}
+\put(620,170){\usefigp{fp:wd-sys32}}
+\put(540,12){\usefigp{fp:wd-sys32}}
+\put(695,100){\vector(-4,1){50}}
+\put(700,85){\deffigp{fp:wd-ms}}
+\put(680,550){\deffigp{fp:wd-of}}
+\put(900,230){\deffigp{fp:wd-comctl32}}
+\put(145,175){\vector(-1,2){20}}
+\put(175,150){\vector(4,-1){50}}
+\put(140,150){\deffigp{fp:wd-compat}}
+\end{overpic}
 \caption{Software dependency graph of Microsoft Word and OpenOffice Writer}
 \label{fig:depvis-word}
 \end{sidewaysfigure}
@@ -118,13 +162,13 @@ We describe some of the observations from Fig.~\ref{fig:depvis-word}:
 
 \begin{itemize}
 
-\item Label \textcircled{1} shows the main OpenOffice program
+\item \usefigp{fp:wd-swriter} shows the main OpenOffice program
 \texttt{swriter.exe}.
 As OpenOffice Writer is composed of 4 individual programs it
 exhibits more complex dependencies than
 Word which is only a single program \texttt{winword.exe}.
 
-\item Label \textcircled{2} shows the common binaries between Word and Writer.
+\item \usefigp{fp:wd-sys32} shows the common binaries between Word and Writer.
 As expected, most of the common binaries
 are in the \texttt{system32} directory as
 most of the Win32 APIs are implemented in those common binaries.
@@ -133,18 +177,18 @@ This DLL contains the APIs for checking the version number of a binary.
 Possibly both programs use this DLL to check the operating system and
 binary versions and then decide to enable or disable certain features.
 
-\item Labels \textcircled{3} and \textcircled{4} show all the binaries
+\item \usefigp{fp:wd-ms} and \usefigp{fp:wd-of} show all the binaries
 used by Word and Writer respectively. It can be seen that Writer
 uses many of its own DLLs.
 
-\item Label \textcircled{5} shows that there are two
+\item \usefigp{fp:wd-comctl32} shows that there are two
 versions of \texttt{comctl32.dll}
 (these are with different pathnames). This is possibly related
 with the use of \texttt{version.dll} mentioned above.
 Windows probably uses a different version of the
 same file depending on the information provided by \texttt{version.dll}.
 
-\item Label \textcircled{6} shows the Windows application
+\item \usefigp{fp:wd-compat} shows the Windows application
 compatibility DLLs being loaded.
 This is possibly because Windows is checking whether there are any special
 compatibility flags for Writer.
@@ -156,26 +200,33 @@ Windows and running with a lower display resolution.
 \subsubsection{Gimp}
 
 \begin{sidewaysfigure}
-%\includegraphics[width=1.0\textwidth]{depvis/gimp-function-removed.pdf}
-\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-function-removed.pdf}
+%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-function-removed.pdf}
+\begin{overpic}[width=1.0\textwidth]{depvis/gimp-function-removed.pdf}
 \color{red}
-\put(125,30){\vector(-1,3){10}}
-\put(120,15){\deffigp{fp:gp-gimp}}
-\put(145,180){\vector(1,-3){15}}
-\put(135,187){\deffigp{fp:gp-gegl}}
+\put(115,28){\vector(-1,3){10}}
+\put(105,10){\deffigp{fp:gf-gimp}}
+\put(135,180){\vector(1,-3){15}}
+\put(120,190){\deffigp{fp:gf-gegl}}
 \put(220,205){\vector(1,-2){15}}
-\put(205,207){\deffigp{fp:gp-gtk}}
-\put(467,170){\vector(1,-1){25}}
-\put(450,172){\deffigp{fp:gp-net}}
+\put(200,215){\deffigp{fp:gf-gtk}}
+\put(457,170){\vector(1,-1){25}}
+\put(430,180){\deffigp{fp:gf-net}}
 \put(640,15){\vector(1,0){50}}
-\put(620,10){\deffigp{fp:gp-zlib}}
+\put(610,10){\deffigp{fp:gf-zlib}}
 \end{overpic}
 \caption{DLL dependency graph of Gimp grouped by functionality}
 \label{fig:gimp-function}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-\includegraphics[width=1.0\textwidth]{depvis/gimp-vendor.pdf}
+%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-vendor.pdf}
+\begin{overpic}[width=1.0\textwidth]{depvis/gimp-vendor.pdf}
+\color{red}
+\put(105,140){\deffigp{fp:gs-gimp}}
+\put(190,50){\vector(2,1){40}}
+\put(160,40){\deffigp{fp:gs-gegl}}
+\put(470,80){\deffigp{fp:gs-gtk}}
+\end{overpic}
 \caption{DLL dependency graph of Gimp grouped by software vendor}
 \label{fig:gimp-vendor}
 \end{sidewaysfigure}
@@ -194,9 +245,9 @@ Windows GUI APIs (e.g., gdi32, comctl32) extensively.
 
 Figure~\ref{fig:gimp-function} is larger than Figure~\ref{fig:gimp-vendor}
 but is still understandable using the functional grouping,
-e.g. {\tt gimp} (\usefigp{fp:gp-gimp}) uses
-the {\tt [gegl]} (\usefigp{fp:gp-gegl}) image processing modules,
-which in turn uses the {\tt [gtk]} (\usefigp{fp:gp-gtk}) windowing
+e.g. {\tt gimp} (\usefigp{fp:gf-gimp} and \usefigp{fp:gs-gimp}) uses
+the {\tt [gegl]} (\usefigp{fp:gf-gegl} and \usefigp{fp:gs-gegl}) image processing modules,
+which in turn uses the {\tt [gtk]} (\usefigp{fp:gf-gtk} and \usefigp{fp:gs-gtk}) windowing
 module.
 The remaining DLLs are not used very much.
 
@@ -213,8 +264,8 @@ binaries belonging to GIMP only turn out to be quite small and
 GIMP prefers to rely on
 existing frameworks like {\tt gtk} (GUI) and GEGL (image processing).
  From Figure~\ref{fig:gimp-function}, we can see that the network module
-(\usefigp{fp:gp-net}) is only used by the {\tt [glib]} library directly
-and the compression module (\usefigp{fp:gp-zlib}) is only used by
+(\usefigp{fp:gf-net}) is only used by the {\tt [glib]} library directly
+and the compression module (\usefigp{fp:gf-zlib}) is only used by
 the image modules directly.
 This observation may simplify some software debugging and maintenance
 scenarios, i.e. reducing the set of modules to be examined.
@@ -251,7 +302,17 @@ This can be concern for software developers.
 \label{sec:flash}
 
 \begin{sidewaysfigure}
-\includegraphics[width=1.0\textwidth]{depvis/ie-yt-diff.pdf}
+%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/ie-yt-diff.pdf}
+\begin{overpic}[width=1.0\textwidth]{depvis/ie-yt-diff.pdf}
+\color{red}
+\put(430,455){\deffigp{fp:id-net}}
+\put(260,340){\vector(1,3){15}}
+\put(245,320){\deffigp{fp:id-mm}}
+\put(670,310){\vector(4,-1){50}}
+\put(640,310){\deffigp{fp:id-dx}}
+\put(670,380){\vector(4,-1){50}}
+\put(640,380){\deffigp{fp:id-flash}}
+\end{overpic}
 \caption{Diff of DLL dependency graph of Internet Explorer with Flash and without}
 \label{fig:ie-diff}
 \end{sidewaysfigure}
@@ -267,11 +328,19 @@ graphs.
 The DLLs marked with {\bf +x+} are the {\em extra} DLLs loaded
 when Flash is played.
 Most of these extra DLLs fall into the
-network, multimedia, DirectX and Flash categories.
+network \usefigp{fp:id-net},
+multimedia \usefigp{fp:id-mm},
+DirectX \usefigp{fp:id-dx} and
+Flash \usefigp{fp:id-flash} categories.
 
 \begin{sidewaysfigure}
 \centering
-\includegraphics[keepaspectratio,width=0.8\textwidth,height=0.8\textheight]{depvis/ie-yt-proj.pdf}
+\begin{overpic}[keepaspectratio,width=0.8\textwidth,height=0.8\textheight]{depvis/ie-yt-proj.pdf}
+\color{red}
+\put(210,470){\deffigp{fp:ip-flash}}
+\put(720,440){\vector(-1,-4){10}}
+\put(710,455){\deffigp{fp:ip-net}}
+\end{overpic}
 \caption{Projection of the DLL dependency graph of Internet Explorer on Flash}
 \label{fig:ie-proj}
 \end{sidewaysfigure}
@@ -280,10 +349,11 @@ To further investigate the interactions resulting from the Flash module,
 we project the visualization on {\tt flash10c.ocx} which is
 the Flash ActiveX control.
 Figure~\ref{fig:ie-proj} shows the projected graph.
-We can see that Flash is interacting with the browser and multimedia modules.
+We can see that Flash \usefigp{fp:ip-flash} is interacting with the
+browser and multimedia modules.
 The DLLs marked with {\bf \#x\#} neither use {\tt flash10c.ocx}
 nor are they used by {\tt flash10c.ocx}.
-In the {\tt network} group,
+In the {\tt network} \usefigp{fp:ip-net} group,
 we can see that {\tt wsock32} is marked by {\bf \#x\#} but
 {\tt ws2\_32} is not.
 Windows has many network modules as shown in the {\tt network} group.

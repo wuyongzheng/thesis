@@ -15,22 +15,23 @@ but the figure only shows 4 of them for simplicity.
 The EXE dependency graph is meant for comparing multiple EXE's to show
 grouped dependencies.
 When there is only a single EXE in the graph, it reduces to a single level
-tree. See Fig \ref{fig:boot} and \ref{fig:browsers} to see the graph
-when there are multiple EXEs.
+tree.
+Figure \ref{fig:boot}, \ref{fig:browsers} and \ref{fig:depvis-word}
+are EXE dependency graphsare with multiple EXEs.
 
-\begin{figure*}[htb]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=1.0\textwidth]{depvis/wget-nogroup.pdf}
 \caption{DLL dependency graph of {\tt wget} without grouping}
 \label{fig:wget-nogroup}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[thb]
+\begin{figure}[thb]
 \centering
 \includegraphics[width=1.0\columnwidth]{depvis/wget-function.pdf}
 \caption{DLL dependency graph of {\tt wget} grouped by functionality}
 \label{fig:wget-function}
-\end{figure*}
+\end{figure}
 
 Figure~\ref{fig:wget-nogroup} shows the DLL
 dependency graph for wget without grouping; while
