@@ -24,15 +24,15 @@ would not make sense for DLLs which do significant work in the initialization.
 
 \begin{figure*}[htbp]
 \centering
-\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
 %\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight,grid,tics=100]{depvis/boot-gdll.pdf}
+\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
 \color{red}
-\put(450,880){\vector(-1,-3){10}}
-\put(445,885){\deffigp{fp:bo-kernel32}}
-\put(110,260){\vector(3,-1){30}}
-\put(88,260){\deffigp{fp:bo-explorer}}
-\put(450,270){\vector(-1,-1){30}}
-\put(450,270){\deffigp{fp:bo-odbc}}
+\put(460,890){\vector(-1,-3){10}}
+\put(455,895){\deffigp{fp:bo-kernel32}}
+\put(120,260){\vector(3,-1){30}}
+\put(98,260){\deffigp{fp:bo-explorer}}
+\put(460,270){\vector(-1,-1){30}}
+\put(460,270){\deffigp{fp:bo-odbc}}
 \end{overpic}
 \caption{EXE dependency graph of the whole system}
 \label{fig:boot}
@@ -60,13 +60,12 @@ the database query interface, is used by {\tt explorer}.
 
 \begin{figure}[bthp]
 \centering
-%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/browsers-group.pdf}
 \begin{overpic}[width=1.0\textwidth]{depvis/browsers-group.pdf}
 \color{red}
-\put(275,775){\vector(3,1){100}}
-\put(240,760){\deffigp{fp:bw-ff}}
-\put(750,95){\vector(-2,-1){50}}
-\put(755,95){\deffigp{fp:bw-opera}}
+\put(290,775){\vector(3,1){100}}
+\put(255,760){\deffigp{fp:bw-ff}}
+\put(770,95){\vector(-2,-1){50}}
+\put(775,95){\deffigp{fp:bw-opera}}
 \put(325,265){\deffigp{fp:bw-ie}}
 \put(890,610){\vector(-3,-1){100}}
 \put(895,610){\deffigp{fp:bw-common}}
@@ -74,15 +73,15 @@ the database query interface, is used by {\tt explorer}.
 \put(840,715){\deffigp{fp:bw-flash}}
 \put(120,204){\vector(1,0){80}}
 \put(80,198){\usefigp{fp:bw-flash}}
-\put(820,68){\vector(-4,-1){100}}
-\put(825,68){\usefigp{fp:bw-flash}}
+\put(835,68){\vector(-4,-1){100}}
+\put(840,68){\usefigp{fp:bw-flash}}
 \end{overpic}
 \caption{EXE dependency graph of three browsers: IE, Firefox, Opera}
 \label{fig:browsers}
 \end{figure}
 
 Figure~\ref{fig:browsers} shows the EXE dependency graph for three
-brow\-sers: Internet Explorer, Firefox and Opera.
+browsers: Internet Explorer, Firefox and Opera.
 Each browser displays a YouTube page to play a
 video till completion. The scenario is intended to show the dependencies
 of the binaries used by the three programs
@@ -133,17 +132,18 @@ different directories.
 \begin{sidewaysfigure}
 \begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/word-group.pdf}
 \color{red}
-\put(40,330){\vector(-1,-4){20}}
-\put(35,340){\deffigp{fp:wd-swriter}}
-\put(720,300){\vector(-3,-1){100}}
-\put(725,305){\deffigp{fp:wd-sys32}}
-\put(655,175){\vector(1,0){50}}
-\put(620,170){\usefigp{fp:wd-sys32}}
+\put(55,340){\vector(-1,-4){20}}
+\put(50,350){\deffigp{fp:wd-swriter}}
+\put(730,300){\vector(-3,-1){100}}
+\put(735,305){\deffigp{fp:wd-sys32}}
+\put(900,230){\usefigp{fp:wd-sys32}}
 \put(540,12){\usefigp{fp:wd-sys32}}
-\put(695,100){\vector(-4,1){50}}
-\put(700,85){\deffigp{fp:wd-ms}}
-\put(680,550){\deffigp{fp:wd-of}}
-\put(900,230){\deffigp{fp:wd-comctl32}}
+\put(705,100){\vector(-4,1){50}}
+\put(710,85){\deffigp{fp:wd-ms}}
+\put(690,550){\deffigp{fp:wd-of}}
+\put(835,140){\vector(-1,3){20}}
+\put(860,130){\vector(2,1){80}}
+\put(830,120){\deffigp{fp:wd-comctl32}}
 \put(145,175){\vector(-1,2){20}}
 \put(175,150){\vector(4,-1){50}}
 \put(140,150){\deffigp{fp:wd-compat}}
@@ -200,32 +200,30 @@ Windows and running with a lower display resolution.
 \subsubsection{Gimp}
 
 \begin{sidewaysfigure}
-%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-function-removed.pdf}
 \begin{overpic}[width=1.0\textwidth]{depvis/gimp-function-removed.pdf}
 \color{red}
-\put(115,28){\vector(-1,3){10}}
-\put(105,10){\deffigp{fp:gf-gimp}}
-\put(135,180){\vector(1,-3){15}}
-\put(120,190){\deffigp{fp:gf-gegl}}
-\put(220,205){\vector(1,-2){15}}
-\put(200,215){\deffigp{fp:gf-gtk}}
-\put(457,170){\vector(1,-1){25}}
-\put(430,180){\deffigp{fp:gf-net}}
-\put(640,15){\vector(1,0){50}}
-\put(610,10){\deffigp{fp:gf-zlib}}
+\put(125,28){\vector(-1,3){10}}
+\put(115,10){\deffigp{fp:gf-gimp}}
+\put(145,180){\vector(1,-3){15}}
+\put(130,190){\deffigp{fp:gf-gegl}}
+\put(230,205){\vector(1,-2){15}}
+\put(210,215){\deffigp{fp:gf-gtk}}
+\put(467,170){\vector(1,-1){25}}
+\put(440,180){\deffigp{fp:gf-net}}
+\put(650,15){\vector(1,0){50}}
+\put(620,10){\deffigp{fp:gf-zlib}}
 \end{overpic}
 \caption{DLL dependency graph of Gimp grouped by functionality}
 \label{fig:gimp-function}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
-%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/gimp-vendor.pdf}
 \begin{overpic}[width=1.0\textwidth]{depvis/gimp-vendor.pdf}
 \color{red}
-\put(105,140){\deffigp{fp:gs-gimp}}
-\put(190,50){\vector(2,1){40}}
-\put(160,40){\deffigp{fp:gs-gegl}}
-\put(470,80){\deffigp{fp:gs-gtk}}
+\put(115,140){\deffigp{fp:gs-gimp}}
+\put(200,50){\vector(2,1){40}}
+\put(170,40){\deffigp{fp:gs-gegl}}
+\put(480,80){\deffigp{fp:gs-gtk}}
 \end{overpic}
 \caption{DLL dependency graph of Gimp grouped by software vendor}
 \label{fig:gimp-vendor}
@@ -302,16 +300,15 @@ This can be concern for software developers.
 \label{sec:flash}
 
 \begin{sidewaysfigure}
-%\begin{overpic}[width=1.0\textwidth,grid,tics=100]{depvis/ie-yt-diff.pdf}
 \begin{overpic}[width=1.0\textwidth]{depvis/ie-yt-diff.pdf}
 \color{red}
-\put(430,455){\deffigp{fp:id-net}}
-\put(260,340){\vector(1,3){15}}
-\put(245,320){\deffigp{fp:id-mm}}
-\put(670,310){\vector(4,-1){50}}
-\put(640,310){\deffigp{fp:id-dx}}
-\put(670,380){\vector(4,-1){50}}
-\put(640,380){\deffigp{fp:id-flash}}
+\put(440,455){\deffigp{fp:id-net}}
+\put(270,340){\vector(1,3){15}}
+\put(255,320){\deffigp{fp:id-mm}}
+\put(680,310){\vector(4,-1){50}}
+\put(650,310){\deffigp{fp:id-dx}}
+\put(680,380){\vector(4,-1){50}}
+\put(650,380){\deffigp{fp:id-flash}}
 \end{overpic}
 \caption{Diff of DLL dependency graph of Internet Explorer with Flash and without}
 \label{fig:ie-diff}
@@ -337,9 +334,9 @@ Flash \usefigp{fp:id-flash} categories.
 \centering
 \begin{overpic}[keepaspectratio,width=0.8\textwidth,height=0.8\textheight]{depvis/ie-yt-proj.pdf}
 \color{red}
-\put(210,470){\deffigp{fp:ip-flash}}
-\put(720,440){\vector(-1,-4){10}}
-\put(710,455){\deffigp{fp:ip-net}}
+\put(220,470){\deffigp{fp:ip-flash}}
+\put(730,440){\vector(-1,-4){10}}
+\put(720,455){\deffigp{fp:ip-net}}
 \end{overpic}
 \caption{Projection of the DLL dependency graph of Internet Explorer on Flash}
 \label{fig:ie-proj}
