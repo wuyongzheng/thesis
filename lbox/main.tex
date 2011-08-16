@@ -703,13 +703,13 @@ should strictly also exclude the monitor pid.
 \node at (27,10) [proc] (b1) {bash (14560)};
 \node at (45,12) [proc] (b2) {bash (15343)};
 \node at (10,23) [proc] (h1) {httpd (4010)};
-\node at (05,17) [proc] (h2) {httpd (4011)};
-\node at (09,13) [proc] (h3) {httpd (4012)};
-\node at (15,09) [proc] (h4) {httpd (4013)};
+\node at (5,17) [proc] (h2) {httpd (4011)};
+\node at (9,13) [proc] (h3) {httpd (4012)};
+\node at (15,9) [proc] (h4) {httpd (4013)};
 \node at (28,27) [proc] (i1) {init (1)};
-\node at (16,04) [proc] (l1) {\bf lb-mon (14940)};
-\node at (30,04) [proc] (l2) {\bf lb-mon (14941)};
-\node at (45,08) [proc] (l3) {\bf lb-mon (15349)};
+\node at (16,4) [proc] (l1) {\bf lb-mon (14940)};
+\node at (30,4) [proc] (l2) {\bf lb-mon (14941)};
+\node at (45,8) [proc] (l3) {\bf lb-mon (15349)};
 \node at (36,22) [proc] (s1) {sshd (14012)};
 \node at (45,16) [proc] (s2) {sshd:alice (15342)};
 \node at (27,16) [proc] (s3) {sshd:root (14120)};
@@ -734,20 +734,20 @@ should strictly also exclude the monitor pid.
 \subfigure[Monitor DAG]{
 \begin{tikzpicture}[x=2mm,y=2mm,font=\scriptsize,>=latex]
 \tikzstyle{proc}=[rectangle,draw]
-\node at (08,10) [proc] (b1) {bash (14560)};
-\node at (05,13) [proc] (b2) {bash (15343)};
+\node at (8,10) [proc] (b1) {bash (14560)};
+\node at (5,13) [proc] (b2) {bash (15343)};
 \node at (49,17) [proc] (h1) {httpd (4010)};
 \node at (48,13) [proc] (h2) {httpd (4011)};
-\node at (47,09) [proc] (h3) {httpd (4012)};
-\node at (46,05) [proc] (h4) {httpd (4013)};
-\node at (00,19) [proc] (i1) {init (1)};
+\node at (47,9) [proc] (h3) {httpd (4012)};
+\node at (46,5) [proc] (h4) {httpd (4013)};
+\node at (0,19) [proc] (i1) {init (1)};
 \node at (24,23) [proc] (l1) {\bf lb-mon (14940)};
 \node at (39,22) [proc] (l2) {\bf lb-mon (14941)};
-\node at (31,08) [proc] (l3) {\bf lb-mon (15349)};
-\node at (03,16) [proc] (s1) {sshd (14012)};
-\node at (12,04) [proc] (s2) {sshd:alice (15342)};
-\node at (10,07) [proc] (s3) {sshd:root (14120)};
-\node at (24,04) [proc] (v1) {vim (15350)};
+\node at (31,8) [proc] (l3) {\bf lb-mon (15349)};
+\node at (3,16) [proc] (s1) {sshd (14012)};
+\node at (12,4) [proc] (s2) {sshd:alice (15342)};
+\node at (10,7) [proc] (s3) {sshd:root (14120)};
+\node at (24,4) [proc] (v1) {vim (15350)};
 \draw [->] (l1) -- (i1);
 \draw [->] (l1) -- (s1);
 \draw [->] (l1) -- (b2);
