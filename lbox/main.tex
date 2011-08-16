@@ -695,10 +695,88 @@ should strictly also exclude the monitor pid.
 % the monitor creation time is not affected much by the number of processes
 % being monitored.
 
+\begin{figure}[htb]
+\centering
+\subfigure[Parent-Child Process Tree]{
+\begin{tikzpicture}[x=2mm,y=2mm,font=\scriptsize,>=latex]
+\tikzstyle{proc}=[rectangle,draw]
+\node at (27,10) [proc] (b1) {bash (14560)};
+\node at (45,12) [proc] (b2) {bash (15343)};
+\node at (10,23) [proc] (h1) {httpd (4010)};
+\node at (05,17) [proc] (h2) {httpd (4011)};
+\node at (09,13) [proc] (h3) {httpd (4012)};
+\node at (15,09) [proc] (h4) {httpd (4013)};
+\node at (28,27) [proc] (i1) {init (1)};
+\node at (16,04) [proc] (l1) {\bf lb-mon (14940)};
+\node at (30,04) [proc] (l2) {\bf lb-mon (14941)};
+\node at (45,08) [proc] (l3) {\bf lb-mon (15349)};
+\node at (36,22) [proc] (s1) {sshd (14012)};
+\node at (45,16) [proc] (s2) {sshd:alice (15342)};
+\node at (27,16) [proc] (s3) {sshd:root (14120)};
+\node at (45,04) [proc] (v1) {vim (15350)};
+\draw [->] (i1) -- (h1);
+\draw [->] (h1) -- (h2);
+\draw [->] (h1) -- (h3);
+\draw [->] (h1) -- (h4);
+\draw [->] (i1) -- (s1);
+\draw [->] (s1) -- (s2);
+\draw [->] (s1) -- (s3);
+\draw [->] (s2) -- (b2);
+\draw [->] (b2) -- (l3);
+\draw [->] (l3) -- (v1);
+\draw [->] (s3) -- (b1);
+\draw [->] (b1) -- (l1);
+\draw [->] (b1) -- (l2);
+\end{tikzpicture}
+\label{fig:lbox-mon-tree1}
+}
+
+\subfigure[Monitor DAG]{
+\begin{tikzpicture}[x=2mm,y=2mm,font=\scriptsize,>=latex]
+\tikzstyle{proc}=[rectangle,draw]
+\node at (08,10) [proc] (b1) {bash (14560)};
+\node at (05,13) [proc] (b2) {bash (15343)};
+\node at (49,17) [proc] (h1) {httpd (4010)};
+\node at (48,13) [proc] (h2) {httpd (4011)};
+\node at (47,09) [proc] (h3) {httpd (4012)};
+\node at (46,05) [proc] (h4) {httpd (4013)};
+\node at (00,19) [proc] (i1) {init (1)};
+\node at (24,23) [proc] (l1) {\bf lb-mon (14940)};
+\node at (39,22) [proc] (l2) {\bf lb-mon (14941)};
+\node at (31,08) [proc] (l3) {\bf lb-mon (15349)};
+\node at (03,16) [proc] (s1) {sshd (14012)};
+\node at (12,04) [proc] (s2) {sshd:alice (15342)};
+\node at (10,07) [proc] (s3) {sshd:root (14120)};
+\node at (24,04) [proc] (v1) {vim (15350)};
+\draw [->] (l1) -- (i1);
+\draw [->] (l1) -- (s1);
+\draw [->] (l1) -- (b2);
+\draw [->] (l1) -- (b1);
+\draw [->] (l1) -- (s3);
+\draw [->] (l1) -- (s2);
+\draw [->] (l1) -- (v1);
+\draw [->] (l1) -- (l3);
+\draw [->] (l1) -- (h1);
+\draw [->] (l1) -- (h2);
+\draw [->] (l1) -- (h3);
+\draw [->] (l1) -- (h4);
+\draw [->] (l1) -- (l2);
+\draw [->] (l3) -- (v1);
+\draw [->] (l2) -- (h1);
+\draw [->] (l2) -- (h2);
+\draw [->] (l2) -- (h3);
+\draw [->] (l2) -- (h4);
+\end{tikzpicture}
+\label{fig:lbox-mon-tree2}
+}
+\caption{A Tree of Cascaded Monitors}
+\label{fig:lbox-mon-tree}
+\end{figure}
+
 The following example shows a snapshot of a system where a web server is running
 and user Alice is using \code{vim}.
-The left part of Figure~\ref{fig:lbox-mon-tree} shows the process tree induced
-by the parent-child relationship while the right
+Figure~\ref{fig:lbox-mon-tree1} shows the process tree induced
+by the parent-child relationship while Figure~\ref{fig:lbox-mon-tree2}
 shows the monitor DAG induced by the monitoring relationship.
 The following sequence describes the creation of the snapshot given
 in Figure~\ref{fig:lbox-mon-tree}:
@@ -723,12 +801,6 @@ process accesses the \code{/etc/passwd} file,
 two file events will be generated to the two monitors, $15349$ and $15340$.
 If \code{vim} ($15350$) accesses another file, then only
 monitor $15349$ will receive the event.
-
-\begin{figure*}
-\includegraphics[width=1.0\textwidth]{lbox/mon-both}
-\caption{A Tree of Cascaded Monitors}
-\label{fig:lbox-mon-tree}
-\end{figure*}
 
 
 % While a simple example was used, it should be clear that only
