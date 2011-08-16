@@ -38,13 +38,34 @@ For example, it should not leak confidential information to low privilege users.
 It should be carefully implemented so that a malicious monitored
 software would not exploit the infrastructure.
 
+{\em Transparent} monitoring means that the monitored software is not aware of
+the monitoring.
+There can be many definitions on the term ``aware of''.
+We give two, a weaker one and a stronger one.
+(i) The monitored software does not need to be adapted (e.g. rewritten or
+recompiled) for the monitoring.
+In other words, the monitoring should work even if the author of the
+monitored software is not aware of it.
+Monitors such as DTrace and DProbes require the monitored
+software to call their probe API.
+These monitors are not transparent under this definition.
+(ii) The monitoring is undetectable by the monitored software.
+The monitor may change the execution environment, which can be detected.
+For example, some system call monitors are implemented by patching the
+user space dispatching table.
+They can be easily detected by examining the table.
+Other monitors can be detected by timing analysis.
+These monitors are not transparent under this definition.
+We believe that the former definition is enough for general purpose monitoring;
+whereas the latter is too costly in terms of either performance overhead or
+special hardware \cite{raffetseder2007detecting}.
 
 By {\em flexible}, the infrastructure should be sufficiently general to
 handle different problems.
 For example, an API can be used to extend the monitored events for future software.
-A filter language can be used pre-process events.
+A filter language can be used to pre-process events.
 
-By {\em efficient}, the infrastructure should not introduce too much
+By {\em efficient}, the infrastructure should not incur too much
 overhead on the monitored software.
 An observer is part of the system and changes the system, similarly,
 a monitor can bring side effects to the monitored program.
