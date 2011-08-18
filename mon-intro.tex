@@ -28,37 +28,44 @@ reliability and performance of the monitored software.
 We believe that a monitoring system should let the user make the choice,
 because different scenarios may have different trade-off.
 
-\TODO{transparent: fully transparent may not be achievelable.
-focus on functional transprency
-%http://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements
-}.
-
-The monitoring infrastructure need to be {\em secure} in both design and implementation.
+The monitoring infrastructure needs to be {\em secure} in both design and implementation.
 For example, it should not leak confidential information to low privilege users.
 It should be carefully implemented so that a malicious monitored
 software would not exploit the infrastructure.
 
-{\em Transparent} monitoring means that the monitored software is not aware of
-the monitoring.
-There can be many definitions on the term ``aware of''.
-We give two, a weaker one and a stronger one.
+There are many definitions on {\em transparency}.
+An early definition can be traced back to the Popek and Goldberg
+virtualization requirements \cite{popek1974formal} on
+equivalence and efficiency of virtual machines.
+Here, we give two definitions, a weaker one and a stronger one.
 (i) The monitored software does not need to be adapted (e.g. rewritten or
 recompiled) for the monitoring.
 In other words, the monitoring should work even if the author of the
 monitored software is not aware of it.
+\code{syslog} requires the monitored program to call the
+\code{syslog(3)} function, thus \code{syslog} is not transparent
+in this definition.
 Monitors such as DTrace and DProbes require the monitored
 software to call their probe API.
-These monitors are not transparent under this definition.
+When they are used to monitor the kernel, they are not considered transparent,
+because the kernel has to be rewritten to call their probe API.
+However, when they are used to monitor the system calls made by a program,
+they are considered transparent, because the program does not need to be
+rewritten.
+In this case, DTrace and the kernel as a whole is considered as the monitor.
 (ii) The monitoring is undetectable by the monitored software.
 The monitor may change the execution environment, which can be detected.
 For example, some system call monitors are implemented by patching the
 user space dispatching table.
-They can be easily detected by examining the table.
+They can be detected by examining the table.
 Other monitors can be detected by timing analysis.
 These monitors are not transparent under this definition.
-We believe that the former definition is enough for general purpose monitoring;
-whereas the latter is too costly in terms of either performance overhead or
-special hardware \cite{raffetseder2007detecting}.
+We believe that the former definition is enough for general purpose monitoring.
+The latter is too costly,
+because it either incurs large performance overhead if implemented in software;
+or requires special hardware.
+Moreover, study \cite{raffetseder2007detecting} has shown that existing software
+and hardware virtualizers can be easily detected.
 
 By {\em flexible}, the infrastructure should be sufficiently general to
 handle different problems.

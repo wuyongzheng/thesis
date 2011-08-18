@@ -236,9 +236,9 @@ zero fill $S$\;
   \lForEach{$y$ in $D_Y[d]$}{
     $S_Y[yH/N] ++$
   }\;
-  \For{$x\leftarrow 0$ \KwTo $W-1$}{
-    \For{$y\leftarrow 0$ \KwTo $H-1$}{
-      $S[x,y]\leftarrow S[x,y]+S_X[x]\times S_Y[y]$
+  \For{$w\leftarrow 0$ \KwTo $W-1$}{
+    \For{$h\leftarrow 0$ \KwTo $H-1$}{
+      $S[w,h]\leftarrow S[w,h]+S_X[w]\times S_Y[h]$
     }
   }
 }

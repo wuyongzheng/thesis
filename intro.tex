@@ -63,7 +63,7 @@ We motivate our research by first giving some examples of problems and
 then showing how monitoring can help solving them.
 
 \begin{enumerate}
-\item {\em DLL Hell}
+\item {\em ``DLL Hell''}
 
 A software product usually consists of many software modules.
 A module may depend on another module in the same software product or
@@ -257,9 +257,10 @@ consistently reappears \cite{binary-planting}.
 
 Windows lacks a consistent software management system to manage
 the installation, update and removal of software.
+In any case, other systems may not have a mandortary software management system.
 Most software products have their own installers, which perform installation in
 different ways.
-This makes binaries in windows is rather ``chaotic''.
+The dependencies and conflicts make binaries in windows rather ``chaotic''.
 Firstly, it is not possible to systematically tell which software a binary,
 or file in general, belongs to.
 Secondly, the software dependencies are unknown.
