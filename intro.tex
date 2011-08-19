@@ -1,26 +1,29 @@
 \chapter{Introduction}
 
 Software is increasingly complex with many interactions among
-different pieces of software and the operating system.
+software components and the operating system.
 The complex interactions make the software ecosystem hard to understand.
-Without proper understanding,
-it is difficult to configure/maintain software and to fix problems.
-The complexity also increases the attack surface\cite{manadhata2006attack}, which measures the
-bugs or features exploitable by malicious attacks.
+This is further multiplied by the fact that many software products are
+closed source.
+Without proper understanding, many problems arise, such as
+maintenance problems, performance problems, software bugs and vulnerabilities.
+The complexity and software bugs also increase the
+{\em attack surface} \cite{manadhata2006attack},
+which measures the bugs or features exploitable by malicious attacks.
 Monitoring is an effective way to understand these interactions.
-Software monitoring is the process of obtaining information
-in running software.
+Software monitoring is the process of obtaining useful information
+from running software.
 It is used for different purposes and the information obtained is different
-according to the purpose:
+according to the purposes:
 
 \begin{itemize}
-\item {\bf software comprehension} \\
+\item {\bf Software Comprehension} \\
 Monitoring can help software comprehension such as studying the control
 flow and module dependency.
 Monitoring running software can be used to study the dynamic behaviour which
 cannot be achieved from static analysis.
-\item {\bf verification} \\
-We can observe the expected behaviours in order to
+\item {\bf Inspection} \\
+We can inspect the expected behaviours in order to
 verify the correctness of the execution.
 Sometimes it is not enough to determine the correctness from the output in
 the narrow sense.
@@ -31,9 +34,9 @@ The correctness of the whole web server host is even more complex.
 This can be verified if we know the expected behaviour and
 can formalize and monitor it.
 Similarly, we can look for unexpected behaviours in order to discover problems.
-\item {\bf diagnosis} \\
+\item {\bf Diagnosis} \\
 In the other direction, if we have a specific problem such as software failure,
-incorrect output or performance problems, we can diagnosis the problem by
+incorrect output or performance problems, we can diagnose the problem by
 studying the behaviour and locate the root cause.
 Software log is probably the most useful resource for software diagnosis.
 It is considered as one kind of monitoring,
@@ -41,8 +44,8 @@ which we call discretionary monitoring.
 However, the log may not be available or the interested information
 may not be logged.
 Mandatory monitoring can obtain the information in this case.
-\item {\bf security} \\
-The access of files and interactions of processes is needed by many
+\item {\bf Security} \\
+The access of files and interactions of processes are needed by many
 security models such as the Biba Integrity Model.
 A reliable underlying monitoring system is essential to implement
 these security models.
