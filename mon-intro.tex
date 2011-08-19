@@ -86,8 +86,17 @@ The LBox addresses the problem of {\em user-level} monitoring.
 Most traditional monitoring infrastructures are super-user based,
 mainly because they are system-wide.
 With user-level monitoring, LBox can be used by all users in a multi-user
-system, moreover, LBox allows monitor to be recursive.
-However, this poses several new challenges such as
+system, moreover, LBox allows monitor to be cascading.
+However, this poses several new challenges.
+Allowing all users to do monitoring changes the adversary model because
+users, unlike administrators, can be untrusted.
+If not carefully designed, the monitoring infrastructure can be exploited
+by malicious users to obtain confidential information such as other
+users' password.
+Cascade monitoring allows monitors to be monitored by other monitors.
+The monitoring infrastructure has to prevent infinite message loop-back,
+which can be caused by, for example, two monitors generating events for
+each other.
 
 Our second monitoring infrastructures, WinResMon addresses the problem
 of extensible resource-based monitoring in Windows.
