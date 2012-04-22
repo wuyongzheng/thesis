@@ -60,7 +60,7 @@ Windows NT introduced the multiple user operating system, which
 separates user configurations and introduces normal/super user account.
 The super user account (also known as administrator) has higher privilege and
 is supposed to only perform administrative tasks following the
-least privilege principle.
+least privilege principle~\cite{saltzer1975protection}.
 However, in practice,
 most users choose to use the super user account,
 because some software written for older Windows do not work if running using
@@ -113,7 +113,7 @@ malware which do not modify system resources are not affected.
 This is alright from a multi-user security perspective, which focuses on
 preventing a user from interfering other users.
 However, in a single-user situation, which is mostly the case for Windows PC,
-it is mode relevant to prevent an application from interfering with other
+it is more relevant to prevent an application from interfering with other
 applications of the same user.
 For example, UAC cannot prevent malware from stealing web browser
 cookies or modifying Word documents.

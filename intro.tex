@@ -212,8 +212,10 @@ in Section~\ref{sec:bg-win}.
 
 The Windows operating system is a closed source system.
 This can be seen from three aspects:
-Firstly, the kernel is closed source, which makes kernel monitoring very difficult.
-Dynamic instrumentation tools like DTrace and SystemTap are not relevant because
+Firstly, the kernel is closed source, which makes kernel monitoring
+very difficult.
+Dynamic instrumentation tools like DTrace~\cite{cantrill2004dynamic} and
+SystemTap~\cite{prasad2005systemtap} are not relevant because
 their probes are specific to code points or functions in the kernel.
 Without understanding the purpose of each function, probes are meaningless.
 It makes kernel extension difficult as well.
@@ -239,8 +241,9 @@ security mechanisms.
 Windows users typically use the administrator account to perform all tasks.
 This is caused by its single-user operating system history and the backward
 compatibility of the current version.
-However, this is against the least privilege principle and makes malware
-capable of performing critical operations.
+However, this is against the least privilege
+principle~\cite{saltzer1975protection} and makes malware capable of performing
+critical operations.
 Although User Account Control (UAC) is introduced in recent version of
 Windows, there are limitations with it.
 
@@ -377,7 +380,7 @@ analyzing performance issues, anomaly discovery, etc.
 The visualization is based on DotPlot, which compares two traces
 and plot the common (or different) items.
 It was early used for
-analyzing similarities in DNA sequences.
+analyzing similarities in DNA sequences \cite{maizel1981enhanced}.
 \code{lviz} extends the traditional DotPlot through a number of visual elements
 so that we can easily associate the visual representation with events in the
 trace and identify the key events.

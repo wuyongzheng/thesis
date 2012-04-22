@@ -211,6 +211,13 @@ Another way of grouping is to think of the source of the binary, so this
 could be a way of grouping by software vendor.
 For example, we can also group binaries which are from Adobe together.
 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=1.0\textwidth]{depvis/wget-nogroup.pdf}
+\caption{DLL dependency graph of {\tt wget} without grouping}
+\label{fig:wget-nogroup}
+\end{figure}
+
 The DLL dependency graph shows actual control flow dependency.
 The EXE dependency graph, on the other hand, only shows what
 DLLs are loaded. Obviously, in a DLL dependency graph,
