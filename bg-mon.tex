@@ -178,43 +178,15 @@ and (iii) not transparent with respect to setuid/setgid executables
 and signals,
 i.e. \code{ptrace} and \code{/proc} disable tracing 
 on setuid/setgid executables.  
-\TODO{check CVE and figure out reason.
-One could write a simple C program as in %Figure~\ref{fig:ptrace-bug}
-to escape from \code{ptrace}.
-After several iterations, some
-child processes will not be traced by the tracing program.}
 % As well as \code{ptrace}, \code{/proc}
 % brings a side-effect to the traced process.
-In both \code{ptrace} and \code{/proc}, when a traced process calls \code{setuid(2)},
+In both \code{ptrace} and \code{/proc}, when a traced process calls
+\code{setuid(2)},
 the call will fail because the tracing process would have insufficient
 privileges to the \code{setuid} process.
 Because of their subtleties and intrinsic difficulties,
 \code{ptrace} and \code{/proc} are not suitable for general purpose user-level
 monitoring although they may be useful in specific situations.
-
-% \begin{figure}[htb]
-% \begin{verbatim}
-% #include <sys/types.h>
-% #include <sys/times.h>
-% #include <unistd.h>
-% main()
-% {
-%   struct tms timing;
-%   int i;
-%   getpid();
-%   if (fork() == 0) {
-%     getppid();
-%     if (fork() == 0) {
-%       times(&timing);
-%       _exit(1);
-%     }
-%     for (i=0; i < 10; getpid()) ;
-%   }
-% }
-% \end{verbatim}
-% \caption{Simple C program to escape \code{ptrace}}
-% \label{fig:ptrace-bug}
-% \end{figure}
 
 The other serious drawback of \code{ptrace} or \code{/proc} is that
 the overhead is considerable, incurring at least two
