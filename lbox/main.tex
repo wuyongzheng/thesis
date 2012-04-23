@@ -143,6 +143,7 @@ For example, a global specification to monitor all
 processes is simply the boolean expression {\em true}.
 
 \item {\em uid/euid/suid/fsuid} (user id):
+\TODO{explain the differences}
 These predicates are true if and only if the
 user id of the process is same as the user id specified.
 Similar predicates are also used for group ids.
@@ -472,7 +473,6 @@ number of context switches to the monitor with the monitor mostly sleeping
 until there are sufficient number of events. However the use of synchronous
 and timeouts allows the monitor to have finer control and more timely
 event delivery but can mean more system overhead.
-is waiting for events is mostly sleep
 
 The monitor API described in this section is actually a user-space library
 which uses the monitoring kernel extension. Thus, this particular
@@ -520,7 +520,7 @@ Error handling also has been omitted for the most part.
  
    /* PART 4: read and process events. */
    for (;;) {
-      /* -1 is the timeout value which means to block for ever */
+      /* -1 is the timeout value which means to block forever */
       event = lbox_next_event(-1);
       switch (event->type) {
       lbox_FILE_EVENT:
@@ -576,7 +576,7 @@ it is important to ensure system confidentiality.
 We do not allow a non-root user to monitor processes owned by other users.
 A corollary of this constraint is that
 a non-root user $u$ cannot monitor a setuid (setgid) executable
-which is setuid (setgid) to user $w$ as lone as the effective user (group) id
+which is setuid (setgid) to user $w$ as long as the effective user (group) id
 $w$ is different from $u$.
 The dual to this is that a monitor process belonging to $w$ can monitor
 such a process from user $u$ when its effective userid is $u$.
@@ -927,37 +927,39 @@ applications tasks did not run as they were supposed to, e.g. due to some
 failure. Again, it is easy to write a monitor which can detect whether
 tasks ran as scheduled.
 
-% \subsection{Implementation Issues}
-% 
-% \subsubsection{The Hooking Mechanism}
-% 
-% The prototype implementation we have is in Linux on the 2.6 kernel series.
-% There are several ways of implementing the monitor mechanism:
-% \begin{enumerate}
-% \item Making use of the {\tt ptrace()} or {\tt /proc} facility.
-% As discussed earlier, this has many problems and does not support
-% mandatory or reliable monitoring. A system-call based mechanism
-% is also not suitable for our object-based orientation.
-% \item Some other in-kernel system call interposition method.
-% This can suffer from TOCTOU (time of create time of use) problems.
-% For example, if we are monitoring the {\tt write()} system call,
-% a process can change the actual file which the file descriptor points to
-% between the time when the file descriptor is looked up and 
-% the actual file descriptor is used.
-% This would lead either to missing an event (unreliability) or
-% reporting an incorrect event (the wrong file).
-% As before, it also does not suit our object-based orientation.
-% \item Using the LSM hooks in Linux 2.6.
-% We currently use this approach in our prototype which has a good
-% match with kernel objects. Its also much simpler as LSM hooks are
-% mostly in the right places.
-% It guarantees mandatory monitoring, and does not suffer from TOCTOU.
-% However, it does not cover every possible system calls.
-% As the present prototype focuses initially on events on files,
-% this is sufficient but it does mean that a full solution cannot be
-% just a module.
-% \end{enumerate}
-% 
+\subsection{Implementation Issues}
+
+\subsubsection{The Hooking Mechanism}
+
+We have implemented our prototype as a kernel module for Linux 2.6 kernel.
+There are several ways of implementing the monitor mechanism:
+\begin{enumerate}
+\item {\bf {\tt ptrace()} or {\tt /proc}}
+As discussed earlier, this has many problems and does not support
+mandatory or reliable monitoring. A system-call based mechanism
+is also not suitable for our object-based orientation.
+\item {\bf In-kernel system call interposition}
+This can suffer from TOCTOU (time of create time of use) problems.
+For example, if we are monitoring the {\tt write()} system call,
+a process can change the actual file which the file descriptor points to
+between the time when the file descriptor is looked up and 
+the actual file descriptor is used.
+This would lead either to missing an event (unreliable) or
+reporting an incorrect event (the wrong file).
+As before, it also does not suit our object-based orientation.
+\item {\bf Linux Security Module (LSM)}
+We currently use this approach in our prototype which has a good
+match with kernel objects. Its also much simpler as LSM hooks are
+mostly in the right places.
+It guarantees mandatory monitoring, and does not suffer from TOCTOU.
+However, it does not cover every possible system calls.
+As the present prototype focuses initially on events on files,
+this is sufficient but it does mean that a full solution cannot be
+just a module.
+\end{enumerate}
+
+\TODO{enable. block diagram.}
+
 % \subsubsection{Matching The File Specification}
 % 
 % Matching file event specifications, requires the 
@@ -996,9 +998,10 @@ tasks ran as scheduled.
 % we introduce an event buffer so that the monitored process 
 % can continue its execution even if it generates a auditing event.
 % Timeouts and events with a flushing property
-% are used to ensure that the monitor can still get events
-% even if the buffer is not full and the monitor can choose
-% a tradeoff between efficiency and timeliness.
+% are used to allow the monitor to get events
+% even if the buffer is not full.
+% In this sense, the monitor can choose
+% a trade-off between efficiency and timeliness.
 % 
 % When a system call takes place, we first check whether the process is being
 % monitored.
@@ -1006,18 +1009,7 @@ tasks ran as scheduled.
 % Thus there is very little impact on non-monitored processes.
 % For monitored processes, the monitor can also be found efficiently.
 % Thus there is very little impact on a process as long as
-% the number of logboxes which contains the process is not too large.
-% 
-% The time required for checking whether the event should be logged
-% varies with different types of events.
-% A direct operation involving the file is very efficient.
-% If there is any file event which involves inheritance,
-% we need to trace the file all the way up to the marked file 
-% or the root directory.
-% Since all the information of parent files is in the dentry cache,
-% the directory traversal should be fast.
-% Other kinds of objects can be equally fast, for example,
-% with a socket connection event, we only need to do the netmask test.
+% the number of monitors of the process is not too large.
 
 \subsection{Comparing to DTrace}
 \label{sec:lbox-dtrace}
@@ -1086,7 +1078,7 @@ fully optimized, the results do show that the overheads of monitoring
 can be very low.
 
 We first use a simple micro-benchmark which gives an indication
-of worse case overheads.
+of worst case overheads.
 The program performs 1000000 open(2) and close(2) calls with
 a monitor watching for the file access.
 We compare the auditing framework in each of the following scenarios:
@@ -1121,11 +1113,11 @@ The benchmark is accessing the same regular file.
 
 \item {\em 1/2 dir levels}:
 The monitor is monitoring a directory which is 1 or 2 levels deep containing
-the which is being used.
+the file which is being used.
 For example, the monitor uses the file specification
 \code{/1} with SUBDIRECTORIES set.
 The 2 dir level benchmark opens the file \code{/1/2/foo}.
-This test investigates the time for directory traversal..
+This test investigates the time for directory traversal.
 
 \item {\em no buff}:
 The file event is synchronous which means 1000000 context switches
@@ -1156,7 +1148,7 @@ no buff & \begin{math} 8.70\pm0.04 \end{math} & \begin{math} 0.99\pm0.08 \end{ma
 ptrace & \begin{math} 59.04\pm0.15 \end{math} & \begin{math} 12.90\pm0.32 \end{math} & \begin{math} 46.11\pm0.39 \end{math} \\
 \hline
 \end{tabular}
-\caption{\code{open(2)} micro-benchmark on Linux}
+\caption{\code{open(2)} micro-benchmark on Linux. All times are in seconds.}
 \label{tab:lbox-open}
 \end{table}
 
@@ -1187,7 +1179,7 @@ One point of comparison with other systems on Linux would be with
 Systrace \cite{provos2003improving}. 
 A pure comparison is not valid since in our system any event
 which must be monitored is eventually passed to the monitor.
-Systrace on the other as it does access control first can choose between a
+Systrace, on the other hand, does access control first can choose between a
 kernel-level policy or the user-level policy daemon. 
 The kernel-level policy should entail less work for Systrace
 simply because the decision is handled only within the kernel, while
@@ -1393,65 +1385,3 @@ even more scalable and efficient. We would like to increase the
 expressivity of the in-kernel mechanisms without incurring more cost
 and also avoiding executing monitor code in the kernel.
 
-% \begin{thebibliography}{99}
-% 
-% \bibitem{dtrace-paper}
-% Bryan M. Cantrill, Michael W. Shapiro and Adam H. Leventhal,
-% ``Dynamic Instrumentation of Production Systems'',
-% Usenix, 2004.
-% 
-% \bibitem{finke}
-% J. Finke,
-% ``Process Monitor: Detecting Events That Didn't Happen'',
-% Usenix LISA, 2002.
-% 
-% \bibitem{garfinkel}
-% T. Garfinkel,
-% ``Traps and Pitfalls: Practical Problems in System Call 
-% Interposition Based Security Tools'',
-% Network and Distributed Systems Security Symp,
-% 2003.
-% 
-% \bibitem{janus}
-% I. Goldberg, D. Wagner, R. Thomas, and E. Brewer,
-% ``A Secure Environment for Untrusted Helper Applications'',
-% Usenix Security, 1996.
-% 
-% \bibitem{alcatraz}
-% Z. Liang, V.N. Venkatakrishnan, and R. Sekar, 
-% ``Isolated Program Execution: An Application
-% Transparent Approach for Executing Untrusted Programs'',
-% ACSAC, 2003.
-% 
-% \bibitem{systrace}
-% N. Provos,
-% ``Improving Host Security with System Call Policies'',
-% Usenix Security, 2003.
-% 
-% \bibitem{solaris-sec-svc}
-% Sun Microsystems,
-% ``System Administration Guide: Security Services'',
-% part IV: Auditing and Device Management.
-% 
-% % \bibitem{dtrace-man}
-% % Sun Microsystems,
-% % ``Solaris Dynamic Tracing Guide''.
-% 
-% \bibitem{lafs}
-% C. Wee,
-% ``LAFS: A Logging and Auditing File System'',
-% Annual Computer Security Applications Conf,
-% 231--240, 1995.
-% 
-% \bibitem{lsm}
-% C. Wright, C. Cowan, S. Smalley, J. Morris, and G. Kroah-Hartman,
-% ``Linux Security Modules: General Security Support for the Linux Kernel'',
-% Usenix Security, 2002.
-% 
-% \bibitem{dprobes}
-% Dynamic Probes,
-% {\small\tt http://dprobes.sourceforge.net/}
-% 
-% \end{thebibliography}
-% 
-% \end{document}

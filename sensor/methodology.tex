@@ -6,10 +6,11 @@ relevant external sensors and rules to the anomaly detection; then we perform
 experiments and analysis to validate the feasibility of our models.
 
 \subsubsection{Experimental Setup}
-Our experimental setup consists
-of one router and
-several hosts connected by 100Mbps connections to the Internet
-through the router. First, we gather normal data from three
+Our experimental setup consists of 5 hosts in a 100Mbps LAN which is connected
+to the Internet through a router.
+All 5 hosts are running 32-bit Windows XP SP2 with Pentium 4 2.4GHz Processor and
+2GB memory.
+First, we gather normal data from three
 uncompromised hosts for a period of 12 days. Next, we ``compromise''
 one host by installing the modified Agobot on it and control it from
 another machine. The compromised host carries out
@@ -145,24 +146,6 @@ under certain conditions \cite{basseville1993detection}. As it is simple
 and efficient, it is suitable for real-time processing of streaming
 sensor data.
 
-\begin{figure}[tb]
-\begin{center}
-\begin{minipage}[t]{.49\textwidth}
-     \includegraphics[width=1\textwidth]{sensor/email}
-\vspace*{-4mm}
-\caption{False detections caused by email rate based
-spam detection}
-\label{fig:detect-by-rate}
-\end{minipage}
-\begin{minipage}[t]{.5\textwidth}
-\includegraphics[width=1\textwidth]{sensor/email-norm}
-\vspace*{-4mm}
-\caption{Samples of user email rate}
-\label{fig:email}
-\end{minipage}
-\end{center}
-\end{figure}
-
 We incorporate a limit $t$ on the accumulation time.  This is similar to the
 moving average computation, in the sense of monitoring a moving time quantum.
 Yet it differs from moving average or rate based detection in that the signal
@@ -199,3 +182,11 @@ within a time interval, the area in the graph enclosed below by the
 baseline and bounded above by the email rate curve. With changepoint
 detection, occasional high email rates do not cause false alarms,
 and constant medium email rates cannot evade detection. 
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{sensor/email}
+\caption{False detections caused by email rate based spam detection}
+\label{fig:detect-by-rate}
+\end{center}
+\end{figure}

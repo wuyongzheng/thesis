@@ -402,7 +402,8 @@ configuration file assigns a priority to log entries.  For example, a log
 entry for writing a registry key might be considered more important to keep
 than one for reading a registry key.
 
-A fragment of an example configuration is shown in Appendix 2.  This example
+A fragment of an example configuration is shown in
+Appendix~\ref{sec:resmon-prior}. This example
 uses priority values ranging from 1 (least important) to 5 (most important).
 For each resource type, configuration entries are matched in a sequential
 order, and mappings are listed from most to least specific.  It is possible to
@@ -597,7 +598,6 @@ Since {\small\tt "foo"} is a relative path, the trace generator concatenates
 \item The handle is returned to {\small\tt iexplore.exe} and operation
 continues as per normal.\footnote{Step 6 and 4 are independent.
 Thus, depending on the scheduler, step 6 is not necessarily executed after
-x
 step 4.} 
 \end{enumerate}
 
@@ -621,7 +621,8 @@ native API level.
 
 WinResMon implements the system call interceptor by means of a kernel mode driver.
 The driver captures system call requests made by a process by ``hooking'' the
-native system calls as described in \cite{ddj-nthooking}.  Appendix 1 lists the
+native system calls as described in \cite{ddj-nthooking}.
+Appendix~\ref{sec:resmon-syscall} lists the
 system calls intercepted by WinResMon.  We found these to be the most common
 system calls arising from file, registry, IPC, synchronization, and process
 operations.\footnote{ Since Microsoft Windows is closed source and the native
@@ -1048,171 +1049,114 @@ to study program behaviours, including repeated patterns, abnormal events
 and behaviour differences,
 which are useful to discover various of problems.
 
-% \begin{thebibliography}{99}
-% 
-% \bibitem{rpm}
-% \url{http://www.rpm.org/}.
-% 
-% \bibitem{systrace}
-% N. Provos, ``Improving Host Security with System Call Policies'', USENIX
-% Security Symposium, pp. 257--272, 2003. 
-% 
-% \bibitem{asep}
-% Y. M. Wang, R. Roussev, C. Verbowski, A. Johnson, M. W. Wu,
-% Y. Huang and S. Y. Kuo,
-% ``Gatekeeper: Monitoring Auto-Start Extensibility Points
-% (ASEPs) for Spyware Management'',
-% Large Installation System Administration Conference, pp. 33--46, 2004.
-% 
-% \bibitem{ntnativeapi}
-% G. Nebbett, ``Windows NT/2000 Native API Reference'', Macmillan Technical
-% Publishing, Indianapolis, 2000. 
-% 
-% \bibitem{nthooking}
-% \url{http://www.ddj.com/184410109}.
-% 
-% \bibitem{MSDN}
-% Microsoft MSDN, ``Process Callbacks",
-% \url{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/Kernel_r/hh/Kernel_r/k108_a0f7bff2-270e-41fb-87d4-d8d533aa0bef.xml.asp}.
-% 
-% \bibitem{yahoo}
-% \url{http://toolbar.yahoo.com/}.
-% 
-% \bibitem{filemon}
-% \url{http://www.sysinternals.com/Utilities/Filemon.html}.
-% 
-% \bibitem{regmon}
-% \url{http://www.sysinternals.com/Utilities/Regmon.html}.
-% 
-% \bibitem{strace}
-% \url{http://www.liacs.nl/~wichert/strace/}.
-% 
-% \bibitem{bindview}
-% \url{http://www.bindview.com/Services/RAZOR/Utilities/Windows/strace_readme.cfm}.
-% 
-% \bibitem{dtrace}
-% B. M. Cantrill, M. W. Shapiro and A. H. Leventhal, ``Dynamic Instrumentation of
-% Production Systems'', USENIX Annual Technical Conference, pp. 15--28, 2004.
-% 
-% \bibitem{systemtap}
-% V. Prasad, W. Cohen, F. Eigler, M. Hunt, J. Keniston, B. Chen, ``Locating
-% System Problems Using Dynamic Instrumentation'', Linux Symposium, vol. 2,
-% pp. 57--72, 2005. 
-% 
-% \bibitem{lbox}
-% Y. Z. Wu and R. H. C. Yap, ``A User-level Framework for Auditing and
-% Monitoring'', Annual Computer Security Applications Conference, pp. 95--105, 2005.
-% 
-% \end{thebibliography}
-% 
-% \newpage
-% \onecolumn
-% 
-% 
-% \section*{Appendix 1: List of Intercepted System Calls}
-% 
-% Table~\ref{loggedcalls} lists the Microsoft Windows NT native-level system
-% calls intercepted in our current implementation.
-% 
-% \begin{table}[here]
-% \centering
-% \begin{tabular}{|l|l|}
-% \hline
-% \multicolumn{2}{|c|}{File} \\
-% \hline
-% ZwCreateFile & opens or creates a new file \\
-% ZwOpenFile & opens an existing file \\
-% ZwDeleteFile & deletes a file \\
-% ZwReadFile & reads from an open file \\
-% ZwWriteFile & writes to an open file \\
-% ZwQuerySystemInformation & queries for information internal to the system \\
-% \hline
-% \multicolumn{2}{|c|}{Registry} \\
-% \hline
-% ZwCreateKey & opens an existing key or creates it if it does not exist \\
-% ZwDeleteKey & deletes a key \\
-% ZwOpenKey & opens an existing key \\
-% ZwQueryKey & provides information about the size and number of subkeys (if
-% any) \\ 
-% ZwQueryValueKey & provides the value of a registry key entry \\
-% ZwSetValuekey & creates or replaces a registry key's value entry \\
-% ZwDeleteValueKey & deletes a registry key's value entry \\
-% \hline
-% \multicolumn{2}{|c|}{Process} \\
-% \hline
-% ZwTerminateProcess & terminates a process and all its threads. \\
-% \hline
-% \multicolumn{2}{|c|}{Synchronization Object (Mutex)} \\
-% \hline
-% ZwCreateMutant & creates a mutex or opens an existing mutex \\
-% ZwOpenMutant & opens an existing mutex \\
-% \hline
-% \multicolumn{2}{|c|}{Synchronization Object (Semaphore)} \\
-% \hline
-% ZwCreateSemaphore & creates a semaphore or opens an existing semaphore \\
-% ZwOpenSemaphore & opens an existing semaphore \\
-% \hline
-% \multicolumn{2}{|c|}{Synchronization Object (Event)} \\
-% \hline
-% ZwCreateEvent & creates a new event or opens an existing event \\
-% ZwOpenEvent & opens an existing event \\
-% \hline
-% \multicolumn{2}{|c|}{Synchronization Object (Waitable Timer)} \\
-% \hline
-% ZwCreateTimer & creates a new timer object or opens an existing timer object \\
-% ZwOpenTimer & opens an existing timer object \\
-% \hline
-% \multicolumn{2}{|c|}{IPC (Named pipe)} \\
-% \hline
-% ZwCreateNamedPipeFile & creates a named pipe \\
-% \hline
-% \multicolumn{2}{|c|}{IPC (Mailslot)} \\
-% \hline
-% ZwCreateMailslotFile & creates a mailslot \\
-% \hline
-% \end{tabular}
-% \caption{Intercepted system calls}
-% \label{loggedcalls}
-% \end{table}
-% 
-% 
-% \section*{Appendix 2: Example of Log Priorities for Trace Compaction}
-% 
-% The following example shows a fragment from a log configuration which assigns
-% priorities on FILE resource-type entries.  We map log entries into priority
-% values ranging from 1 (least important to retain) to 5 (most important to
-% retain).
-% 
-% \medskip
-% \hrule
-% \begin{small}
-% \begin{verbatim}
-% # File Section
-% # Format:
-% # Type	 Action  Object                                      Mode    Priority
-% FILE    Read    *                                            *         1
-% FILE    Write   *                                            *         1
-% File    Open    C:\Windows\Temp\*                            *         1
-% File    Open    C:\Windows\System32\*                        RW|WO     5
-% File    Open    C:\Windows\System32\*                        RO        4
-% File    Open    C:\Windows\*                                 RW|WO     4
-% File    Open    C:\Windows\*                                 RO        3
-% File    Open    C:\Program Files\*                           RW|WO     3
-% File    Open    C:\Program Files\*                           RO        2
-% File    Open    C:\Documents and Settings\Local Settings\
-%                 {Temp\*|Temporary Internet Files\*}	         *         1
-% File    Open    *                                            RW|WO     2
-% File    Open    *                                            RO        1
-% File    Delete  C:\Windows\Temp\*                            *         1
-% File    Delete  C:\Windows\System32\*                        *         5
-% File    Delete  C:\Windows\*                                 *         4
-% File    Delete  C:\Program Files\*                           *         3
-% File    Delete  C:\Documents and Settings\Local Settings\
-%                 {Temp\*|Temporary Internet Files\*}          *         1
-% File    Delete  *                                            *         2
-% .... 
-% \end{verbatim}
-% \end{small}
-% \hrule
-% 
-% \end{document}
+\begin{appendices}
+
+\section{List of Intercepted System Calls}
+\label{sec:resmon-syscall}
+
+\TODO{fix the numbering}
+Table~\ref{loggedcalls} lists the Microsoft Windows NT native-level system
+calls intercepted in our current implementation.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{File} \\
+\hline
+ZwCreateFile & opens or creates a new file \\
+ZwOpenFile & opens an existing file \\
+ZwDeleteFile & deletes a file \\
+ZwReadFile & reads from an open file \\
+ZwWriteFile & writes to an open file \\
+ZwQuerySystemInformation & queries for information internal to the system \\
+\hline
+\multicolumn{2}{|c|}{Registry} \\
+\hline
+ZwCreateKey & opens an existing key or creates it if it does not exist \\
+ZwDeleteKey & deletes a key \\
+ZwOpenKey & opens an existing key \\
+ZwQueryKey & provides metadata of a key \\
+ZwQueryValueKey & provides the value of a registry key entry \\
+ZwSetValuekey & creates or replaces a registry key's value entry \\
+ZwDeleteValueKey & deletes a registry key's value entry \\
+\hline
+\multicolumn{2}{|c|}{Process} \\
+\hline
+ZwTerminateProcess & terminates a process and all its threads. \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Mutex)} \\
+\hline
+ZwCreateMutant & creates a mutex or opens an existing mutex \\
+ZwOpenMutant & opens an existing mutex \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Semaphore)} \\
+\hline
+ZwCreateSemaphore & creates a semaphore or opens an existing semaphore \\
+ZwOpenSemaphore & opens an existing semaphore \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Event)} \\
+\hline
+ZwCreateEvent & creates a new event or opens an existing event \\
+ZwOpenEvent & opens an existing event \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Waitable Timer)} \\
+\hline
+ZwCreateTimer & creates a new timer object or opens an existing one \\
+ZwOpenTimer & opens an existing timer object \\
+\hline
+\multicolumn{2}{|c|}{IPC (Named pipe)} \\
+\hline
+ZwCreateNamedPipeFile & creates a named pipe \\
+\hline
+\multicolumn{2}{|c|}{IPC (Mailslot)} \\
+\hline
+ZwCreateMailslotFile & creates a mailslot \\
+\hline
+\end{tabular}
+\caption{Intercepted system calls}
+\label{loggedcalls}
+\end{table}
+
+
+\section{Example of Log Priorities for Trace Compaction}
+\label{sec:resmon-prior}
+
+The following example shows a fragment from a log configuration which assigns
+priorities on FILE resource-type entries.  We map log entries into priority
+values ranging from 1 (least important to retain) to 5 (most important to
+retain).
+
+\medskip
+\hrule
+\begin{small}
+\begin{verbatim}
+# File Section
+# Format:
+# Type  Action  Object                                       Mode      Priority
+FILE    Read    *                                            *         1
+FILE    Write   *                                            *         1
+File    Open    C:\Windows\Temp\*                            *         1
+File    Open    C:\Windows\System32\*                        RW|WO     5
+File    Open    C:\Windows\System32\*                        RO        4
+File    Open    C:\Windows\*                                 RW|WO     4
+File    Open    C:\Windows\*                                 RO        3
+File    Open    C:\Program Files\*                           RW|WO     3
+File    Open    C:\Program Files\*                           RO        2
+File    Open    C:\Documents and Settings\Local Settings\
+                {Temp\*|Temporary Internet Files\*}           *         1
+File    Open    *                                            RW|WO     2
+File    Open    *                                            RO        1
+File    Delete  C:\Windows\Temp\*                            *         1
+File    Delete  C:\Windows\System32\*                        *         5
+File    Delete  C:\Windows\*                                 *         4
+File    Delete  C:\Program Files\*                           *         3
+File    Delete  C:\Documents and Settings\Local Settings\
+                {Temp\*|Temporary Internet Files\*}          *         1
+File    Delete  *                                            *         2
+....
+\end{verbatim}
+\end{small}
+\hrule
+\end{appendices}

@@ -44,6 +44,14 @@ user in a day. About 10 to 20 emails are sent daily.
 It shows that our hypothesis that all emails are sent with the
 user present is reasonable.
 
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{sensor/email-norm}
+\caption{Samples of user email rate}
+\label{fig:email}
+\end{center}
+\end{figure}
+
 When we apply CuSum to detect changes in the amount of emails sent when
 the user is present, we incorporate a limit on the accumulation time
 $t$, and set $a=0$, $N=120$ and $t=6$ hours. The effect is that
