@@ -27,7 +27,7 @@ there can be fragile and implicit dependencies between all the software
 installed (past, present or future) on a system.
 In Windows, this often leads to software failures when installing or
 uninstalling some application.
-This is colloquially known as ``DLL hell'' \cite{anderson2000end}.
+This is colloquially known as ``DLL hell''~\cite{anderson2000end}.
 
 In this section, our objective is to understand the usage and dependencies
 between software modules (executables and DLLs) in Windows.
@@ -75,16 +75,17 @@ administrators and users.
 Most of the related work on software dependencies makes use of analysis
 of the source code. Some of it also makes use of static and
 dynamic analysis of binaries.
-\cite{nagappan2007using} focuses on software testing and analysis of
-software components and their dependencies on Windows Server 2003
-using a tool from \cite{srivastava2005efficient}.
-\cite{zimmermann2008predicting} is also similar and uses graph network analysis
+Several works~\cite{srivastava2005efficient,nagappan2007using}
+have been proposed to do software testing and analysis on Windows Server 2003
+using software dependencies.
+Zimmermann et al.~\cite{zimmermann2008predicting} use graph network analysis
 to predict software defect rates on Windows Server 2003.
-Other tools to construct dependency graphs are \cite{wilde1989dependency} and \cite{wilhelm2005dependency}
-but they rely on the source code.
+Other tools~\cite{wilde1989dependency,wilhelm2005dependency}
+construct dependency graphs based on source code.
 
-\cite{salah2004hierarchy} and \cite{salah2006scenario} use dynamic analysis to extract
-views of software at different levels. The purpose of their tool is more likely
+Salah et al.\cite{salah2004hierarchy,salah2006scenario} use dynamic analysis to
+extract views of software at different levels.
+The purpose of their tool is more likely
 suitable for developers since their use-cases are tailored for helping
 them locate areas to be changed. Their method relies on access to the source
 code since they rely on instrumentation by adding code to intercept function
@@ -95,5 +96,3 @@ in terms of the binaries, as a whole in Windows through
 various dependency graphs. We deal with binaries and not with source code.
 We also deal with the more complex environment of Windows, e.g. kernel
 can call user space functions, a form of callback.
-
-

@@ -39,8 +39,8 @@ Binary authentication is also beneficial because it is even more important
 for the operating system to be protected against malicious drivers
 and the loading of malware into the kernel.
 
-Most work on binary integrity authentication is on Unix/Linux
-\cite{apvrille2004digsig,williams2002anti,doorn01signedexecutables}.
+Most work on binary integrity authentication is on
+Unix/Linux~\cite{apvrille2004digsig,williams2002anti,doorn01signedexecutables}.
 However, the problem of malware is more acute in Windows.
 There are also many types of executable code,
 e.g. executables (.exe), dynamic linked libraries (.dll), 
@@ -52,8 +52,10 @@ cannot be executed. We argue that binary authentication together with
 execute protection of memory regions (e.g. Windows data execution prevention) 
 provides protection against most of the malware on Windows.
 
-A binary authentication needs to be flexible to operate under different scenarios.
-Our prototype signs binaries using a HMAC \cite{krawczyk1997rfc2104} which is more lightweight
+A binary authentication needs to be flexible to operate under different
+scenarios.
+Our prototype signs binaries using a HMAC~\cite{krawczyk1997rfc2104},
+which is more lightweight
 than having to rely on PKI infrastructure, although it can also make use of it.
 The authentication scheme additionally allows for other security benefits.
 Not only is it important to authenticate software on a system but one also needs

@@ -12,8 +12,9 @@ We now discuss some of the these which are related to the thesis.
 The Windows operating system is a closed source system.
 Firstly, the kernel is closed source.
 This makes kernel monitoring very difficult.
-Dynamic instrumentation tools like DTrace and SystemTap are not relevant because
-their probes are specific to code points or functions in the kernel.
+Dynamic instrumentation tools like DTrace~\cite{cantrill2004dynamic} and
+SystemTap~\cite{prasad2005systemtap} are not relevant because their probes are
+specific to code points or functions in the kernel.
 Without understanding the purpose of each function, probes are meaningless.
 It makes kernel extension difficult as well.
 The lack of kernel APIs make anti virus developers use undocumented internal

@@ -46,7 +46,7 @@ may not be logged.
 Mandatory monitoring can obtain the information in this case.
 \item {\bf Security} \\
 The access of files and interactions of processes are needed by many
-security models such as the Biba Integrity Model.
+security models such as the Biba Integrity Model~\cite{biba1977integrity}.
 A reliable underlying monitoring system is essential to implement
 these security models.
 Some intrusion detection systems also work by monitoring malicious
@@ -219,8 +219,8 @@ SystemTap~\cite{prasad2005systemtap} are not relevant because
 their probes are specific to code points or functions in the kernel.
 Without understanding the purpose of each function, probes are meaningless.
 It makes kernel extension difficult as well.
-The lack of kernel APIs make anti-virus developers use undocumented internal
-functions in a hacking way which are
+The lack of kernel APIs makes anti-virus developers use undocumented internal
+functions in a hacky way which is
 not officially supported by Microsoft and may cease to work
 after a Windows update.
 Unfortunately, there is no officially supported technique to achieve this.
@@ -375,14 +375,14 @@ grouping of modules;
 filtering by causality; and
 the ``diff'' of two dependencies.
 
-Our second visualization, \code{lviz} \cite{wu2010visualizing},
+Our second visualization, \code{lviz}~\cite{wu2010visualizing},
 is a visualization tool for many different purposes including
 software failure diagnostics,
 analyzing performance issues, anomaly discovery, etc.
 The visualization is based on DotPlot, which compares two traces
 and plot the common (or different) items.
 It was early used for
-analyzing similarities in DNA sequences \cite{maizel1981enhanced}.
+analyzing similarities in DNA sequences~\cite{maizel1981enhanced}.
 \code{lviz} extends the traditional DotPlot through a number of visual elements
 so that we can easily associate the visual representation with events in the
 trace and identify the key events.
@@ -394,7 +394,8 @@ Many of the system security problems such as malware stem from the fact that
 untrusted binaries are executed.
 Since the WinResMon monitoring infrastructure monitors file system related information flow,
 we can tackle the binary trustworthiness from the information
-flow point of view, similar to the Biba Integrity Model.
+flow point of view, similar to the Biba Integrity
+Model~\cite{biba1977integrity}.
 In short, low integrity process should not modify high integrity binary and
 high integrity process should not load low integrity binary.
 We achieve this goal in two steps.

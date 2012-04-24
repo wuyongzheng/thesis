@@ -141,7 +141,8 @@ new log messages.
 
 System call, the interface between user and kernel space,
 is often monitored for various purpose.
-The UNIX \code{ptrace} and Solaris \code{/proc} are commonly
+The UNIX \code{ptrace} and Solaris \code{/proc}~\cite{faulkner1991process}
+are commonly
 used for system call monitoring because of their portability.
 To use \code{ptrace}, the monitor calls the \code{ptrace(2)} system call
 and specifies the process ID of another process to be monitored and waits.
@@ -161,8 +162,8 @@ as it make the system call.
 They are transparent monitoring systems because in general,
 the monitored program is not aware of the monitoring.
 Because of this,
-systems like Janus \cite{wagner1999janus} or
-Alcatraz \cite{liang2009alcatraz} use them to do system call monitoring.
+systems like Janus~\cite{wagner1999janus} or
+Alcatraz~\cite{liang2009alcatraz} use them to do system call monitoring.
 However, this usage is problematic because it is not
 meant to be a secure monitoring mechanism, e.g.
 \code{ptrace} was meant to support debuggers.
@@ -170,7 +171,7 @@ In the Solaris manual pages, \code{ptrace} is described as being
 ``unique and arcane''.
 These kinds of problems and common
 pitfalls with user-level system call interposition
-are discussed in \cite{garfinkel2003traps}, such as:
+are discussed by Garfinkel~\cite{garfinkel2003traps}, such as:
 (i) race conditions between time of check and time of use (TOCTOU), 
 i.e. a buffer can be modified by another thread;
 (ii) non-inheritance of tracing, i.e. special \code{strace} hacks in Linux;
@@ -225,7 +226,7 @@ and improve performance.
 \subsection{Windows Sysinternals}
 \label{sec:sysinternals}
 
-FileMon \cite{filemon} and RegMon \cite{regmon}
+FileMon~\cite{filemon} and RegMon~\cite{regmon}
 are file and registry monitoring tools for Windows, respectively.
 They monitor operations taking place on
 the registry or specified file system.
@@ -250,7 +251,7 @@ The details are covered in in Section~\ref{sec:resmon-overhead}.
 \subsection{Solaris DTrace}
 \label{sec:dtrace}
 
-DTrace\cite{cantrill2004dynamic} is a dynamic tracing framework
+DTrace~\cite{cantrill2004dynamic} is a dynamic tracing framework
 created on Solaris 10, for troubleshooting kernel and application problems
 on production systems.
 Software developers insert probes into the code of the software
@@ -286,10 +287,11 @@ are not supported.
 \label{sec:systemtap}
 % http://sourceware.org/systemtap/wiki/SystemtapDtraceComparison
 
-SystemTap \cite{prasad2005systemtap} is developed to bring the idea of dynamic instrumentation
+SystemTap~\cite{prasad2005systemtap} is developed to bring the idea of dynamic instrumentation
 in DTrace into Linux and possibly other UNIX variants.
 Before we describe SystemTap, let us first look at its predecessor
-DProbes \cite{moore2001dprobes} and the underlying KProbes \cite{mavinakayanahalli2006kprobes},
+DProbes~\cite{moore2001dprobes,bhattacharya2003dynamic} and
+the underlying KProbes~\cite{mavinakayanahalli2006kprobes},
 which was introduced earlier than DTrace.
 
 KProbes is a Linux kernel framework which allows dynamic instrumentation
@@ -352,7 +354,7 @@ Each basic block (contiguous instructions without branches in the middle)
 is translated just before execution.
 This is also known as just-in-time translation.
 There are a number of dynamic instrumentation systems available,
-such as Pin\cite{luk2005pin}, DynamoRIO\cite{bruening2004dynamorio}
-and Valgrind\cite{nethercote2003valgrind}.
+such as Pin~\cite{luk2005pin}, DynamoRIO~\cite{bruening2004dynamorio}
+and Valgrind~\cite{nethercote2003valgrind}.
 In our module dependency visualization work (Sec~\ref{sec:depvis}),
 we monitor all function calls in a program using Pin.

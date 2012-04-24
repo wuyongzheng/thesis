@@ -10,14 +10,14 @@
 We illustrate the two dependency graphs on a small example, namely, the
 {\tt wget} program downloading an {\tt https} page.
 Figure~\ref{fig:wget-exe-split} shows the EXE dependency graph for {\tt wget}.
-{\tt wget} loads 34 DLLs but due to space limitations,
+{\tt wget} loads 34 DLLs,
 but the figure only shows 4 of them for simplicity.
 The EXE dependency graph is meant for comparing multiple EXE's to show
 grouped dependencies.
 When there is only a single EXE in the graph, it reduces to a single level
 tree.
 Figure \ref{fig:boot}, \ref{fig:browsers} and \ref{fig:depvis-word}
-are EXE dependency graphsare with multiple EXEs.
+are EXE dependency graphs with multiple EXEs.
 
 \begin{figure}[thb]
 \centering
@@ -29,6 +29,7 @@ are EXE dependency graphsare with multiple EXEs.
 Figure~\ref{fig:wget-nogroup} shows the DLL
 dependency graph for wget without grouping; while
 Figure~\ref{fig:wget-function} shows it grouped by functionality.
+The edge weights are the number of control transfers between DLLs or EXEs.
 As we can see, Figure~\ref{fig:wget-function} is much more compact
 because the nodes have been grouped according to the function of the modules.
 

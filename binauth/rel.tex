@@ -1,21 +1,22 @@
 \subsection{Related Work}
 \label{sec:binauth-related}
 
-Tripwire \cite{kim1994design} is one of the first to do file integrity protection
+Tripwire~\cite{kim1994design} is one of the first to do file integrity protection
 but is limited as it in user-mode program and 
 checks file integrity off-line.
 It does not provide any mandatory form of integrity checking and
 there are many known attacks such as:
 file modification in between authentication times,
 and attacks on system daemons (e.g. cron and sendmail)
-and system files that it depends on \cite{arnold2001trouble,slaviero2005attacking}.
+and system files that it depends on
+\cite{arnold2001trouble,slaviero2005attacking}.
 
 There a number of kernel level binary level authentication implementations.
 These are mainly for Unix
-such as DigSig \cite{apvrille2004digsig}, Trojanproof \cite{williams2002anti}
-and SignedExec \cite{doorn01signedexecutables}, which modify the Unix kernel
+such as DigSig~\cite{apvrille2004digsig}, Trojanproof~\cite{williams2002anti}
+and SignedExec~\cite{doorn01signedexecutables}, which modify the Unix kernel
 to verify the executable's digital signature before program execution.
-DigSig and SignedExec embed signatures within the the elf binaries.
+DigSig and SignedExec embed signatures within the ELF binaries.
 For efficiency, DigSig employs a caching mechanism to avoid checking
 binaries which have been verified already. The mechanism is similar 
 to ours here but we need to handle the problems of Windows.
@@ -29,7 +30,7 @@ binaries are signed.
 In this section, we examine the implementation issues and tradeoffs
 for Windows which is more complex and difficult than in Unix.
 
-Authenticode \cite{authenticode} is Microsoft infrastructure
+Authenticode~\cite{authenticode} is Microsoft infrastructure
 for digitally signing binaries.
 % It was publicly announced in 1996 as part of Microsoft's IE 3.0
 % and ActiveX technologies, but it ships as a standard part of Windows.

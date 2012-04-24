@@ -32,8 +32,9 @@ as FAQs or forums, but such information is often incomplete.
 
 As discussed in Section~\ref{sec:wi-management},
 in various distributions of Linux, software dependency issues are partly
-addressed by the use of a package manager.  The Red Hat Package Manager (RPM)
-\cite{ewing1996rpm}, for example, records the currently installed packages and the
+addressed by the use of a package manager.
+The Red Hat Package Manager (RPM)~\cite{ewing1996rpm}, for example,
+records the currently installed packages and the
 files required and provided by these packages in a centralized database.  RPM
 checks dependencies before removing a package to ensure that files required by
 other installed packages are not removed.  Similar checks are done to prevent
@@ -138,7 +139,7 @@ certain administrator privileges to function correctly, the system
 administrator can set up a policy that restricts the administrator privileges
 to the needed resources (files, registry keys, etc).  
 We remark that this approach can be contrasted with confinement systems
-such as systrace \cite{provos2003improving} in Unix.
+such as Systrace~\cite{provos2003improving} in Unix.
 WinResMon is an auditing tool, it does not confine system calls, but
 provides useful input for system administrators to create policies 
 on resource access which can then be used to limit privileges.
@@ -147,9 +148,10 @@ on resource access which can then be used to limit privileges.
 
 Managing the Microsoft Windows registry is difficult due to its complexity.
 Spyware often takes advantage of this complexity to bury itself in the
-registry, making it difficult for the user to remove it completely.  In
-\cite{wang2004gatekeeper}, the authors have listed the most common entry points for spyware
-to enter a Windows NT system.  The following are some of the configuration
+registry, making it difficult for the user to remove it completely.
+Wang et al.~\cite{wang2004gatekeeper} have listed the most common entry points
+for spyware to enter a Windows NT system.
+The following are some of the configuration
 settings WinResMon can monitor:
 
 \begin{itemize}
@@ -403,7 +405,7 @@ entry for writing a registry key might be considered more important to keep
 than one for reading a registry key.
 
 A fragment of an example configuration is shown in
-Appendix~\ref{sec:resmon-prior}. This example
+Figure~\ref{fig:resmon-prior}. This example
 uses priority values ranging from 1 (least important) to 5 (most important).
 For each resource type, configuration entries are matched in a sequential
 order, and mappings are listed from most to least specific.  It is possible to
@@ -413,6 +415,41 @@ into one of three modes: RO (read-only), RW (read-write) and WO
 (write-only/append). The archiver translates the semantics of each operation
 from file flags in the raw log entries to the appropriate values for matching
 against the configuration.
+
+\begin{figure}[htb!]
+\hrule
+\begin{small}
+\begin{verbatim}
+# File Section
+# Format:
+# Type  Action  Object                                       Mode      Priority
+FILE    Read    *                                            *         1
+FILE    Write   *                                            *         1
+File    Open    C:\Windows\Temp\*                            *         1
+File    Open    C:\Windows\System32\*                        RW|WO     5
+File    Open    C:\Windows\System32\*                        RO        4
+File    Open    C:\Windows\*                                 RW|WO     4
+File    Open    C:\Windows\*                                 RO        3
+File    Open    C:\Program Files\*                           RW|WO     3
+File    Open    C:\Program Files\*                           RO        2
+File    Open    C:\Documents and Settings\Local Settings\
+                {Temp\*|Temporary Internet Files\*}          *         1
+File    Open    *                                            RW|WO     2
+File    Open    *                                            RO        1
+File    Delete  C:\Windows\Temp\*                            *         1
+File    Delete  C:\Windows\System32\*                        *         5
+File    Delete  C:\Windows\*                                 *         4
+File    Delete  C:\Program Files\*                           *         3
+File    Delete  C:\Documents and Settings\Local Settings\
+                {Temp\*|Temporary Internet Files\*}          *         1
+File    Delete  *                                            *         2
+.... 
+\end{verbatim}
+\end{small}
+\hrule
+\caption{Example of Log Priorities for Trace Compaction}
+\label{fig:resmon-prior}
+\end{figure}
 
 The existing applications and anticipated usage, together with some general
 principles, can be used to derive the priority assignment for the
@@ -619,15 +656,76 @@ could be discrepancies and mismatches between API use at the Win32 level and
 native level.  To ensure accuracy, WinResMon intercepts system calls at the
 native API level.
 
-WinResMon implements the system call interceptor by means of a kernel mode driver.
+WinResMon implements the system call interceptor by means of a kernel driver.
 The driver captures system call requests made by a process by ``hooking'' the
-native system calls as described in \cite{ddj-nthooking}.
-Appendix~\ref{sec:resmon-syscall} lists the
+native system calls \cite{ddj-nthooking}.
+Table~\ref{tab:resmon-syscall} lists the
 system calls intercepted by WinResMon.  We found these to be the most common
 system calls arising from file, registry, IPC, synchronization, and process
 operations.\footnote{ Since Microsoft Windows is closed source and the native
 API is only partially documented, it is difficult to make any guarantees about
-completeness.  }
+completeness.}
+
+\begin{table}[htb!]
+\centering
+\small 
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{File} \\
+\hline
+ZwCreateFile & opens or creates a new file \\
+ZwOpenFile & opens an existing file \\
+ZwDeleteFile & deletes a file \\
+ZwReadFile & reads from an open file \\
+ZwWriteFile & writes to an open file \\
+ZwQuerySystemInformation & queries for information internal to the system \\
+\hline
+\multicolumn{2}{|c|}{Registry} \\
+\hline
+ZwCreateKey & opens an existing key or creates it if it does not exist \\
+ZwDeleteKey & deletes a key \\
+ZwOpenKey & opens an existing key \\
+ZwQueryKey & provides metadata of a key \\
+ZwQueryValueKey & provides the value of a registry key entry \\
+ZwSetValuekey & creates or replaces a registry key's value entry \\
+ZwDeleteValueKey & deletes a registry key's value entry \\
+\hline
+\multicolumn{2}{|c|}{Process} \\
+\hline
+ZwTerminateProcess & terminates a process and all its threads. \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Mutex)} \\
+\hline
+ZwCreateMutant & creates a mutex or opens an existing mutex \\
+ZwOpenMutant & opens an existing mutex \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Semaphore)} \\
+\hline
+ZwCreateSemaphore & creates a semaphore or opens an existing semaphore \\
+ZwOpenSemaphore & opens an existing semaphore \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Event)} \\
+\hline
+ZwCreateEvent & creates a new event or opens an existing event \\
+ZwOpenEvent & opens an existing event \\
+\hline
+\multicolumn{2}{|c|}{Synchronization Object (Waitable Timer)} \\
+\hline
+ZwCreateTimer & creates a new timer object or opens an existing one \\
+ZwOpenTimer & opens an existing timer object \\
+\hline
+\multicolumn{2}{|c|}{IPC (Named pipe)} \\
+\hline
+ZwCreateNamedPipeFile & creates a named pipe \\
+\hline
+\multicolumn{2}{|c|}{IPC (Mailslot)} \\
+\hline
+ZwCreateMailslotFile & creates a mailslot \\
+\hline
+\end{tabular}
+\caption{Intercepted system calls}
+\label{tab:resmon-syscall}
+\end{table}
 
 To gather information about processes, WinResMon uses a simpler method.
 Microsoft Windows NT exports a set of process callback functions in the kernel
@@ -1001,8 +1099,9 @@ than system calls.  In Windows, a system call viewpoint can be
 confusing since there are multiple levels of APIs which translate into the poorly
 documented native API.
 
-Systrace \cite{provos2003improving} is a UNIX tool for sandboxing untrusted code.  Unlike
-Systrace, which examines system-call sequences issued by the monitored
+Systrace~\cite{provos2003improving} is a UNIX tool for sandboxing untrusted
+code.
+Unlike Systrace, which examines system-call sequences issued by the monitored
 processes and applies a specific security policy, WinResMon is meant as a
 monitoring tool to inspect resource usage and interactions among programs in a
 system.
@@ -1048,115 +1147,3 @@ In Section~\ref{sec:lviz}, we will visualize WinResMon's log in order
 to study program behaviours, including repeated patterns, abnormal events
 and behaviour differences,
 which are useful to discover various of problems.
-
-\begin{appendices}
-
-\section{List of Intercepted System Calls}
-\label{sec:resmon-syscall}
-
-\TODO{fix the numbering}
-Table~\ref{loggedcalls} lists the Microsoft Windows NT native-level system
-calls intercepted in our current implementation.
-
-\begin{table}[h!]
-\centering
-\small
-\begin{tabular}{|l|l|}
-\hline
-\multicolumn{2}{|c|}{File} \\
-\hline
-ZwCreateFile & opens or creates a new file \\
-ZwOpenFile & opens an existing file \\
-ZwDeleteFile & deletes a file \\
-ZwReadFile & reads from an open file \\
-ZwWriteFile & writes to an open file \\
-ZwQuerySystemInformation & queries for information internal to the system \\
-\hline
-\multicolumn{2}{|c|}{Registry} \\
-\hline
-ZwCreateKey & opens an existing key or creates it if it does not exist \\
-ZwDeleteKey & deletes a key \\
-ZwOpenKey & opens an existing key \\
-ZwQueryKey & provides metadata of a key \\
-ZwQueryValueKey & provides the value of a registry key entry \\
-ZwSetValuekey & creates or replaces a registry key's value entry \\
-ZwDeleteValueKey & deletes a registry key's value entry \\
-\hline
-\multicolumn{2}{|c|}{Process} \\
-\hline
-ZwTerminateProcess & terminates a process and all its threads. \\
-\hline
-\multicolumn{2}{|c|}{Synchronization Object (Mutex)} \\
-\hline
-ZwCreateMutant & creates a mutex or opens an existing mutex \\
-ZwOpenMutant & opens an existing mutex \\
-\hline
-\multicolumn{2}{|c|}{Synchronization Object (Semaphore)} \\
-\hline
-ZwCreateSemaphore & creates a semaphore or opens an existing semaphore \\
-ZwOpenSemaphore & opens an existing semaphore \\
-\hline
-\multicolumn{2}{|c|}{Synchronization Object (Event)} \\
-\hline
-ZwCreateEvent & creates a new event or opens an existing event \\
-ZwOpenEvent & opens an existing event \\
-\hline
-\multicolumn{2}{|c|}{Synchronization Object (Waitable Timer)} \\
-\hline
-ZwCreateTimer & creates a new timer object or opens an existing one \\
-ZwOpenTimer & opens an existing timer object \\
-\hline
-\multicolumn{2}{|c|}{IPC (Named pipe)} \\
-\hline
-ZwCreateNamedPipeFile & creates a named pipe \\
-\hline
-\multicolumn{2}{|c|}{IPC (Mailslot)} \\
-\hline
-ZwCreateMailslotFile & creates a mailslot \\
-\hline
-\end{tabular}
-\caption{Intercepted system calls}
-\label{loggedcalls}
-\end{table}
-
-
-\section{Example of Log Priorities for Trace Compaction}
-\label{sec:resmon-prior}
-
-The following example shows a fragment from a log configuration which assigns
-priorities on FILE resource-type entries.  We map log entries into priority
-values ranging from 1 (least important to retain) to 5 (most important to
-retain).
-
-\medskip
-\hrule
-\begin{small}
-\begin{verbatim}
-# File Section
-# Format:
-# Type  Action  Object                                       Mode      Priority
-FILE    Read    *                                            *         1
-FILE    Write   *                                            *         1
-File    Open    C:\Windows\Temp\*                            *         1
-File    Open    C:\Windows\System32\*                        RW|WO     5
-File    Open    C:\Windows\System32\*                        RO        4
-File    Open    C:\Windows\*                                 RW|WO     4
-File    Open    C:\Windows\*                                 RO        3
-File    Open    C:\Program Files\*                           RW|WO     3
-File    Open    C:\Program Files\*                           RO        2
-File    Open    C:\Documents and Settings\Local Settings\
-                {Temp\*|Temporary Internet Files\*}           *         1
-File    Open    *                                            RW|WO     2
-File    Open    *                                            RO        1
-File    Delete  C:\Windows\Temp\*                            *         1
-File    Delete  C:\Windows\System32\*                        *         5
-File    Delete  C:\Windows\*                                 *         4
-File    Delete  C:\Program Files\*                           *         3
-File    Delete  C:\Documents and Settings\Local Settings\
-                {Temp\*|Temporary Internet Files\*}          *         1
-File    Delete  *                                            *         2
-....
-\end{verbatim}
-\end{small}
-\hrule
-\end{appendices}

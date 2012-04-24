@@ -43,6 +43,8 @@ The label of an edge indicates the number of times $P_a$ creates $P_b$.
 In this work, we are concerned with determining and visualizing these
 dependencies at runtime, when the software (and there may be multiple
 EXEs) run.
+I.e. the dependencies are based on dynamic runtime behaviours instead of
+the static code structure.
 Instead of using a single visualization to show the three kinds of dependency
 together, we propose two visualizations which are meant
 to serve different purposes.
@@ -188,12 +190,13 @@ An edge from node $x$ to node $y$ represents a module or executable
 in $x$ calling some code in module $y$.
 We also call this as $x$ uses $y$.
 Typically this means $x$ calls a function in $y$.
-The label of an edge represents the number of invocations, i.e.
+The label of an edge (weight) represents the number of invocations, i.e.
 the number of calls from $x$ to $y$.
 Note that it is possible for DLL $x$ to use DLL $y$ and also for
 $y$ to use $x$ during the execution.
 In this case, the edge between node $x$ and $y$ is bidirectional.
 In the visualization, we use a thick line without any arrow.
+The edge weight is the sum of number control transfers in both directions.
 
 A direct visualization of the DLL dependency graph is often too complex,
 because there can be too many binaries used during an execution.

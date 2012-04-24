@@ -23,7 +23,7 @@ no security guarantees are possible.
 More secure versions of Unix have finer grained auditing mechanisms
 to satisfy the Trusted Computer System Evaluation Criteria (TCSEC) or Common
 Criteria (CC) security requirements.
-The Solaris Basic Security Module \cite{solaris-sec-svc}
+The Solaris Basic Security Module~\cite{solaris-sec-svc}
 for example defines kernel auditing events 
 which can serve to log certain system calls.
 Such auditing is typically system-wide on all processes and
@@ -143,7 +143,9 @@ For example, a global specification to monitor all
 processes is simply the boolean expression {\em true}.
 
 \item {\em uid/euid/suid/fsuid} (user id):
-\TODO{explain the differences}
+These user identities are used to identify the owner of a process in different
+contexts.
+For example, the {\em fsuid} is used during file system operations.
 These predicates are true if and only if the
 user id of the process is same as the user id specified.
 Similar predicates are also used for group ids.
@@ -264,9 +266,9 @@ the identifier of the file.
 \item {\em inclusion flag}:
 For directories, we can specify whether
 we are monitoring the directory itself, or all files in its subdirectories.
-For example, you can specify that all files under \code{/etc}
+For example, one can specify that all files under \code{/etc}
 are included by using the SELF+SUBDIRECTORIES flag.
-You can specify that only the \code{/etc} directory itself
+Alternatively, one can specify that only the \code{/etc} directory itself
 is included by using the SELF flag only.
 
 % Since this is a two bit flag, 0 (defined as IGNORE) conveniently means that we
@@ -648,7 +650,7 @@ in which case, a default policy is applied.
 \subsubsection{Cascading Monitors}
 \label{sec:lbox-self}
 
-It may be the case that one of the processes being monitor is
+It may be the case that one of the processes being monitored is
 itself a monitor, we call this cascaded monitors.
 Cascading auditing gives the maximum flexibility to create 
 collections of independent monitors as well as an ecology
@@ -900,19 +902,18 @@ Note that the order of the two specifications is not important.
 
 \subsubsection{Global Monitoring}
 
-Sometimes you need to monitor all actions on a single process;
-and other times you need to monitor a single action on all processes.
+Sometimes we need to monitor all actions on a single process;
+and other times we need to monitor a single action on all processes.
 In this example, we want to see if any process is sending packets
 to the network \code{137.132.0.0/255.255.0.0}.
 The process specification is simply, \\
 {\small\verb|  proc_spec = lbox_TRUE();|} \\
 The event specification is the following network event, \\
-{\small\verb|  lbox_net_connect_ipv4(&event_spec,|} \\
-{\small\verb|    "137.132.0.0/255.255.0.0");|}
+{\small\verb|  lbox_net_connect_ipv4(&event_spec, "137.132.0.0/255.255.0.0");|}
 
 \subsubsection{Other Applications}
 
-LAFS \cite{wee1995lafs}
+LAFS~\cite{wee1995lafs}
 is a logging and auditing file system where accesses not conforming
 to a policy are logged.
 The policy specification
@@ -922,8 +923,8 @@ Note that it is harder to use {\tt dtrace} to do this LAFS-style tracing
 because of its system call orientation. Here we can make use of 
 inheritance in the directory structure. 
 
-In \cite{finke2002process} a monitoring application is described to report when 
-applications tasks did not run as they were supposed to, e.g. due to some
+Finke~\cite{finke2002process} proposed a monitoring system, which reports when
+applications did not run as they were supposed to, e.g. due to some
 failure. Again, it is easy to write a monitor which can detect whether
 tasks ran as scheduled.
 
@@ -958,58 +959,57 @@ this is sufficient but it does mean that a full solution cannot be
 just a module.
 \end{enumerate}
 
-\TODO{enable. block diagram.}
+\subsubsection{Matching The File Specification}
 
-% \subsubsection{Matching The File Specification}
-% 
-% Matching file event specifications, requires the 
-% deeper matching file event specification to take precedence.
-% To achieve this, the algorithm for checking of a file access is as follows.
-% \begin{enumerate}
-% \item If the current file is marked SELF, report it (generate event), done.
-% \item If the current file is marked SUBDIRECTORIES, report it (generate event), done.
-% \item If the current file is marked IGNORE (neither SELF nor SUBDIRECTORIES), ignore it,
-% done.
-% \item If it is the root directory, ignore it, done.
-% \item Set parent directory as current file.
-% \item Goto 2.
-% \end{enumerate}
-% 
-% Suppose we have the following two file event specifications
-% from the previous example:
-% \begin{enumerate}
-% \item {\tt (/, SELF|SUBDIRECTORIES, R|W)}
-% \item {\tt (/var/www, IGNORE, R|W)}
-% \end{enumerate}
-% For the file /var/www/a/b/c, the checking is stopped
-% at {\tt /var/www} at the third step.
-% For the file /etc/passwd, the checking is stopped
-% at {\tt /} at the second step.
-% 
-% To do the upward directory traversal, we make use of the
-% {\tt dentry} kernel structure.
-% The upward directory traversal is fast, because in Linux,
-% during the path resolving phase, all the parent {\tt dentry}
-% nodes are stored in the {\tt dcache}.
-% 
-% \subsubsection{Performance Tuning Methods}
-% 
-% To reduce the overhead of of task switching caused by our auditing system,
-% we introduce an event buffer so that the monitored process 
-% can continue its execution even if it generates a auditing event.
-% Timeouts and events with a flushing property
-% are used to allow the monitor to get events
-% even if the buffer is not full.
-% In this sense, the monitor can choose
-% a trade-off between efficiency and timeliness.
-% 
-% When a system call takes place, we first check whether the process is being
-% monitored.
-% This check only requires a few instructions.
-% Thus there is very little impact on non-monitored processes.
-% For monitored processes, the monitor can also be found efficiently.
-% Thus there is very little impact on a process as long as
-% the number of monitors of the process is not too large.
+Matching file event specifications, requires the 
+deeper matching file event specification to take precedence.
+To achieve this, the algorithm for checking of a file access is as follows.
+\begin{enumerate}
+\item If the current file is marked SELF, report it (generate event), done.
+\item If the current file is marked SUBDIRECTORIES, report it (generate event),
+done.
+\item If the current file is marked IGNORE (neither SELF nor SUBDIRECTORIES),
+ignore it, done.
+\item If it is the root directory, ignore it, done.
+\item Set parent directory as current file.
+\item Goto 2.
+\end{enumerate}
+
+Suppose we have the following two file event specifications
+from the previous example:
+\begin{enumerate}
+\item {\tt (/, SELF|SUBDIRECTORIES, R|W)}
+\item {\tt (/var/www, IGNORE, R|W)}
+\end{enumerate}
+For the file /var/www/a/b/c, the checking is stopped
+at {\tt /var/www} at the third step.
+For the file /etc/passwd, the checking is stopped
+at {\tt /} at the second step.
+
+To do the upward directory traversal, we make use of the
+{\tt dentry} kernel structure.
+The upward directory traversal is fast, because in Linux,
+during the path resolving phase, all the parent {\tt dentry}
+nodes are stored in the {\tt dcache}.
+
+\subsubsection{Performance Tuning Methods}
+
+To reduce the overhead of of task switching caused by our auditing system,
+we introduce an event buffer so that the monitored process 
+can continue its execution even if it generates a auditing event.
+Timeouts and events with a flushing property
+are used to allow the monitor to get events
+even if the buffer is not full.
+In this sense, the monitor can choose
+a trade-off between efficiency and timeliness.
+
+When a system call takes place, we first check whether the process is being
+monitored.
+This check only requires a few instructions.
+Thus there is very little impact on non-monitored processes.
+For monitored processes, the monitor can also be found efficiently.
+Thus there is very little impact on a process as long as
+the number of monitors of the process is not too large.
 
 \subsection{Comparing to DTrace}
 \label{sec:lbox-dtrace}
@@ -1060,12 +1060,12 @@ and flexible event filters to reduce number of events.
 \subsection{Experimental Evaluation}
 \label{sec:lbox-bench}
 
-Our prototype Linux implementation makes use of LSM \cite{wright2002linux} and
+Our prototype Linux implementation makes use of LSM~\cite{wright2002linux} and
 version 2.6.10 of the kernel,
 and thus is convenient to install
 as it consists of loadable kernel modules.
-The interface to the kernel is done through \code{ioctl} to a pseudo file system
-in \code{/proc/lbox}.
+The interface to the kernel is done through \code{ioctl} to a pseudo
+file system in \code{/proc/lbox}.
 The lbox API library in Section~\ref{sec:lbox-framework} 
 gives a more convenient interface that using \code{ioctl} system calls.
 % Due to lack of space, we do not go into further details
@@ -1176,7 +1176,7 @@ Using asynchronous events with buffering (0 dir level)
 drops the overhead to $15\%$.
 
 One point of comparison with other systems on Linux would be with
-Systrace \cite{provos2003improving}. 
+Systrace~\cite{provos2003improving}. 
 A pure comparison is not valid since in our system any event
 which must be monitored is eventually passed to the monitor.
 Systrace, on the other hand, does access control first can choose between a
@@ -1330,7 +1330,7 @@ to each operating system alone.
 
 The last two benchmarks, bash and Mozilla,
 have also been chosen because these applications
-have been used in Alcatraz \cite{liang2009alcatraz}.
+have been used in Alcatraz~\cite{liang2009alcatraz}.
 For I/O monitoring, we have monitored all the I/O from the application.
 The results given in Table~\ref{tab:lbox-macro}. 
 The results for \code{strace} and \code{truss} are only meant to illustrate
