@@ -14,7 +14,7 @@ to help monitor correct system operation and to detect potential
 security problems.
 In Unix systems, logging is traditionally {\em application based}.
 The application itself controls what is being logged through
-the system logging mechanism \code{syslog} (Sec.~\ref{sec:syslog}), e.g.
+the system logging mechanism \code{syslog} (Section~\ref{sec:syslog}), e.g.
 security audit log messages generated 
 by \code{login}, \code{su}, etc.
 The drawback of application logging is since it is under the
@@ -70,7 +70,7 @@ Finally we also require that the monitor be {\em transparent} to the monitored
 processes --- thus the act of being monitored has no side effects to the
 monitorees.
 We remark that traditional Unix mechanisms such as \code{ptrace} and 
-\code{proc} (Sec.~\ref{sec:ptrace}) do not provide these guarantees.
+\code{proc} (Section~\ref{sec:ptrace}) do not provide these guarantees.
 
 A key objective is that the monitoring mechanism be efficient and scalable.
 By efficiency, we mean that fine-grained monitoring is possible with low
@@ -445,8 +445,8 @@ The \code{lbox\_create(proc\_spec, event\_spec, n)} is used to designate
 the current process to be the lbox monitor which will
 receive the events generated from the processes defined by \code{proc\_spec}
 which trigger the set of events defined in \code{event\_spec}.
-One caveat is that we disallow self-referential monitoring, see
-section \ref{sec:lbox-self}.
+One caveat is that we disallow self-referential monitoring (see
+Section~\ref{sec:lbox-self}).
 
 In our framework, asynchronous events are stored in a kernel buffer
 of size \code{n} defined at monitor creation time. Asynchronous events
@@ -1014,7 +1014,7 @@ the number of monitors of the process is not too large.
 \subsection{Comparing to DTrace}
 \label{sec:lbox-dtrace}
 
-There are some similarities with Solaris DTrace (Sec.~\ref{sec:dtrace}),
+There are some similarities with Solaris DTrace (Section~\ref{sec:dtrace}),
 which was published at about the same time as this work.
 Both systems aim to bring minimal side effects to the monitored program
 in order to be used on production systems.

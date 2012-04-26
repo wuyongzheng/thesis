@@ -23,7 +23,7 @@ and SystemTap.
 
 Our objective is to visualize detailed system traces.
 In the rest of the section, we will shorten system trace to simply trace.
-Our traces are obtained with WinResMon (Sec.~\ref{sec:winresmon}) which
+Our traces are obtained with WinResMon (Section~\ref{sec:winresmon}) which
 captures all operations performed by the Windows kernel
 from all processes.
 % Our aim is to capture the relevant operations which can be attributed
@@ -62,7 +62,7 @@ performs the operation.
 % % CPU reset may be triggered by system boot or waking up from hibernate,
 % % thus one has to add addition bits to ensure monotone increasing timestamp.}
 % \TODO{usenix comm:
-% A minor technical tidbit: in Sec. 3.1 it is said that start and end time of
+% A minor technical tidbit: in Section 3.1 it is said that start and end time of
 % the event is recorded using CPU perf counters; what happens in SMPs? How is
 % the timestamp decided?}
 \item {\bf Operation type} is specific to the event.
@@ -101,7 +101,7 @@ the opened or created file, access flags, file attributes, creation disposition
 etc.) and other Windows operating system specific information.
 Figure~\ref{fig:logex} shows two examples of events.
 WinResMon can optionally capture the data associated with an
-event. (see Sec.~\ref{sec:wbbench} which uses network packet data)
+event. (see Section~\ref{sec:wbbench} which uses network packet data)
 % While file and registry resources are represented as paths,
 % network resources are represented as network address, i.e. IP address and port.
 % Only TCP and UDP protocols are recorded.
@@ -268,7 +268,7 @@ together into a single pixel in a window.
 DotPlots which contains aggregated events are drawn as grayscale images
 which are then colored using the DP coloring rules for customizing
 the appearance.
-Normalization or histogram equalization (see Sec.~\ref{sec:lviz-imp})
+Normalization or histogram equalization (see Section~\ref{sec:lviz-imp})
 is applied on the image so that the color intensity fits in a displayable range.
 Our extended DotPlots (see region 5 in the center of Figure~\ref{fig:elements})
 can be drawn with event-ordering, time-ordering or time-duration-ordering.
@@ -299,7 +299,7 @@ on how matching and coloring rules are specified.
 The DP matching rule specifies whether two events
 match. The specification allows for matching on
 the properties of an event, e.g. PID/TID, program name,
-operation type, etc. (see Sec.~\ref{sec:systrace})
+operation type, etc. (see Section~\ref{sec:systrace})
 It essentially allows any combination of information about
 the event in the trace.
 For example, matching based on {\it program name + operation type + resource name}
@@ -350,12 +350,12 @@ the trace and allow that to be correlated to the associated event in the DP.
 
 Barcodes are colored using
 barcode coloring rules similar to DP coloring rules.
-For example Figure~\ref{fig:cp-xcopy} (see Sec. \ref{sec:cp})
+For example Figure~\ref{fig:cp-xcopy} (see Section~\ref{sec:cp})
 colors the barcode by resource type.
 Multiple barcode coloring rules can be specified.
 Since barcodes are useful to show properties of the events,
 there can be more than one barcode. Each barcode has its own
-set of coloring rules, see Figure~\ref{fig:cp-xcopy} which has 3 different
+set of coloring rules, (see Figure~\ref{fig:cp-xcopy}) which has 3 different
 barcodes stacked on the X and Y axis.
 In the thesis, we number the barcode from inside (top or left depending
 on the axis) to outside, i.e. barcode 1 means the inner most barcode.
@@ -423,7 +423,7 @@ The non-white regions inside the DP show when {\tt xcopy} is using the
 same resource with the same operation and parameter.
 Its color represents the resource.
 Each blue square is the aggregated visualization effect from
-copying a file (see Sec. \ref{sec:cp}).
+copying a file (see Section~\ref{sec:cp}).
 The file sizes are apparent from the sizes of the small (region 3 and 5)
 and big (region 4 and 6) blue squares.
 We can see that file operations are performed at the start (barcode 1),
