@@ -22,7 +22,7 @@ would not make sense for DLLs which do significant work in the initialization.
 \subsubsection{System Boot}
 \label{sec:apply:boot}
 
-\begin{figure*}[htbp]
+\begin{figure}[htbp]
 \centering
 %\begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight,grid,tics=100]{depvis/boot-gdll.pdf}
 \begin{overpic}[keepaspectratio,width=0.95\textwidth,height=0.95\textheight]{depvis/boot-gdll.pdf}
@@ -36,7 +36,7 @@ would not make sense for DLLs which do significant work in the initialization.
 \end{overpic}
 \caption{EXE dependency graph of the whole system}
 \label{fig:boot}
-\end{figure*}
+\end{figure}
 
 Figure~\ref{fig:boot} shows the EXE dependency graph for a boot-to-shutdown cycle
 for a fresh Windows XP install.
@@ -57,28 +57,6 @@ This is somewhat surprising leading to the question why {\tt odbc32},
 the database query interface, is used by {\tt explorer}.
 
 \subsubsection{Comparing Web Browsers}
-
-\begin{figure}[bthp]
-\centering
-\begin{overpic}[width=1.0\textwidth]{depvis/browsers-group.pdf}
-\color{red}
-\put(290,775){\vector(3,1){100}}
-\put(255,760){\deffigp{fp:bw-ff}}
-\put(770,95){\vector(-2,-1){50}}
-\put(775,95){\deffigp{fp:bw-opera}}
-\put(325,265){\deffigp{fp:bw-ie}}
-\put(890,610){\vector(-3,-1){100}}
-\put(895,610){\deffigp{fp:bw-common}}
-\put(835,715){\vector(-4,-1){90}}
-\put(840,715){\deffigp{fp:bw-flash}}
-\put(120,204){\vector(1,0){80}}
-\put(80,198){\usefigp{fp:bw-flash}}
-\put(835,68){\vector(-4,-1){100}}
-\put(840,68){\usefigp{fp:bw-flash}}
-\end{overpic}
-\caption{EXE dependency graph of three browsers: IE, Firefox, Opera}
-\label{fig:browsers}
-\end{figure}
 
 Figure~\ref{fig:browsers} shows the EXE dependency graph for three
 browsers: Internet Explorer, Firefox and Opera.
@@ -158,7 +136,7 @@ In this test, we opened a {\tt .DOC} file, i.e. a Microsoft Word document
 with both programs.
 % This example is also used to demonstrate program-program dependencies.
 % Earlier, Figure~\ref{fig:browsers} only showed program-binary dependencies.
-We describe some of the observations from Fig.~\ref{fig:depvis-word}:
+We describe some of the observations from Figure~\ref{fig:depvis-word}:
 
 \begin{itemize}
 

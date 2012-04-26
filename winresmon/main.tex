@@ -182,12 +182,12 @@ resource-access traces which are later used by the analyzer.  The archiver
 performs log compaction/summarization of old traces.
 Query and user-log API provide the interface to the trace database.
 
-\begin{figure*}
+\begin{figure}
 \centering
 \includegraphics[scale=0.6]{winresmon/usp}
 \caption{WinResMon overall system architecture}
 \label{fig:winresmon-sys}
-\end{figure*}
+\end{figure}
 
 
 \subsubsection{The Logger}
@@ -235,7 +235,7 @@ The timing is measured in CPU cycles, thus it is very accurate},
 We can optionally record the user space stack trace, which is a list
 of function return addresses who directly or indirectly make the
 system call.
-This stack trace feature is used in our trace visualization (Sec.~\ref{sec:lviz}).
+This stack trace feature is used in our trace visualization (Section~\ref{sec:lviz}).
 The specific information recorded by different record types are:
 
 \begin{enumerate}
@@ -958,7 +958,7 @@ The benchmarks for process creation are:
 \item[$(P_2)$] Create a dummy GUI process and wait for its termination.
 \end{description}
 
-\begin{sidewaystable*}
+\begin{sidewaystable}
 \centering
 \begin{tabular}{|l|l|c|c|c|}
 \hline
@@ -984,7 +984,7 @@ Registry Operation & $n$ & Clean & WinResMon & RegMon \\
 \end{tabular}
 \caption{Performance comparison on file and registry access ($n$ operations in seconds)}
 \label{tab:winresmon-perf-fr}
-\end{sidewaystable*}
+\end{sidewaystable}
 
 Table~\ref{tab:winresmon-perf-fr} shows the execution time (in seconds)
 for the file and registry access benchmarks.
@@ -1007,7 +1007,7 @@ designed for long term use and is therefore always running in the background.
 These two benchmark comparisons merely give us a baseline on how WinResMon
 compares with other, similar monitoring software.
 
-\begin{table*}
+\begin{table}
 \small
 \centering
 \begin{tabular}{|l|l|c|c|}
@@ -1020,9 +1020,9 @@ Process Operation & $n$ & Clean & WinResMon \\
 \end{tabular}
 \caption{Performance of process creation (in seconds)}
 \label{tab:winresmon-perf-proc}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\begin{table}
 \small
 \centering
 \begin{tabular}{|l|c|c|}
@@ -1037,7 +1037,7 @@ Lame     & $45.631 \pm 0.538$  & $45.662 \pm 0.534$ ($0.6\%$) \\
 \end{tabular}
 \caption{Performance of macro-benchmarks (in seconds)}
 \label{tab:winresmon-perf-macro}
-\end{table*}
+\end{table}
 
 Table~\ref{tab:winresmon-perf-proc} shows the results of the process creation benchmark. The
 console process in the benchmark creates a dummy child process using the
@@ -1087,12 +1087,12 @@ We briefly mention some other tools/systems below, and highlight the important
 differences with WinResMon.
 
 WinResMon shares the basic monitoring functionalities with
-FileMon and RegMon tools (Sec.~\ref{sec:sysinternals}).
+FileMon and RegMon tools (Section~\ref{sec:sysinternals}).
 However, WinResMon's
 infrastructure is integrated, and its log database is designed to assist
 system administrators in inspecting software configuration and dependencies.
 
-Strace (Sec.~\ref{sec:ptrace}) is a Linux/UNIX tool used to intercept and log system
+Strace (Section~\ref{sec:ptrace}) is a Linux/UNIX tool used to intercept and log system
 calls invoked by a process.  There is also a Microsoft Windows NT port of
 strace with similar functionality.  WinResMon differs from
 strace in that is focused more on resource usage (files, registry, etc) rather
@@ -1107,9 +1107,9 @@ processes and applies a specific security policy, WinResMon is meant as a
 monitoring tool to inspect resource usage and interactions among programs in a
 system.
 
-DTrace (Sec.~\ref{sec:dtrace}),
-SystemTap (Sec.~\ref{sec:systemtap}) and
-LBox (Sec.~\ref{sec:lbox}) are
+DTrace (Section~\ref{sec:dtrace}),
+SystemTap (Section~\ref{sec:systemtap}) and
+LBox (Section~\ref{sec:lbox}) are
 auditing and instrumentation systems on various UNIX operating systems.  They
 are all event based auditing systems, performing a specific action only on a
 specific event.  DTrace and SystemTap allow administrators to dynamically

@@ -13,7 +13,7 @@
 \usepackage[a4paper,includeheadfoot,hmargin=1.2in,vmargin=1.0in]{geometry}
 \usepackage[onehalfspacing]{setspace}
 \usepackage{rotating}
-\usepackage[permil]{overpic}
+\usepackage[permil]{overpic} % overpic v0.53 has a problem shifting X. I use v0.52 instead.
 \usepackage{tikz}
 
 
@@ -22,8 +22,8 @@
             \node[shape=circle,draw,inner sep=1pt](char){#1};}}
 \newcommand{\usefigp}[1]{\figpcir{\ref{#1}}}
 \newcommand{\deffigp}[1]{\refstepcounter{figp}\label{#1}\usefigp{#1}}
-%\newcommand{\TODO}[1]{}
-\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\TODO}[1]{}
+%\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 \newcommand{\code}[1]{{\tt #1}}
 \newcommand{\BS}{\linebreak[0]$\backslash$\linebreak[0]}
 %\newcommand{\mypreamble}[1]{

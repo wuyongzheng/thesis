@@ -105,7 +105,7 @@ on a number of other programs to do its work.
 The EXE dependency graph has two kinds of nodes,
 files which are EXEs, are denoted by ellipses, while
 files which are DLLs, are denoted by rectangles
-(Fig.~\ref{fig:grouping}).
+(Figure~\ref{fig:grouping}).
 EXE-EXE and EXE-DLL dependencies are represented by
 blue and black directed edges respectively.
 In general, the EXE dependency graph forms a general graph rather than a
@@ -153,6 +153,28 @@ same file type are in one node, e.g. label 4 in Figure~\ref{fig:browsers}
 which shows the dependencies from DLLs which match with the
 pathname {\tt /windows/system32/*.dll} (note that we have used
 the forward `{\tt /}' for pathnames).
+
+\begin{figure}[bthp]
+\centering
+\begin{overpic}[width=1.0\textwidth]{depvis/browsers-group.pdf}
+\color{red}
+\put(290,775){\vector(3,1){100}}
+\put(255,760){\deffigp{fp:bw-ff}}
+\put(770,95){\vector(-2,-1){50}}
+\put(775,95){\deffigp{fp:bw-opera}}
+\put(325,265){\deffigp{fp:bw-ie}}
+\put(890,610){\vector(-3,-1){100}}
+\put(895,610){\deffigp{fp:bw-common}}
+\put(835,715){\vector(-4,-1){90}}
+\put(840,715){\deffigp{fp:bw-flash}}
+\put(120,204){\vector(1,0){80}}
+\put(80,198){\usefigp{fp:bw-flash}}
+\put(835,68){\vector(-4,-1){100}}
+\put(840,68){\usefigp{fp:bw-flash}}
+\end{overpic}
+\caption{EXE dependency graph of three browsers: IE, Firefox, Opera}
+\label{fig:browsers}
+\end{figure}
 
 \paragraph{DLL Dependency Graph}
 
