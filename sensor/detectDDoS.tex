@@ -56,17 +56,7 @@ They show that $p_{net}$ is more stable a quantity than
 $p_{out}$ among different flows,
 regardless of the transport protocol or user presence.
 
-Figure~\ref{fig:ddos} shows the distribution of $p_{net}$ for 13,620 flows.
-Figure~\ref{fig:ddos}(a) shows the net outgoing packet rate is close
-to 0 for most flows. When the user is present, 35\% of the flows
-have $p_{net}=0$; and 80\% flows have $p_{net}$ less than 10 packets
-a minute. When the user is absent, 90\% of the flows have
-$p_{net}=0$. Figure~\ref{fig:ddos}(b) shows that the difference in
-$p_{net}$ when user is present and absent, it can be as large as 600
-for some flows, so different upper bounds of normal $p_{net}$ should
-be used for user presence and absence and for each flow.
-
-\begin{figure*}[htb]
+\begin{figure}[htb]
   \centering
   \subfigure[2351 active TCP flows during user presence]{
     \label{fig:tcpflow_presentrate}
@@ -85,9 +75,19 @@ be used for user presence and absence and for each flow.
   \caption{Difference in the outgoing packet rate and the net outgoing packet
 rate (in packets per second)}
   \label{fig:flowrates}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[htb]
+Figure~\ref{fig:ddos} shows the distribution of $p_{net}$ for 13,620 flows.
+Figure~\ref{fig:ddos}(a) shows the net outgoing packet rate is close
+to 0 for most flows. When the user is present, 35\% of the flows
+have $p_{net}=0$; and 80\% flows have $p_{net}$ less than 10 packets
+a minute. When the user is absent, 90\% of the flows have
+$p_{net}=0$. Figure~\ref{fig:ddos}(b) shows that the difference in
+$p_{net}$ when user is present and absent, it can be as large as 600
+for some flows, so different upper bounds of normal $p_{net}$ should
+be used for user presence and absence and for each flow.
+
+\begin{figure}[htb]
 \centering \subfigure[Distribution of flow net outgoing packet
 rates]{\includegraphics[width=0.48\textwidth]{sensor/net-outrate}}
 \subfigure[Difference in the flow rates when user is present and
@@ -96,7 +96,7 @@ absent]{\includegraphics[width=0.48\textwidth]{sensor/net-outrate-diff}}
 packet rate $p_{net}$ with 13,620 TCP and UDP flows, each flow is
 observed for 10 minutes during user presence and absence}
 \label{fig:ddos}
-\end{figure*}
+\end{figure}
 
 From Figure~\ref{fig:ddos}(a), initializing the upper bound of normal
 $p_{net}$ to be $a=60$ packets per minute is sufficient for most

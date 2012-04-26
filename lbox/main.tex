@@ -494,7 +494,7 @@ Error handling also has been omitted for the most part.
 % Rather than discuss the actual monitor API, we have used a library for
 % monitoring which gives a simpler way of using the monitoring infrastructure.
 
-\begin{figure*}[htbp]
+\begin{figure}[htbp]
 \small
 \begin{center}
 \begin{verbatim}
@@ -537,7 +537,7 @@ Error handling also has been omitted for the most part.
 \end{center}
 \caption{A Simple Monitor}
 \label{fig:lbox-eg-prog}
-\end{figure*}
+\end{figure}
 
 In part 1, two events are to be monitored. Any access to any files
 starting from the current working directory including its subdirectories
@@ -1272,7 +1272,7 @@ The benchmark creates a TCP socket and connects to a local port.
 This is repeated for 4000 times and the results are in Table~\ref{tab:lbox-connect}.
 We can see that in an expensive system call, the overhead is not noticeable.
 
-\begin{table*}[ht]
+\begin{table}[ht]
 \small
 \centering
 \noindent\makebox[\textwidth]{%
@@ -1299,7 +1299,7 @@ truss with I/O & \begin{math} 1126.7\pm4.4 (511.5\%) \end{math} & \begin{math} 7
 \end{tabular}}
 \caption{Macro-benchmarks}
 \label{tab:lbox-macro}
-\end{table*}
+\end{table}
 
 The \code{open} micro-benchmark gives a measure of worst-case overhead
 since the file is totally cached in memory and in that case, the Linux

@@ -228,16 +228,6 @@ DotPlots can be used to do self-comparison
 by comparing a sequence with itself or to compare
 two different sequences.
 
-\begin{figure}[tb]
-\begin{center}
-\includegraphics[width=0.4\textwidth]{lviz/elements.png}
-\caption{Elements of VDP: axis histograms (Region 1,2);
-barcodes (3,4); and extended DotPlot (5). This figure is same as
-Figure~\ref{fig:cp-xcopy} with the added annotation.}
-\label{fig:elements}
-\end{center}
-\end{figure}
-
 Here, we develop a novel DotPlot based visualization which is
 extensible and can be configured for many uses.
 Our visualization, which we call {\em VDP},
@@ -253,6 +243,34 @@ and $(iii)$ the x-axis barcodes (region 3) and
 y-axis barcodes (region 4).
 A larger diagram of the same visualization highlighting various
 details is in Figure~\ref{fig:cp-xcopy}.
+
+\begin{figure}[tb]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{lviz/elements.png}
+\caption{Elements of VDP: axis histograms (Region 1,2);
+barcodes (3,4); and extended DotPlot (5). This figure is same as
+Figure~\ref{fig:cp-xcopy} with the added annotation.}
+\label{fig:elements}
+\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{lviz/cp-xcopy.png}
+\caption{Self-comparison event-ordered VDP of {\tt xcopy}
+copying 8 files of different sizes with the following configuration rules:
+}
+\begin{tabular}{ll}
+DP match : & operation + parameter (pathname)\\
+DP color : & magenta $\rightarrow$ source; cyan $\rightarrow$ destination;\\
+ & black $\rightarrow$ other\\
+Bar1 color : & black $\rightarrow$ file operation\\
+Bar2 color : & black $\rightarrow$ source/destination files\\
+Bar3 color : & black $\rightarrow$ registry operation
+\end{tabular}
+\label{fig:cp-xcopy}
+\end{center}
+\end{figure}
 
 An important aspect of the VDP is that it is intended to
 be extensively customizable. Thus, it gives rise to a family of visualizations.
@@ -383,25 +401,6 @@ it represents the total time taken (recall that an event has start and end
 time) on the aggregated events.
 
 \subsubsection{A VDP Example}
-
-\begin{figure}[htb]
-\begin{center}
-\includegraphics[width=0.5\textwidth]{lviz/cp-xcopy.png}
-\caption{Self-comparison event-ordered VDP of {\tt xcopy}
-copying 8 files of different sizes with the following configuration rules:
-}
-\begin{tabular}{ll}
-DP match : & operation + parameter (pathname)\\
-DP color : & magenta $\rightarrow$ source; cyan $\rightarrow$ destination;\\
- & black $\rightarrow$ other\\
-Bar1 color : & black $\rightarrow$ file operation\\
-Bar2 color : & black $\rightarrow$ source/destination files\\
-Bar3 color : & black $\rightarrow$ registry operation
-\end{tabular}
-\label{fig:cp-xcopy}
-\end{center}
-\end{figure}
-
 
 % \TODO{reviewer 2:
 % Move figure 4 closer to the text where it is explained (section 3.3) Actually
